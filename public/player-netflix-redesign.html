@@ -739,7 +739,7 @@
   </main>
 
   <script>
-    const socket = io("http://localhost:8080");
+    const socket = io({ transports: ["websocket"] });
 
     // Helper function to format rank as ordinal (1st, 2nd, 3rd, etc.)
     function formatRank(rank) {
