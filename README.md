@@ -36,7 +36,6 @@ npm start
 Open in your browser:
 - Game Master: `http://localhost:8080/game-master.html`
 - Player: `http://localhost:8080/player.html`
-- Alternate player UI: `http://localhost:8080/player-netflix-redesign.html`
 
 ## Configuration
 Create a `.env` file if you want to override the default port:
