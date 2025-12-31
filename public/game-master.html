@@ -780,6 +780,11 @@
         });
     }
 
+    function decodeHtmlEntities(value) {
+        const textarea = document.createElement("textarea");
+        textarea.innerHTML = value;
+        return textarea.value;
+    }
 
     // Function to display a question
     function displayQuestion(room, questionIndex) {
@@ -791,7 +796,7 @@
         }
 
         // Display the question
-        questionText.textContent = questionData.question;
+        questionText.textContent = decodeHtmlEntities(questionData.question);
 
         // Display the answer options with labels (A:, B:, etc.)
         answerOptions.innerHTML = "";
@@ -812,7 +817,7 @@
             // Create the text span
             const textSpan = document.createElement("span");
             textSpan.classList.add("text");
-            textSpan.textContent = answer;
+            textSpan.textContent = decodeHtmlEntities(answer);
 
             // Append circle and text inside the answerBox
             div.appendChild(circle);
