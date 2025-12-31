@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0B0B0B">
+  <title>Netflix Trivia Night • Player</title>
+  <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+  <style>
+    :root{
+      --bg0:#070707;
+      --bg1:#0b0b0b;
+      --bg2:#141414;
+      --surface:#181818;
+      --surface2:#222222;
+      --surface3:#2a2a2a;
+      --text:#ffffff;
+      --muted:#b3b3b3;
+      --muted2:#8f8f8f;
+      --red:#e50914;
+      --red2:#b20710;
+      --ring:rgba(229,9,20,.35);
+      --border:1px solid rgba(255,255,255,.08);
+      --radius:18px;
+      --shadow:0 18px 55px rgba(0,0,0,.55);
+      --tap:56px;
+    }
+
+    *{box-sizing:border-box;}
+    html,body{height:100%;}
+    body{
+      margin:0;
+      color:var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      background:
+        radial-gradient(1200px 600px at 50% 0%, rgba(229,9,20,.10), transparent 60%),
+        radial-gradient(900px 500px at 10% 85%, rgba(255,255,255,.05), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg2));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:0;
+    }
+
+    /* App “phone” canvas */
+    .app{
+      width:100%;
+      max-width:440px;
+      min-height:100svh;
+      background: url('imgs/light-bg.png');
+      background-size: auto, auto, cover;
+      background-position: center, center, center;
+      background-repeat: no-repeat;
+      border:var(--border);
+      border-radius:0;
+      overflow:hidden;
+      position:relative;
+      box-shadow:none;
+    }
+
+    .app::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(900px 520px at 50% 0%, rgba(0,0,0,.10), transparent 60%),
+        radial-gradient(700px 500px at 10% 85%, rgba(0,0,0,.18), transparent 55%),
+        linear-gradient(180deg, rgba(0,0,0,.22), rgba(0,0,0,.34));
+      mix-blend-mode:multiply;
+      z-index:0;
+    }
+
+    /* Ensure UI sits above the background overlay */
+    .panel{ z-index:1; }
+
+    @media (min-width: 560px){
+      body{ padding:14px; }
+      .app{
+        min-height:min(calc(100svh - 28px), 860px);
+        border-radius:28px;
+        box-shadow:var(--shadow);
+      }
+    }
+
+    /* Panels are full-screen “screens” */
+    .panel{
+      position:absolute;
+      inset:0;
+      padding:
+        calc(22px + env(safe-area-inset-top))
+        calc(20px + env(safe-area-inset-right))
+        calc(22px + env(safe-area-inset-bottom))
+        calc(20px + env(safe-area-inset-left));
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+      opacity:0;
+      transform: translateY(10px);
+      pointer-events:none;
+      transition: opacity .18s ease, transform .18s ease;
+      overflow-y:auto;
+      -webkit-overflow-scrolling: touch;
+      z-index:1;
+    }
+    .panel.active{
+      opacity:1;
+      transform: translateY(0);
+      pointer-events:auto;
+    }
+
+    /* Top brand header used on multiple screens */
+    .brand{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding-top:6px;
+    }
+    .brand-left{
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+      min-width:0;
+    }
+
+    .brand-stack{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      min-width:0;
+    }
+
+    .brand-logos{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+    }
+
+    .brand-logos img{
+      display:block;
+      max-width:50%;
+      height:auto;
+    }
+
+    .brand-n{
+      width:22px;
+      height:22px;
+      flex:0 0 auto;
+      filter: drop-shadow(0 10px 26px rgba(229,9,20,.16));
+    }
+
+    .brand-app{
+      width:min(250px, 64vw);
+      max-width:280px;
+      height:auto;
+      flex:1 1 auto;
+      filter: drop-shadow(0 12px 30px rgba(0,0,0,.35));
+    }
+    .brand-title{
+      line-height:1.05;
+      min-width:0;
+    }
+    .brand-title .kicker{
+      color:var(--muted2);
+      font-size:12px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+    }
+    .brand-title .name{
+      font-size:18px;
+      font-weight:800;
+      letter-spacing:.02em;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    /* Splash */
+    .splash{
+      justify-content:center;
+      align-items:center;
+      gap:22px;
+      text-align:center;
+    }
+    .splash-logos{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:18px;
+      padding-top:18px;
+    }
+    .splash-logos .splash-n{
+      width:72px;
+      height:auto;
+      filter: drop-shadow(0 18px 45px rgba(229,9,20,.28));
+    }
+    .splash-logos .splash-title{
+      width:min(320px, 78vw);
+      height:auto;
+      filter: drop-shadow(0 18px 45px rgba(0,0,0,.35));
+    }
+    .splash-hint{
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .chip{
+      padding:8px 10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      color:var(--muted);
+      font-size:12px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      user-select:none;
+      align-self: flex-start;
+    }
+    .dot{
+      width:8px;
+      height:8px;
+      border-radius:999px;
+      background: var(--muted2);
+      box-shadow: 0 0 0 4px rgba(255,255,255,.05);
+    }
+    .dot.ok{ background: #2ecc71; box-shadow: 0 0 0 4px rgba(46,204,113,.14); }
+    .dot.bad{ background: #ff4757; box-shadow: 0 0 0 4px rgba(255,71,87,.14); }
+
+    h1,h2,h3,p{margin:0;}
+    .hero{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      padding-top:6px;
+    }
+    .hero h1{
+      font-size:28px;
+      letter-spacing:-0.02em;
+      line-height:1.08;
+    }
+    .hero p{
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.4;
+      max-width:40ch;
+    }
+
+    .card{
+      background: rgba(255,255,255,.04);
+      border:var(--border);
+      border-radius:var(--radius);
+      padding:16px;
+    }
+
+    .form{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .label-row{
+      display:flex;
+      align-items:baseline;
+      justify-content:space-between;
+      gap:12px;
+    }
+    label{
+      font-size:12px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--muted2);
+    }
+    .hint{
+      font-size:12px;
+      color:var(--muted);
+    }
+    input{
+      width:100%;
+      height:52px;
+      padding:0 14px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      color:var(--text);
+      font-size:16px;
+      outline:none;
+      transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+    }
+    input::placeholder{color: rgba(255,255,255,.35);}
+    input:focus{
+      border-color: rgba(229,9,20,.65);
+      box-shadow: 0 0 0 4px var(--ring);
+      background: rgba(255,255,255,.06);
+    }
+
+    .form-error{
+      display:none;
+      padding:12px 14px;
+      border-radius:14px;
+      background: rgba(229,9,20,.10);
+      border:1px solid rgba(229,9,20,.35);
+      color:#ffd4d6;
+      font-size:14px;
+      line-height:1.3;
+    }
+    .form-error.show{display:block;}
+
+    .btn-row{
+      display:flex;
+      gap:10px;
+      margin-top:4px;
+    }
+    button{
+      font: inherit;
+      border: none;
+      cursor: pointer;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn{
+      height:var(--tap);
+      border-radius:16px;
+      padding:0 16px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:800;
+      letter-spacing:.02em;
+      transition: transform .06s ease, filter .15s ease, background .15s ease, border-color .15s ease;
+    }
+    .btn:active{ transform: translateY(1px); }
+    .btn-primary{
+      background: linear-gradient(180deg, var(--red), var(--red2));
+      color: var(--text);
+      box-shadow: 0 12px 26px rgba(229,9,20,.22);
+    }
+    .btn-primary:hover{ filter: brightness(1.05); }
+    .btn-secondary{
+      background: rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.12);
+      color: var(--text);
+    }
+    .btn-block{ width:100%; }
+
+    .spacer{ flex:1; }
+
+    /* Question screen */
+    .q-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:14px;
+      margin-top:6px;
+    }
+    .q-meta{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-width:0;
+    }
+    .q-label{
+      color:var(--muted2);
+      font-size:12px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+    }
+    .q-number{
+      font-size:34px;
+      font-weight:900;
+      letter-spacing:-0.02em;
+      line-height:1;
+    }
+    .q-sub{
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    #answerButtons{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+      margin-top:10px;
+    }
+    .answer-btn{
+      height:72px;
+      border-radius:18px;
+      background: rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.12);
+      color: var(--text);
+      font-size:22px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transition: transform .06s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;
+    }
+    .answer-btn:active{ transform: translateY(1px); }
+
+    .answer-btn:hover{
+      border-color: rgba(255,255,255,.18);
+      background: rgba(255,255,255,.06);
+    }
+
+    .answer-btn.selected{
+      border-color: rgba(229,9,20,.9);
+      box-shadow: 0 0 0 4px var(--ring);
+      background: rgba(229,9,20,.14);
+    }
+
+    .answer-btn:disabled{
+      cursor:not-allowed;
+      opacity:.55;
+    }
+    .answer-btn.selected:disabled{
+      opacity:1;
+      cursor:default;
+    }
+
+    .toast{
+      display:none;
+      padding:12px 14px;
+      border-radius:14px;
+      background: rgba(46, 204, 113, .12);
+      border:1px solid rgba(46, 204, 113, .35);
+      color:#dbffe9;
+      font-size:14px;
+    }
+    .toast.show{display:block;}
+
+    /* Score blocks */
+    .scores{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:12px;
+    }
+    .score-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+    .metric{
+      background: rgba(255,255,255,.04);
+      border:var(--border);
+      border-radius:18px;
+      padding:14px;
+    }
+    .metric .k{
+      color:var(--muted2);
+      font-size:12px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+    }
+    .metric .v{
+      font-size:26px;
+      font-weight:900;
+      margin-top:6px;
+    }
+    .metric .s{
+      color:var(--muted);
+      font-size:13px;
+      margin-top:4px;
+    }
+
+    .center{
+      text-align:center;
+    }
+
+  </style>
+</head>
+<body>
+  <main class="app" role="application" aria-label="Netflix Trivia Night Player Controller">
+
+    <!-- Splash Screen -->
+    <section id="splashPanel" class="panel active splash" aria-label="Splash Screen">
+      <div class="splash-logos" role="img" aria-label="Netflix Trivia Night">
+        <img class="splash-n" src="imgs/netflix-logo.png" alt="Netflix">
+        <img class="splash-title" src="imgs/trivia-logo.png" alt="Trivia Night">
+      </div>
+      <div class="splash-hint">Tap to continue</div>
+    </section>
+
+    <!-- Welcome Screen -->
+    <section id="welcomePanel" class="panel" aria-label="Welcome Screen">
+      <div class="brand">
+        <div class="brand-left">
+          <div class="brand-stack">
+            <div class="brand-logos">
+              <img class="brand-app" src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia">
+            </div>
+            <div class="brand-title">
+              <div class="kicker">PLAYER REMOTE</div>
+              <div class="name">Ready to play</div>
+            </div>
+          </div>
+        </div>
+        <div class="chip" aria-hidden="true"><span class="dot ok"></span><span>Ready</span></div>
+      </div>
+
+      <div class="spacer"></div>
+
+      <div class="hero center">
+        <h1>Use your phone as the controller.</h1>
+        <p>Join the room on the TV, then tap A/B/C/D to lock in your answer.</p>
+      </div>
+
+      <div class="spacer"></div>
+
+      <div class="btn-row">
+        <button id="welcomeButton" class="btn btn-primary btn-block">Join a game</button>
+      </div>
+    </section>
+
+    <!-- Join Quiz Screen -->
+    <section id="joinQuizPanel" class="panel" aria-label="Join Game Screen">
+      <div class="brand">
+        <div class="brand-left">
+          <div class="brand-stack">
+            <div class="brand-logos">
+              <img class="brand-app" src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia">
+            </div>
+            <div class="brand-title">
+              <div class="kicker">JOIN</div>
+              <div class="name">Enter your details</div>
+            </div>
+          </div>
+        </div>
+        <div id="connectionChip" class="chip"><span id="connectionDot" class="dot"></span><span id="connectionText">Connecting…</span></div>
+      </div>
+
+      <div class="hero">
+        <h1>Enter your details</h1>
+        <p>Your name appears on the TV scoreboard. Your quiz code is shown on the host screen.</p>
+      </div>
+
+      <div id="joinError" class="form-error" role="alert" aria-live="polite"></div>
+
+      <div class="card">
+        <form class="form" onsubmit="return false;">
+          <div class="field">
+            <div class="label-row">
+              <label for="playerName">Name</label>
+              <span class="hint">e.g., Keith</span>
+            </div>
+            <input type="text" id="playerName" placeholder="Your name" autocomplete="nickname" inputmode="text">
+          </div>
+
+          <div class="field">
+            <div class="label-row">
+              <label for="roomId">Quiz code</label>
+              <span class="hint">4–8 chars</span>
+            </div>
+            <input type="text" id="roomId" placeholder="ABCD" autocomplete="off" inputmode="text" autocapitalize="characters">
+          </div>
+
+          <div class="btn-row">
+            <button id="joinButton" class="btn btn-primary btn-block">Join</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="spacer"></div>
+
+      <p class="hint center">Tip: keep this page open while you play.</p>
+    </section>
+
+    <!-- Waiting Panel -->
+    <section id="waitingPanel" class="panel" aria-label="Waiting Screen">
+      <div class="brand">
+        <div class="brand-left">
+          <div class="brand-stack">
+            <div class="brand-logos">
+              <img class="brand-app" src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia">
+            </div>
+            <div class="brand-title">
+              <div class="kicker">CONNECTED</div>
+              <div class="name">Waiting for host</div>
+            </div>
+          </div>
+        </div>
+        <div class="chip"><span class="dot ok"></span><span>In room</span></div>
+      </div>
+
+      <div class="spacer"></div>
+
+      <div class="hero center">
+        <h1>You're in.</h1>
+        <p>Waiting for the host to start the first round.</p>
+      </div>
+
+      <div class="spacer"></div>
+
+      <div class="card">
+        <p class="hint">When the round begins, your answer buttons will appear here automatically.</p>
+      </div>
+    </section>
+
+    <!-- Submit Answer Panel -->
+    <section id="submitAnswerPanel" class="panel" aria-label="Answer Screen">
+      <div class="brand">
+        <div class="brand-left">
+          <div class="brand-stack">
+            <div class="brand-logos">
+              <img class="brand-app" src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia">
+            </div>
+            <div class="brand-title">
+              <div class="kicker">LIVE</div>
+              <div class="name">Tap A / B / C / D</div>
+            </div>
+          </div>
+        </div>
+        <div class="chip"><span class="dot ok"></span><span>Tap once</span></div>
+      </div>
+
+      <div class="q-top">
+        <div class="q-meta">
+          <div class="q-label">Question</div>
+          <div class="q-number"><span id="questionNumber">1</span></div>
+          <div class="q-sub">Pick A, B, C or D</div>
+        </div>
+      </div>
+
+      <div id="answerToast" class="toast" aria-live="polite">Answer submitted. Good luck 🤞</div>
+
+      <div id="answerButtons" aria-label="Answer Buttons">
+        <button id="answerA" class="answer-btn" type="button">A</button>
+        <button id="answerB" class="answer-btn" type="button">B</button>
+        <button id="answerC" class="answer-btn" type="button">C</button>
+        <button id="answerD" class="answer-btn" type="button">D</button>
+      </div>
+
+      <div class="spacer"></div>
+
+      <p class="hint center">Your first tap locks your answer.</p>
+    </section>
+
+    <!-- End of Round Panel -->
+    <section id="endOfRoundPanel" class="panel" aria-label="End of Round Screen">
+      <div class="brand">
+        <div class="brand-left">
+          <div class="brand-stack">
+            <div class="brand-logos">
+              <img class="brand-app" src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia">
+            </div>
+            <div class="brand-title">
+              <div class="kicker">ROUND COMPLETE</div>
+              <div class="name">Your stats</div>
+            </div>
+          </div>
+        </div>
+        <div class="chip"><span class="dot ok"></span><span>Scores</span></div>
+      </div>
+
+      <div class="hero">
+        <h1>Nice one.</h1>
+        <p>Here’s your progress so far. Next round will start on the TV.</p>
+      </div>
+
+      <div class="scores">
+        <div class="score-grid">
+          <div class="metric">
+            <div class="k">Round score</div>
+            <div class="v" id="roundScoreValue">3</div>
+            <div class="s">points this round</div>
+          </div>
+          <div class="metric">
+            <div class="k">Total</div>
+            <div class="v" id="totalScoreValue">3</div>
+            <div class="s">overall points</div>
+          </div>
+        </div>
+
+        <div class="metric">
+          <div class="k">Position</div>
+          <div class="v" id="roundRankValue">3rd</div>
+          <div class="s">current ranking</div>
+        </div>
+      </div>
+
+      <div class="spacer"></div>
+
+      <div class="card center">
+        <p class="hint">Waiting for the next round…</p>
+      </div>
+    </section>
+
+    <!-- End of Game Panel -->
+    <section id="endOfGamePanel" class="panel" aria-label="End of Game Screen">
+      <div class="brand">
+        <div class="brand-left">
+          <div class="brand-stack">
+            <div class="brand-logos">
+              <img class="brand-app" src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia">
+            </div>
+            <div class="brand-title">
+              <div class="kicker">FINAL</div>
+              <div class="name">Game over</div>
+            </div>
+          </div>
+        </div>
+        <div class="chip"><span class="dot ok"></span><span>Done</span></div>
+      </div>
+
+      <div class="hero">
+        <h1>Thanks for playing.</h1>
+        <p>Want another go? Return to the start screen and join a new room code.</p>
+      </div>
+
+      <div class="scores">
+        <div class="score-grid">
+          <div class="metric">
+            <div class="k">Final score</div>
+            <div class="v" id="finalScoreValue">10</div>
+            <div class="s">total points</div>
+          </div>
+          <div class="metric">
+            <div class="k">Finish</div>
+            <div class="v" id="finalRankValue">3rd</div>
+            <div class="s">place</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="spacer"></div>
+
+      <div class="btn-row">
+        <button id="restartButton" class="btn btn-primary btn-block">Return to start</button>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    const socket = io("http://localhost:8080");
+
+    // Helper function to format rank as ordinal (1st, 2nd, 3rd, etc.)
+    function formatRank(rank) {
+      if (!rank) return "—";
+      const lastDigit = rank % 10;
+      const lastTwoDigits = rank % 100;
+      
+      if (lastTwoDigits >= 11 && lastTwoDigits <= 13) {
+        return rank + "th";
+      }
+      
+      switch (lastDigit) {
+        case 1: return rank + "st";
+        case 2: return rank + "nd";
+        case 3: return rank + "rd";
+        default: return rank + "th";
+      }
+    }
+
+    // Panels
+    const splashPanel = document.getElementById("splashPanel");
+    const welcomePanel = document.getElementById("welcomePanel");
+    const joinQuizPanel = document.getElementById("joinQuizPanel");
+    const waitingPanel = document.getElementById("waitingPanel");
+    const submitAnswerPanel = document.getElementById("submitAnswerPanel");
+    const endOfRoundPanel = document.getElementById("endOfRoundPanel");
+    const endOfGamePanel = document.getElementById("endOfGamePanel");
+
+    // Controls
+    const welcomeButton = document.getElementById("welcomeButton");
+    const playerNameInput = document.getElementById("playerName");
+    const roomIdInput = document.getElementById("roomId");
+    const joinButton = document.getElementById("joinButton");
+    const restartButton = document.getElementById("restartButton");
+
+    // Question
+    const questionNumber = document.getElementById("questionNumber");
+    const answerButtons = document.querySelectorAll("#answerButtons button");
+    const answerToast = document.getElementById("answerToast");
+
+    // Inline error
+    const joinError = document.getElementById("joinError");
+
+    // Connection UI
+    const connectionChip = document.getElementById("connectionChip");
+    const connectionDot = document.getElementById("connectionDot");
+    const connectionText = document.getElementById("connectionText");
+
+    let roomId;
+    let playerName;
+
+    // Restore last name (small UX win)
+    try{
+      const savedName = localStorage.getItem("nt_player_name");
+      if(savedName){ playerNameInput.value = savedName; }
+    }catch(e){}
+
+    function setInlineError(msg){
+      if(!msg){
+        joinError.textContent = "";
+        joinError.classList.remove("show");
+        return;
+      }
+      joinError.textContent = msg;
+      joinError.classList.add("show");
+    }
+
+    function setConnectionState(state){
+      // state: "ok" | "bad" | "idle"
+      const dotClass = state === "ok" ? "dot ok" : state === "bad" ? "dot bad" : "dot";
+      connectionDot.className = dotClass;
+
+      if(state === "ok"){
+        connectionText.textContent = "Connected";
+      }else if(state === "bad"){
+        connectionText.textContent = "Disconnected";
+      }else{
+        connectionText.textContent = "Connecting…";
+      }
+    }
+
+    // Switch panels (keeps your existing model)
+    function showPanel(panel){
+      document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+      panel.classList.add("active");
+    }
+
+    // Splash -> Welcome (auto, or tap to skip)
+    let splashDismissed = false;
+    function exitSplash(){
+      if(splashDismissed) return;
+      splashDismissed = true;
+      showPanel(welcomePanel);
+    }
+    splashPanel.addEventListener("click", exitSplash);
+    setTimeout(exitSplash, 4000);
+
+    // Welcome Screen -> Join
+    welcomeButton.addEventListener("click", () => {
+      showPanel(joinQuizPanel);
+      setInlineError("");
+      setTimeout(() => playerNameInput.focus(), 120);
+    });
+
+    // Join room
+    joinButton.addEventListener("click", () => {
+      playerName = (playerNameInput.value || "").trim();
+      roomId = (roomIdInput.value || "").trim();
+
+      if(!playerName || !roomId){
+        setInlineError("Please enter your name and the quiz code shown on the TV.");
+        return;
+      }
+
+      // Save name for next time
+      try{ localStorage.setItem("nt_player_name", playerName); }catch(e){}
+
+      setInlineError("");
+
+      socket.emit("player:join", { roomId, name: playerName }, (err, room) => {
+        if(err){
+          setInlineError(`Could not join: ${err.message || "Unknown error"}`);
+        }else{
+          console.log("Successfully joined room:", roomId);
+          showPanel(waitingPanel);
+        }
+      });
+    });
+
+    // Enter key submits join
+    [playerNameInput, roomIdInput].forEach(el => {
+      el.addEventListener("keydown", (e) => {
+        if(e.key === "Enter"){
+          e.preventDefault();
+          joinButton.click();
+        }
+      });
+    });
+
+    // quiz started
+    socket.on("quiz:started", (data) => {
+      showPanel(submitAnswerPanel);
+    });
+
+    // Next question
+    socket.on("quiz:nextQuestion", (data) => {
+      console.log("Next Question");
+      questionNumber.textContent = data.questionId;
+
+      // Reset answer state
+      answerToast.classList.remove("show");
+      answerButtons.forEach(button => {
+        button.disabled = false;
+        button.classList.remove("selected");
+      });
+    });
+
+    // Answer clicks
+    answerButtons.forEach((button, index) => {
+      button.addEventListener("click", () => {
+        const answer = index + 1;
+
+        // Disable all buttons + show selected
+        answerButtons.forEach(btn => btn.disabled = true);
+        button.classList.add("selected");
+        answerToast.classList.add("show");
+
+        socket.emit("submitAnswer", { roomId, answer }, (err, result) => {
+          if(err){
+            console.error("Error submitting answer:", err);
+          }else{
+            console.log("Answer submitted successfully:", result);
+          }
+        });
+      });
+    });
+
+    socket.on("quiz:endOfRound", (data) => {
+      console.log("Round ended:", data.message);
+      
+      // Update end of round panel with player data
+      if (data.playerData) {
+        const roundScoreValue = document.getElementById("roundScoreValue");
+        const totalScoreValue = document.getElementById("totalScoreValue");
+        const roundRankValue = document.getElementById("roundRankValue");
+        
+        if (roundScoreValue) roundScoreValue.textContent = data.playerData.currentRoundScore || 0;
+        if (totalScoreValue) totalScoreValue.textContent = data.playerData.totalScore || 0;
+        if (roundRankValue) roundRankValue.textContent = formatRank(data.playerData.endOfRoundRank);
+      }
+      
+      showPanel(endOfRoundPanel);
+    });
+
+    socket.on("quiz:roundStart", (data) => {
+      console.log("New round:", data.message);
+
+      questionNumber.textContent = 1;
+      answerToast.classList.remove("show");
+      answerButtons.forEach(button => {
+        button.disabled = false;
+        button.classList.remove("selected");
+      });
+
+      showPanel(submitAnswerPanel);
+    });
+
+    socket.on("quiz:endOfGame", (data) => {
+      console.log("Game ended:", data.message);
+      
+      // Update end of game panel with player data
+      if (data.playerData) {
+        const finalScoreValue = document.getElementById("finalScoreValue");
+        const finalRankValue = document.getElementById("finalRankValue");
+        
+        if (finalScoreValue) finalScoreValue.textContent = data.playerData.totalScore || 0;
+        if (finalRankValue) finalRankValue.textContent = formatRank(data.playerData.overallRank);
+      }
+      
+      showPanel(endOfGamePanel);
+    });
+
+    restartButton.addEventListener("click", () => {
+      // Reset answer buttons state
+      answerButtons.forEach(button => {
+        button.disabled = false;
+        button.classList.remove("selected");
+      });
+      
+      // Reset question number
+      questionNumber.textContent = 1;
+      
+      // Hide answer toast
+      answerToast.classList.remove("show");
+      
+      // Clear room ID (but keep player name)
+      roomId = "";
+      
+      // Clear room ID input field
+      if (roomIdInput) roomIdInput.value = "";
+      
+      // Show welcome panel
+      showPanel(welcomePanel);
+      setInlineError("");
+    });
+
+    socket.on("connect", () => {
+      console.log("Connected to server.");
+      setConnectionState("ok");
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Disconnected from server.");
+      setConnectionState("bad");
+    });
+
+    // Initial
+    setConnectionState("idle");
+  </script>
+</body>
+</html>

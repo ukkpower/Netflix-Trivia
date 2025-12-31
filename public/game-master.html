@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game Master Test</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+</head>
+<body>
+  <!-- Welcome Screen -->
+  <div id="welcomePanel" class="panel active">
+    <!-- Overlay background light -->
+    <img src="imgs/light-bg.png" alt="Background Overlay" class="background-overlay">
+  
+    <!-- Netflix Logo -->
+    <img src="imgs/netflix-logo.png" alt="Netflix Logo" class="netflix-logo">
+  
+    <!-- Trivia Logo -->
+    <img src="imgs/trivia-logo.png" alt="Trivia Logo" class="trivia-logo">
+  </div>
+  
+
+  <!-- Setup Screen -->
+  <div id="setupPanel" class="panel main-bg">
+    <header>
+        <img src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia Logo">
+    </header>
+    <div class="container cat-container">
+        <!-- Top Section (Banner) -->
+        <div class="banner">
+            <div class="big-box"><h3 class="box-title">Take the Netflix General Knowlege Quiz</h3><p>Test your general knowlege of the world and challenge yourself</p><button id="generalQuizBtn">Lets Go</button></div>
+            <div class="small-box"><div>Create your own custom Quiz</div><button class="small-box-button" id="customQuizBtn">Customise</button></div>
+      </div>        
+        <!-- Category Grid -->
+        <div class="grid">
+            <div class="box" style="background-image: url('imgs/categories/sports.png');" data-category="Sports" data-description="Test your knowledge on various sports, teams, and legendary athletes."><span class="box-label">Sports</span></div>
+            <div class="box" style="background-image: url('imgs/categories/entertainment.png');" data-category="Entertainment" data-description="Dive into the world of movies, music, and pop culture."><span class="box-label">Entertainment</span></div>
+            <div class="box" style="background-image: url('imgs/categories/history.png');" data-category="History" data-description="Explore historical events and figures from around the world."><span class="box-label">History</span></div>
+            <div class="box" style="background-image: url('imgs/categories/science.png');" data-category="Science" data-description="Discover scientific breakthroughs, famous scientists, and natural wonders."><span class="box-label">Science</span></div>
+            <div class="box" style="background-image: url('imgs/categories/technology.png');" data-category="Technology" data-description="Test your knowledge of modern and historical technological advancements."><span class="box-label">Technology</span></div>
+            <div class="box" style="background-image: url('imgs/categories/decades.png');" data-category="Decades" data-description="Identify key moments from different decades in history."><span class="box-label">Decades</span></div>
+            <div class="box" style="background-image: url('imgs/categories/politics.png');" data-category="Politics" data-description="Learn about global leaders, policies, and historical political events."><span class="box-label">Politics</span></div>
+            <div class="box" style="background-image: url('imgs/categories/mythology.png');" data-category="Mythology" data-description="Unravel the stories of gods, legends, and ancient myths."><span class="box-label">Mythology</span></div>
+        </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content" id="modalContent">
+            <div class="modal-inner">
+                <h2 class="modal-title"></h2>
+                <p class="modal-description"></p>
+                
+                <!-- Number of Rounds Selection -->
+                <p class="difficulty-label">Number of Rounds:</p>
+                <div class="range-container">
+                    <div class="range">
+                        <input type="range" id="roundSlider" min="1" max="10" step="1" value="2">
+                    </div>
+                    <ul class="range-labels" id="rangeLabels">
+                        <li>1</li>
+                        <li class="active selected">2</li>
+                        <li>3</li>
+                        <li>4</li>
+                        <li>5</li>
+                        <li>6</li>
+                        <li>7</li>
+                        <li>8</li>
+                        <li>9</li>
+                        <li>10</li>
+                    </ul>
+                </div>
+
+                <!-- Difficulty Selection -->
+                <p class="difficulty-label">Select Difficulty:</p>
+                <div class="difficulty-options">
+                    <div class="difficulty-card selected" data-value="1">
+                        <span class="difficulty-icon">★</span>
+                        <span class="difficulty-name">Easy</span>
+                    </div>
+                    <div class="difficulty-card" data-value="2">
+                        <span class="difficulty-icon">★★</span>
+                        <span class="difficulty-name">Medium</span>
+                    </div>
+                    <div class="difficulty-card" data-value="3">
+                        <span class="difficulty-icon">★★★</span>
+                        <span class="difficulty-name">Hard</span>
+                    </div>
+                </div>
+
+                <div class="modal-buttons">
+                    <button id="confirmBtn">Start Quiz</button>
+                    <button id="closeBtn">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <!-- Custom Quiz Modal -->
+    <div class="modal" id="customModal">
+        <div class="modal-content custom-modal-content" id="customModalContent">
+            <div class="modal-inner">
+                <h2 class="modal-title">Create Custom Quiz</h2>
+                <p class="modal-description">Select categories and number of rounds for each</p>
+                
+                <!-- Category List with Steppers -->
+                <div class="category-list">
+                    <div class="category-row" data-category-id="21">
+                        <span class="category-name">Sports</span>
+                        <div class="round-stepper">
+                            <button class="stepper-btn stepper-minus" disabled>−</button>
+                            <span class="stepper-value">0</span>
+                            <button class="stepper-btn stepper-plus">+</button>
+                        </div>
+                    </div>
+                    <div class="category-row" data-category-id="10">
+                        <span class="category-name">Entertainment</span>
+                        <div class="round-stepper">
+                            <button class="stepper-btn stepper-minus" disabled>−</button>
+                            <span class="stepper-value">0</span>
+                            <button class="stepper-btn stepper-plus">+</button>
+                        </div>
+                    </div>
+                    <div class="category-row" data-category-id="23">
+                        <span class="category-name">History</span>
+                        <div class="round-stepper">
+                            <button class="stepper-btn stepper-minus" disabled>−</button>
+                            <span class="stepper-value">0</span>
+                            <button class="stepper-btn stepper-plus">+</button>
+                        </div>
+                    </div>
+                    <div class="category-row" data-category-id="17">
+                        <span class="category-name">Science</span>
+                        <div class="round-stepper">
+                            <button class="stepper-btn stepper-minus" disabled>−</button>
+                            <span class="stepper-value">0</span>
+                            <button class="stepper-btn stepper-plus">+</button>
+                        </div>
+                    </div>
+                    <div class="category-row" data-category-id="18">
+                        <span class="category-name">Technology</span>
+                        <div class="round-stepper">
+                            <button class="stepper-btn stepper-minus" disabled>−</button>
+                            <span class="stepper-value">0</span>
+                            <button class="stepper-btn stepper-plus">+</button>
+                        </div>
+                    </div>
+                    <div class="category-row" data-category-id="32">
+                        <span class="category-name">Decades</span>
+                        <div class="round-stepper">
+                            <button class="stepper-btn stepper-minus" disabled>−</button>
+                            <span class="stepper-value">0</span>
+                            <button class="stepper-btn stepper-plus">+</button>
+                        </div>
+                    </div>
+                    <div class="category-row" data-category-id="24">
+                        <span class="category-name">Politics</span>
+                        <div class="round-stepper">
+                            <button class="stepper-btn stepper-minus" disabled>−</button>
+                            <span class="stepper-value">0</span>
+                            <button class="stepper-btn stepper-plus">+</button>
+                        </div>
+                    </div>
+                    <div class="category-row" data-category-id="20">
+                        <span class="category-name">Mythology</span>
+                        <div class="round-stepper">
+                            <button class="stepper-btn stepper-minus" disabled>−</button>
+                            <span class="stepper-value">0</span>
+                            <button class="stepper-btn stepper-plus">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Difficulty Selection -->
+                <p class="difficulty-label">Select Difficulty:</p>
+                <div class="difficulty-options" id="customDifficultyOptions">
+                    <div class="difficulty-card selected" data-value="1">
+                        <span class="difficulty-icon">★</span>
+                        <span class="difficulty-name">Easy</span>
+                    </div>
+                    <div class="difficulty-card" data-value="2">
+                        <span class="difficulty-icon">★★</span>
+                        <span class="difficulty-name">Medium</span>
+                    </div>
+                    <div class="difficulty-card" data-value="3">
+                        <span class="difficulty-icon">★★★</span>
+                        <span class="difficulty-name">Hard</span>
+                    </div>
+                </div>
+
+                <div class="modal-buttons">
+                    <button id="customConfirmBtn">Start Quiz</button>
+                    <button id="customCloseBtn">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <!-- Player Connect Screen -->
+  <div id="playerConnectPanel" class="panel main-bg">
+    <header>
+        <img src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia Logo">
+    </header>
+    <div class="container">
+        <div class="content-box content-box-outline content-box-equal">
+            <h1>Player<br>Connect</h1>
+            <img style="width: 100px; margin: auto; margin-bottom: 20px;" src=" https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Example ">
+            <p class="contentPara">Open the Netflix Triva phone app and enter your quiz code to join the quiz</p>
+            <h2 id="roomIdDisplay"></h2>
+        </div>
+        <div class="content-box content-box-equal">
+            <div class="outerContainer">
+                <div class="badgeContainer badgeContainer-player-connect"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M144 0a80 80 0 1 1 0 160A80 80 0 1 1 144 0zM512 0a80 80 0 1 1 0 160A80 80 0 1 1 512 0zM0 298.7C0 239.8 47.8 192 106.7 192l42.7 0c15.9 0 31 3.5 44.6 9.7c-1.3 7.2-1.9 14.7-1.9 22.3c0 38.2 16.8 72.5 43.3 96c-.2 0-.4 0-.7 0L21.3 320C9.6 320 0 310.4 0 298.7zM405.3 320c-.2 0-.4 0-.7 0c26.6-23.5 43.3-57.8 43.3-96c0-7.6-.7-15-1.9-22.3c13.6-6.3 28.7-9.7 44.6-9.7l42.7 0C592.2 192 640 239.8 640 298.7c0 11.8-9.6 21.3-21.3 21.3l-213.3 0zM224 224a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zM128 485.3C128 411.7 187.7 352 261.3 352l117.3 0C452.3 352 512 411.7 512 485.3c0 14.7-11.9 26.7-26.7 26.7l-330.7 0c-14.7 0-26.7-11.9-26.7-26.7z"/></svg></div>
+                <div class="playertContainer">
+                    <p>Players will appear here as they join...</p>
+                    <ul id="playerList"></ul>
+                </div>
+            </div>
+            <div class="button-container"><button id="startQuizButton">START QUIZ</button></div>
+        </div>
+    </div>
+  </div>
+
+  <!-- Round Start Panel -->
+  <div id="roundStartPanel" class="panel main-bg">
+    <header>
+        <img src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia Logo">
+    </header>
+    <div class="container">
+        <div class="content-box content-box-outline round-start-box">
+            <div class="content-box-inner">
+                <h1>Round</h1>
+                <h1 id="roundNumber">1</h1>
+                <p id="categoryName"></p>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <!-- Questions Panel -->
+  <div id="questionsPanel" class="panel main-bg">
+    <header>
+        <img src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia Logo">
+    </header>
+    <div class="container">
+        <div class="content-box content-box-outline content-box-equal">
+            <div id="questionDisplay"><p id="questionText"></p></div>
+        </div>
+        <div id="answerOptions" class="content-box content-box-equal">
+            <!-- <ul id="answerOptions"></ul> -->
+        </div>
+    </div>
+        <!-- Add a row for player names -->
+        <div id="playerAnswerStatus">
+            <div class="badgeContainer"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M144 0a80 80 0 1 1 0 160A80 80 0 1 1 144 0zM512 0a80 80 0 1 1 0 160A80 80 0 1 1 512 0zM0 298.7C0 239.8 47.8 192 106.7 192l42.7 0c15.9 0 31 3.5 44.6 9.7c-1.3 7.2-1.9 14.7-1.9 22.3c0 38.2 16.8 72.5 43.3 96c-.2 0-.4 0-.7 0L21.3 320C9.6 320 0 310.4 0 298.7zM405.3 320c-.2 0-.4 0-.7 0c26.6-23.5 43.3-57.8 43.3-96c0-7.6-.7-15-1.9-22.3c13.6-6.3 28.7-9.7 44.6-9.7l42.7 0C592.2 192 640 239.8 640 298.7c0 11.8-9.6 21.3-21.3 21.3l-213.3 0zM224 224a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zM128 485.3C128 411.7 187.7 352 261.3 352l117.3 0C452.3 352 512 411.7 512 485.3c0 14.7-11.9 26.7-26.7 26.7l-330.7 0c-14.7 0-26.7-11.9-26.7-26.7z"/></svg></div>
+            <!-- Player names will be dynamically added here -->
+        </div>
+  </div>
+
+    <!-- End of Round Panel -->
+    <div id="endOfRoundPanel" class="panel main-bg">
+        <header>
+            <img src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia Logo">
+        </header>
+        <div class="container">
+            <div class="content-box content-box-equal">
+                <div class="end-of-round-text">End of</div>
+                <div class="end-of-round-text end-of-round-round">Round</div>
+                <div class="end-of-round-text" id="endRoundNumber">1</div>
+            </div>
+            <div class="content-box content-box-equal">
+                <div class="leaderboard">
+                    <!-- Column Headers -->
+                    <div class="header">
+                        <span class="name-header"></span> <!-- Empty space for alignment -->
+                        <span class="round-header">Round</span>
+                        <span class="overall-header">Overall</span>
+                    </div>
+                    <div id="playerScores"></div>
+                </div>
+            </div>
+        </div>  
+    </div>
+
+    <!-- End of Quiz Panel -->
+    <div id="endOfQuizPanel" class="panel main-bg">
+        <header>
+            <img src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia Logo">
+        </header>
+        <div class="container">
+            <div class="content-box content-box-outline">
+                <div class="content-box-inner">        
+                    <h1>End of Quiz</h1>
+                    <div id="finalPlayerScores">
+                    <!-- Player total scores will be dynamically added here -->
+                    </div>
+                    <button id="restartQuizButton">Restart Quiz</button>
+                </div>
+            </div>
+        </div>  
+    </div>
+
+  <script>
+    const socket = io({ transports: ["websocket"] });
+
+    // Helper function to format rank as ordinal (1st, 2nd, 3rd, etc.)
+    function formatRank(rank) {
+      if (!rank) return "—";
+      const lastDigit = rank % 10;
+      const lastTwoDigits = rank % 100;
+      
+      if (lastTwoDigits >= 11 && lastTwoDigits <= 13) {
+        return rank + "th";
+      }
+      
+      switch (lastDigit) {
+        case 1: return rank + "st";
+        case 2: return rank + "nd";
+        case 3: return rank + "rd";
+        default: return rank + "th";
+      }
+    }
+
+    const categories = {
+      "9": "General Knowledge",
+      "10": "Entertainment: Books",
+      "11": "Entertainment: Film",
+      "12": "Entertainment: Music",
+      "13": "Entertainment: Musicals & Theatres",
+      "14": "Entertainment: Television",
+      "15": "Entertainment: Video Games",
+      "16": "Entertainment: Board Games",
+      "17": "Science & Nature",
+      "18": "Science: Computers",
+      "19": "Science: Mathematics",
+      "20": "Mythology",
+      "21": "Sports",
+      "22": "Geography",
+      "23": "History",
+      "24": "Politics",
+      "25": "Art",
+      "26": "Celebrities",
+      "27": "Animals",
+      "28": "Vehicles",
+      "29": "Entertainment: Comics",
+      "30": "Science: Gadgets",
+      "31": "Entertainment: Japanese Anime & Manga",
+      "32": "Entertainment: Cartoon & Animations"
+    };
+
+    // Get references to HTML elements
+    const welcomePanel = document.getElementById("welcomePanel");
+    const setupPanel = document.getElementById("setupPanel");
+    const playerConnectPanel = document.getElementById("playerConnectPanel");
+    const nextButton1 = document.getElementById("nextButton1");
+    const categoryList = document.getElementById("categoryList");
+    const beginQuizButton = document.getElementById("beginQuizButton");
+    const roomIdDisplay = document.getElementById("roomIdDisplay");
+    const playerList = document.getElementById("playerList");
+    const startQuizButton = document.getElementById("startQuizButton");
+    const questionsPanel = document.getElementById("questionsPanel");
+    const questionText = document.getElementById("questionText");
+    const answerOptions = document.getElementById("answerOptions");
+    const nextQuestionButton = document.getElementById("nextQuestionButton");
+    const roundStartPanel = document.getElementById("roundStartPanel");
+    const roundNumber = document.getElementById("roundNumber");
+    const categoryName = document.getElementById("categoryName");
+    const startRoundButton = document.getElementById("startRoundButton");
+    const endOfRoundPanel = document.getElementById("endOfRoundPanel");
+    const endRoundNumber = document.getElementById("endRoundNumber");
+    const playerScores = document.getElementById("playerScores");
+    const nextRoundButton = document.getElementById("nextRoundButton");
+
+    // Get references to modal elements
+    const modal = document.getElementById('modal');
+    const modalContent = document.getElementById('modalContent');
+    const modalTitle = document.querySelector('.modal-title');
+    const modalDescription = document.querySelector('.modal-description');
+    const difficultyCards = document.querySelectorAll('.difficulty-options .difficulty-card');
+    const confirmBtn = document.getElementById('confirmBtn');
+    const closeBtn = document.getElementById('closeBtn');
+
+    // Get references to round slider elements
+    const roundSlider = document.getElementById('roundSlider');
+    const rangeLabels = document.getElementById('rangeLabels');
+    const rangeLabelItems = rangeLabels.querySelectorAll('li');
+
+    let selectedCategory = null; // Store the selected category
+    let selectedDifficulty = "1"; // Default difficulty
+    let selectedRounds = 2; // Default number of rounds
+    let roomId;
+
+    let currentRoundNumber = 1;
+    let currentQuestionIndex = 1; // Track the current question index
+
+    // Category ID mapping
+    const categoryIds = {
+        "General": [9],
+        "Sports": [21],
+        "Entertainment": [10],
+        "History": [23],
+        "Science": [17],
+        "Technology": [18],
+        "Decades": [32],
+        "Politics": [24],
+        "Mythology": [20]
+    };
+
+
+    // Function to switch panels
+    function showPanel(panel) {
+      document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+      panel.classList.add("active");
+    }
+
+    // Welcome Screen: Next Button
+    document.addEventListener("DOMContentLoaded", () => {
+        // Automatically redirect from Welcome Panel after 3 seconds
+        setTimeout(() => {
+            if (welcomePanel.classList.contains("active")) {
+                showPanel(setupPanel);
+            }
+        }, 6000);
+
+        // Initialize the range slider with default value
+        updateRangeSlider(2);
+    });
+
+
+    let currentRoom; // Store the room object
+
+    // Update range slider UI
+    function updateRangeSlider(value) {
+        selectedRounds = value;
+        roundSlider.value = value;
+        
+        // Update labels
+        rangeLabelItems.forEach((label, index) => {
+            const labelValue = index + 1;
+            label.classList.remove('active', 'selected');
+            if (labelValue < value) {
+                label.classList.add('selected');
+            } else if (labelValue === value) {
+                label.classList.add('active', 'selected');
+            }
+        });
+
+        // Update track fill using CSS custom property
+        const percent = ((value - 1) / 9) * 100;
+        roundSlider.parentElement.style.setProperty('--range-progress', `${percent}%`);
+    }
+
+    // Range slider input handler
+    roundSlider.addEventListener('input', function() {
+        updateRangeSlider(parseInt(this.value));
+    });
+
+    // Range label click handler
+    rangeLabelItems.forEach((label, index) => {
+        label.addEventListener('click', () => {
+            updateRangeSlider(index + 1);
+        });
+    });
+
+    // Open modal with selected category
+    function openModal(category, description, hasImage = true) {
+        selectedCategory = category;
+        modalTitle.textContent = category;
+        modalDescription.textContent = description;
+        
+        // Set the category image as background (or clear it)
+        if (hasImage) {
+            const imageName = category.toLowerCase();
+            modalContent.style.backgroundImage = `url('imgs/categories/${imageName}.png')`;
+        } else {
+            modalContent.style.backgroundImage = 'none';
+        }
+        
+        // Reset round slider to default (2)
+        updateRangeSlider(2);
+
+        // Reset difficulty selection to Easy
+        difficultyCards.forEach(card => card.classList.remove('selected'));
+        document.querySelector('.difficulty-options .difficulty-card[data-value="1"]').classList.add('selected');
+        selectedDifficulty = "1";
+        
+        modal.classList.add('show');
+    }
+
+    // Close modal
+    function closeModal() {
+        modal.classList.remove('show');
+    }
+
+    // Handle General Quiz button click
+    const generalQuizBtn = document.getElementById('generalQuizBtn');
+    generalQuizBtn.addEventListener('click', () => {
+        openModal('General', 'Test your general knowledge of the world with a mix of questions from all categories.', false);
+    });
+
+    // Handle category selection
+    const boxes = document.querySelectorAll('.grid .box');
+    boxes.forEach(box => {
+        box.addEventListener('click', () => {
+            const category = box.getAttribute('data-category');
+            const description = box.getAttribute('data-description');
+            openModal(category, description);
+        });
+    });
+
+    // Handle difficulty card selection
+    difficultyCards.forEach(card => {
+        card.addEventListener('click', () => {
+            // Remove selected class from all cards
+            difficultyCards.forEach(c => c.classList.remove('selected'));
+            // Add selected class to clicked card
+            card.classList.add('selected');
+            // Update selected difficulty
+            selectedDifficulty = card.getAttribute('data-value');
+        });
+    });
+
+    // Setup Screen
+    confirmBtn.addEventListener('click', () => {
+        const categoryId = categoryIds[selectedCategory];
+        
+        if (!categoryId || categoryId.length === 0) {
+            console.error("Invalid category selected:", selectedCategory);
+            alert("Invalid category selection. Please try again.");
+            return;
+        }
+
+        // Generate rounds array by repeating the category ID
+        const rounds = Array(selectedRounds).fill(categoryId[0]);
+
+        console.log(`Selected Category: ${selectedCategory} (ID: ${categoryId[0]}), Rounds: ${selectedRounds}, Difficulty: ${selectedDifficulty}`);
+
+
+        // Reset the round number to 1 for a new game
+        currentRoundNumber = 1;
+
+        // Emit event to create room with selected category and difficulty
+        socket.emit("room:create", {
+            questionTimeLimit: 30,
+            questionPerRound: 2,
+            rounds: rounds,
+            mode: selectedDifficulty
+        }, (err, room) => {
+            if (err) {
+                console.error("Error creating room:", err);
+                alert("Failed to create room. Please try again."); // Notify the user
+            } else {
+                console.log("Room created successfully:", room);
+                
+                // Store room details globally
+                currentRoom = room;
+                roomId = room.roomId;
+                roomIdDisplay.textContent = roomId.toString().replace(/(\d{3})(\d{3})/, "$1 $2");
+
+                // Move to player connect screen only after successful response
+                showPanel(playerConnectPanel);
+            }
+        });
+
+        closeModal(); // Close modal after selection
+    });
+    // Close modal via button
+    closeBtn.addEventListener('click', closeModal);
+
+    // Close modal when clicking outside modal content
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+
+    // ========== CUSTOM QUIZ MODAL ==========
+    const customModal = document.getElementById('customModal');
+    const customQuizBtn = document.getElementById('customQuizBtn');
+    const customConfirmBtn = document.getElementById('customConfirmBtn');
+    const customCloseBtn = document.getElementById('customCloseBtn');
+    const customDifficultyCards = document.querySelectorAll('#customDifficultyOptions .difficulty-card');
+    let customSelectedDifficulty = "1";
+
+    // Open custom modal
+    function openCustomModal() {
+        // Reset all steppers to 0
+        document.querySelectorAll('.category-row').forEach(row => {
+            const valueSpan = row.querySelector('.stepper-value');
+            const minusBtn = row.querySelector('.stepper-minus');
+            valueSpan.textContent = '0';
+            minusBtn.disabled = true;
+        });
+
+        // Reset difficulty selection to Easy
+        customDifficultyCards.forEach(card => card.classList.remove('selected'));
+        document.querySelector('#customDifficultyOptions .difficulty-card[data-value="1"]').classList.add('selected');
+        customSelectedDifficulty = "1";
+
+        customModal.classList.add('show');
+    }
+
+    // Close custom modal
+    function closeCustomModal() {
+        customModal.classList.remove('show');
+    }
+
+    // Handle custom quiz button click
+    customQuizBtn.addEventListener('click', openCustomModal);
+
+    // Handle stepper buttons
+    document.querySelectorAll('.category-row').forEach(row => {
+        const minusBtn = row.querySelector('.stepper-minus');
+        const plusBtn = row.querySelector('.stepper-plus');
+        const valueSpan = row.querySelector('.stepper-value');
+
+        minusBtn.addEventListener('click', () => {
+            let value = parseInt(valueSpan.textContent);
+            if (value > 0) {
+                value--;
+                valueSpan.textContent = value;
+                if (value === 0) {
+                    minusBtn.disabled = true;
+                }
+            }
+        });
+
+        plusBtn.addEventListener('click', () => {
+            let value = parseInt(valueSpan.textContent);
+            if (value < 5) { // Max 5 rounds per category
+                value++;
+                valueSpan.textContent = value;
+                minusBtn.disabled = false;
+            }
+        });
+    });
+
+    // Handle custom difficulty card selection
+    customDifficultyCards.forEach(card => {
+        card.addEventListener('click', () => {
+            customDifficultyCards.forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            customSelectedDifficulty = card.getAttribute('data-value');
+        });
+    });
+
+    // Handle custom quiz start
+    customConfirmBtn.addEventListener('click', () => {
+        // Build rounds array from selections
+        const rounds = [];
+        document.querySelectorAll('.category-row').forEach(row => {
+            const categoryId = parseInt(row.getAttribute('data-category-id'));
+            const roundCount = parseInt(row.querySelector('.stepper-value').textContent);
+            for (let i = 0; i < roundCount; i++) {
+                rounds.push(categoryId);
+            }
+        });
+
+        // Validate at least one round selected
+        if (rounds.length === 0) {
+            alert('Please select at least one round from any category.');
+            return;
+        }
+
+        console.log(`Custom Quiz - Rounds: ${rounds}, Difficulty: ${customSelectedDifficulty}`);
+
+        // Reset the round number to 1 for a new game
+        currentRoundNumber = 1;
+
+        // Emit event to create room with custom rounds
+        socket.emit("room:create", {
+            questionTimeLimit: 30,
+            questionPerRound: 5,
+            rounds: rounds,
+            mode: customSelectedDifficulty
+        }, (err, room) => {
+            if (err) {
+                console.error("Error creating room:", err);
+                alert("Failed to create room. Please try again.");
+            } else {
+                console.log("Room created successfully:", room);
+                
+                currentRoom = room;
+                roomId = room.roomId;
+                roomIdDisplay.textContent = roomId.toString().replace(/(\d{3})(\d{3})/, "$1 $2");
+
+                showPanel(playerConnectPanel);
+            }
+        });
+
+        closeCustomModal();
+    });
+
+    // Close custom modal via button
+    customCloseBtn.addEventListener('click', closeCustomModal);
+
+    // Close custom modal when clicking outside
+    customModal.addEventListener('click', (e) => {
+        if (e.target === customModal) {
+            closeCustomModal();
+        }
+    });
+
+    // Player Connect Screen: Listen for player:joined events
+    socket.on("player:joined", (data) => {
+      const playerItem = document.createElement("li");
+      playerItem.textContent = data.name;
+      playerList.appendChild(playerItem);
+
+        // Update the local currentRoom variable with the updated room object
+        if (data.room) {
+            currentRoom = data.room;
+            console.log("Updated room object:", currentRoom);
+        }      
+    });
+
+    // Player Connect Screen: Start Quiz Button
+    startQuizButton.addEventListener("click", () => {
+        // Check if there are any connected players
+        if (!currentRoom || !currentRoom.players || Object.keys(currentRoom.players).length === 0) {
+            showNoPlayersModal(); // Show modal if no players are connected
+            return;
+        }
+        // Show the round start panel
+        showPanel(roundStartPanel);
+
+        // Display the round number and category name
+        const currentRoundId = currentRoom.currentProgress.currentRound;
+        roundNumber.textContent = currentRoundNumber; // Start with round 1
+        categoryName.textContent = categories[currentRoundId] || "Unknown Category";
+
+        // Start a 3-second timer when the round panel is shown
+        setTimeout(() => {
+            // Emit quiz:start event
+            socket.emit("quiz:start", { roomId: roomId }, (err, message) => {
+                if (err) {
+                    console.error("Error starting quiz:", err);
+                } else {
+                    console.log("Quiz Status:", message);
+
+                    // Show the questions panel
+                    showPanel(questionsPanel);
+
+                    // Display the first question
+                    currentQuestionIndex = 1;
+                    displayQuestion(currentRoom, currentQuestionIndex);
+
+                    // Display player names
+                    displayPlayerNames(currentRoom);
+                }
+            });
+        }, 3000); // 3000 milliseconds = 3 seconds
+    });
+
+    // Function to show a modal when no players are connected
+    function showNoPlayersModal() {
+        const modal = document.createElement("div");
+        modal.classList.add("modal", "show");
+
+        modal.innerHTML = `
+            <div class="modal-content">
+                <h2>No Players Yet</h2>
+                <p>You need at least one player to start the quiz.</p>
+                <button id="closeNoPlayersModal">OK</button>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        // Close the modal when "OK" is clicked
+        document.getElementById("closeNoPlayersModal").addEventListener("click", () => {
+            modal.remove();
+        });
+    }
+
+
+    // Function to display a question
+    function displayQuestion(room, questionIndex) {
+        const questionData = room.currentProgress.roundQuestions[questionIndex];
+        if (!questionData) {
+            // No more questions, show the end of round panel
+            displayEndOfRound(room);
+            return;
+        }
+
+        // Display the question
+        questionText.textContent = questionData.question;
+
+        // Display the answer options with labels (A:, B:, etc.)
+        answerOptions.innerHTML = "";
+        questionData.allAnswers.forEach((answer, index) => {
+            const div = document.createElement("div");
+            div.classList.add("answerBox");
+
+            // Mark the correct answer
+            if (answer === questionData.correct_answer) {
+                div.setAttribute("data-correct", "true");
+            }
+
+            // Create the circle
+            const circle = document.createElement("div");
+            circle.classList.add("circle");
+            circle.textContent = String.fromCharCode(65 + index); // A, B, C, etc.
+
+            // Create the text span
+            const textSpan = document.createElement("span");
+            textSpan.classList.add("text");
+            textSpan.textContent = answer;
+
+            // Append circle and text inside the answerBox
+            div.appendChild(circle);
+            div.appendChild(textSpan);
+
+            answerOptions.appendChild(div);
+        });
+    }
+
+    // Function to display player names
+    function displayPlayerNames(room) {
+        const playerAnswerStatus = document.getElementById("playerAnswerStatus");
+        
+        // Remove only existing player name spans, keeping the SVG
+        const existingSpans = playerAnswerStatus.querySelectorAll("span");
+        existingSpans.forEach(span => span.remove());
+
+        for (const [playerId, playerData] of Object.entries(room.players)) {
+            const playerNameSpan = document.createElement("span");
+            playerNameSpan.textContent = playerData.name;
+            playerNameSpan.id = `player-${playerId}`; // Unique ID for each player
+            playerAnswerStatus.appendChild(playerNameSpan);
+        }
+    }
+
+    function nextQuestion () {
+        // Move to the next question
+        currentQuestionIndex++;
+
+        // Check if the next question exists before emitting
+        if (!currentRoom.currentProgress.roundQuestions[currentQuestionIndex]) {
+            console.log("No more questions in this round. Notifying players and moving to end of round.");
+
+            // Notify all players that the round has ended and get updated room object
+            socket.emit("quiz:endOfRound", {
+                roomId: roomId // Notify players that the round is over
+            }, (err, updatedRoom) => {
+                if (err) {
+                    console.error("Error ending round:", err);
+                    // Fallback to using currentRoom if there's an error
+                    displayEndOfRound(currentRoom);
+                } else {
+                    console.log("Round ended successfully, updated room:", updatedRoom);
+                    
+                    // Update the local currentRoom variable with the updated room object
+                    currentRoom = updatedRoom;
+                    
+                    // Move game master to end-of-round screen with updated room data
+                    displayEndOfRound(updatedRoom);
+                }
+            });
+            return; // Stop execution to prevent emitting a next question event
+        }
+        
+        // If there is a next question, emit to players
+        socket.emit("quiz:nextQuestion", {
+            roomId: roomId, // Pass the room ID
+            questionId: currentQuestionIndex // Pass the new question ID
+        }, (err, updatedRoom) => {
+            if (err) {
+            console.error("Error updating question:", err);
+            } else {
+            console.log("Question updated successfully:", updatedRoom);
+
+            // Update the local currentRoom variable with the updated room object
+            currentRoom = updatedRoom;
+
+            // Update the UI to display the next question
+            displayQuestion(currentRoom, currentQuestionIndex);
+
+            // Reset player names for the next question
+            const playerAnswerStatus = document.getElementById("playerAnswerStatus");
+            const playerSpans = playerAnswerStatus.querySelectorAll("span");
+            playerSpans.forEach(span => span.classList.remove("answered"));
+
+            }
+        });
+    };
+
+    // Function to display the end of round panel
+    function displayEndOfRound(room) {
+
+        //For testing, log room object
+        console.log("Room object:", room);
+
+        // Update the round number
+        endRoundNumber.textContent = currentRoundNumber;
+
+        // Clear previous player scores
+        playerScores.innerHTML = "";
+
+        // Display player scores
+        for (const [playerId, playerData] of Object.entries(room.players)) {
+            const playerScoreItem = document.createElement("div");
+            playerScoreItem.classList.add("player");
+
+            // Generate dots based on currentRoundAnswers
+            const dotsContainer = document.createElement("span");
+            dotsContainer.classList.add("dots");
+
+            for (let i = 1; i <= room.questionPerRound; i++) {
+                const dot = document.createElement("span");
+                dot.classList.add("dot");
+
+                // Check if the player answered correctly (true/false)
+                if (playerData.currentRoundAnswers[i]) {
+                    dot.classList.add("dots-correct"); // Add class for correct answers
+                }
+
+                dotsContainer.appendChild(dot);
+            }
+
+            // Set up the player score row
+            playerScoreItem.innerHTML = `
+                <span class="name">${playerData.name}</span>
+            `;
+            
+            // Append dots container
+            playerScoreItem.appendChild(dotsContainer);
+
+            // Append the round and overall score
+            playerScoreItem.innerHTML += `
+                <span class="round">${playerData.currentRoundScore}</span>
+                <span class="overall">
+                    <span class="score-circle">${playerData.totalScore}</span>
+                </span>
+            `;
+
+            // Add player row to the scoreboard
+            playerScores.appendChild(playerScoreItem);
+        }
+
+        // Show the end of round panel
+        showPanel(endOfRoundPanel);
+        
+        // Start a 3-second timer when the round panel is shown
+        setTimeout(() => {
+            displayNextRound(room);
+        }, 6000); // 6000 milliseconds = 6 seconds
+    }
+
+
+    function displayNextRound (room) {
+         // Ensure currentRoom is defined before proceeding
+         if (!currentRoom || !currentRoom.rounds) {
+            console.error("Error: currentRoom is not properly set up.");
+            alert("An error occurred. Please restart the quiz.");
+            return;
+        }
+
+         // Check if there are more rounds left
+        if (currentRoundNumber >= currentRoom.rounds.length) {
+            // No more rounds left, show the end of quiz panel
+            displayEndOfQuiz();
+            return;
+        }
+        // Increment the round number
+        currentRoundNumber++;  
+        
+        // Display the round number and category name
+        const currentRoundId = room.rounds[currentRoundNumber - 1];
+        roundNumber.textContent = currentRoundNumber;
+        categoryName.textContent = categories[currentRoundId] || "Unknown Category";
+
+        // Show the round start panel for the next round
+        showPanel(roundStartPanel);
+
+        setTimeout(() => {
+            // Emit the quiz:nextRound event to the server
+            socket.emit("quiz:nextRound", {
+                roomId: roomId // Pass the room ID
+            }, (err, nextRoundData) => {
+                if (err) {
+                console.error("Error moving to the next round:", err);
+                } else {
+                console.log("Next round data:", nextRoundData);
+
+                // Update the room object with the new round data
+                currentRoom = nextRoundData;
+
+                // Show the questions panel
+                showPanel(questionsPanel);
+
+                // Display the first question
+                currentQuestionIndex = 1;
+                displayQuestion(currentRoom, currentQuestionIndex);
+
+                // Display player names
+                displayPlayerNames(currentRoom);
+
+                }
+            });
+        }, 3000);         
+
+    }
+
+    // Function to display the end of quiz panel
+    function displayEndOfQuiz() {
+        // Emit end of game event to the server and get updated room object
+        socket.emit("quiz:endOfGame", { roomId: roomId }, (err, updatedRoom) => {
+            if (err) {
+                console.error("Error ending game:", err);
+                // Fallback to using currentRoom if there's an error
+                updatedRoom = currentRoom;
+            } else {
+                console.log("Game ended successfully, updated room:", updatedRoom);
+                
+                // Update the local currentRoom variable with the updated room object
+                currentRoom = updatedRoom;
+            }
+
+            // Clear previous player scores
+            finalPlayerScores.innerHTML = "";
+
+            // Display player total scores and rankings using updated room data
+            for (const [playerId, playerData] of Object.entries(updatedRoom.players)) {
+                const playerScoreItem = document.createElement("div");
+
+                playerScoreItem.innerHTML = `
+                <p><strong>${playerData.name}</strong></p>
+                <p>Total Score: ${playerData.totalScore}</p>
+                <p>Rank: ${formatRank(playerData.overallRank)}</p>
+                `;
+                finalPlayerScores.appendChild(playerScoreItem);
+            }
+
+            // Show the end of quiz panel
+            showPanel(endOfQuizPanel);
+        });
+    }
+
+    // Restart Quiz Button: Restart the quiz
+    restartQuizButton.addEventListener("click", () => {
+    // Reset the round number
+    currentRoundNumber = 1;
+
+    // Emit a restart event to the server (if needed)
+    socket.emit("quiz:restart", { roomId: roomId }, (err, message) => {
+        if (err) {
+        console.error("Error restarting quiz:", err);
+        } else {
+        console.log("Quiz restarted:", message);
+
+        // Show the setup panel to start a new quiz
+        showPanel(setupPanel);
+        }
+    });
+    });
+
+    // Listen for playerAnswered events
+    socket.on("playerAnswered", (data) => {
+        console.log("Player answered:", data);
+        const playerNameSpan = document.getElementById(`player-${data.playerId}`);
+        if (playerNameSpan) {
+            playerNameSpan.classList.add("answered"); // Turn the player's name green
+        }
+
+        // Check if all players have answered
+        checkAllPlayersAnswered();
+    });
+
+    // Function to check if all players have answered
+    function checkAllPlayersAnswered() {
+        const playerAnswerStatus = document.getElementById("playerAnswerStatus");
+        const playerSpans = playerAnswerStatus.querySelectorAll("span");
+        const allAnswered = Array.from(playerSpans).every(span => span.classList.contains("answered"));
+
+        // Enable or disable the "Next Question" button
+        if (allAnswered) {
+            // Find and highlight the correct answer
+            const correctAnswerBox = document.querySelector('.answerBox[data-correct="true"]');
+            if (correctAnswerBox) {
+                correctAnswerBox.classList.add("correct");
+            }
+
+            // Wait 6 seconds before moving to the next question
+            setTimeout(() => {
+                nextQuestion(); // Automatically move to the next question
+            }, 6000);
+        }
+    }
+
+    // Restart Quiz Button: Reset everything and go back to the Setup Panel
+    restartQuizButton.addEventListener("click", () => {
+        console.log("Restarting quiz...");
+
+        // Reset game-related variables
+        currentRoundNumber = 1;  // Reset round count
+        currentRoom = null;       // Clear current room data
+        roomId = null;            // Clear room ID
+        selectedCategory = null;  // Reset selected category
+        selectedDifficulty = "1"; // Reset difficulty to default
+
+        // Clear any displayed player scores
+        playerScores.innerHTML = "";
+        finalPlayerScores.innerHTML = "";
+
+        // Reset UI elements (if needed)
+        roundNumber.textContent = "1"; // Reset displayed round number
+        categoryName.textContent = ""; // Clear category name display
+        roomIdDisplay.textContent = ""; // Clear room ID display
+
+        // 🔹 Clear previous players from the player list
+        playerList.innerHTML = "";
+
+        // Take the player back to the Setup Panel
+        showPanel(setupPanel);
+    });
+
+
+
+    // Log connection and disconnection events
+    socket.on("connect", () => {
+      console.log("Connected to server:", socket.id);
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Disconnected from server");
+    });
+  </script>
+</body>
+</html>

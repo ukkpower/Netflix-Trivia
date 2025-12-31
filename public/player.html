@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Player Join Quiz</title>
+  <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f4f4f4;
+    }
+    .panel {
+      display: none;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    .panel.active {
+      display: block;
+    }
+    input, button {
+      margin: 10px;
+      padding: 10px;
+      font-size: 16px;
+    }
+    #answerButtons {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+
+    #answerButtons button {
+    padding: 15px 30px;
+    font-size: 18px;
+    cursor: pointer;
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    color: #333;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  #answerButtons button.selected {
+    background-color: #007bff; /* Blue */
+    color: white; /* White text */
+  }
+
+  #answerButtons button:disabled {
+    background-color: #e9e9e9;
+    color: #aaa;
+    cursor: not-allowed;
+  }
+
+  /* Override the disabled styles for the selected button */
+  #answerButtons button.selected:disabled {
+    background-color: #007bff; /* Blue */
+    color: white; /* White text */
+    opacity: 1; /* Ensure the button is not faded */
+  }
+  </style>
+</head>
+<body>
+  <!-- Welcome Screen -->
+  <div id="welcomePanel" class="panel active">
+    <h1>Welcome to the Quiz!</h1>
+    <button id="welcomeButton">Start</button>
+  </div>
+
+  <!-- Join Quiz Screen -->
+  <div id="joinQuizPanel" class="panel">
+    <h1>Join Quiz</h1>
+    <div>
+      <label for="playerName">Player Name:</label>
+      <input type="text" id="playerName" placeholder="Enter Your Name">
+    </div>
+    <div>
+      <label for="roomId">Room ID:</label>
+      <input type="text" id="roomId" placeholder="Enter Room ID">
+    </div>
+    <button id="joinButton">Join</button>
+  </div>
+
+  <!-- Waiting Panel -->
+  <div id="waitingPanel" class="panel">
+    <h1>Waiting for the first round...</h1>
+  </div>
+
+  <!-- Submit Answer Panel -->
+  <div id="submitAnswerPanel" class="panel">
+    <h1>Question <span id="questionNumber">1</span></h1>
+    <div id="answerButtons">
+      <button id="answerA">A</button>
+      <button id="answerB">B</button>
+      <button id="answerC">C</button>
+      <button id="answerD">D</button>
+    </div>
+  </div>
+
+  <!-- End of Round Panel -->
+  <div id="endOfRoundPanel" class="panel">
+    <h1>Round Over!</h1>
+    <div>You scored: 3</div>
+    <div>Your overall score is: 3</div>
+    <div>You are placed 3rd so far</div>
+    <p>Waiting for the next round...</p>
+  </div>
+
+  <!-- End of Game Panel -->
+  <div id="endOfGamePanel" class="panel">
+    <h1>Game Over!</h1>
+    <div>You scored: 10</div>
+    <div>You finised 3rd place</div>
+    <p>Thanks for playing!</p>
+    <button id="restartButton">Return to Start</button>
+  </div>
+
+
+  <script>
+    const socket = io("http://localhost:8080");
+
+    // Get references to HTML elements
+    const welcomePanel = document.getElementById("welcomePanel");
+    const joinQuizPanel = document.getElementById("joinQuizPanel");
+    const waitingPanel = document.getElementById("waitingPanel");
+    const submitAnswerPanel = document.getElementById("submitAnswerPanel");
+    const welcomeButton = document.getElementById("welcomeButton");
+    const playerNameInput = document.getElementById("playerName");
+    const roomIdInput = document.getElementById("roomId");
+    const joinButton = document.getElementById("joinButton");
+    const questionNumber = document.getElementById("questionNumber");
+    const answerButtons = document.querySelectorAll("#answerButtons button");
+    const endOfRoundPanel = document.getElementById("endOfRoundPanel");
+    const endOfGamePanel = document.getElementById("endOfGamePanel");
+    const restartButton = document.getElementById("restartButton");
+
+    let roomId;
+    let playerName;
+
+    // Function to switch panels
+    function showPanel(panel) {
+      document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+      panel.classList.add("active");
+    }
+
+    // Welcome Screen: Start Button
+    welcomeButton.addEventListener("click", () => {
+      showPanel(joinQuizPanel);
+    });
+
+    // Join Quiz Screen: Join Button
+    joinButton.addEventListener("click", () => {
+      playerName = playerNameInput.value.trim();
+      roomId = roomIdInput.value.trim();
+
+      if (!playerName || !roomId) {
+        alert("Please enter your name and room ID.");
+        return;
+      }
+
+      // Emit the player:join event
+      socket.emit("player:join", { roomId, name: playerName }, (err, room) => {
+        if (err) {
+          alert(`Error joining room: ${err.message}`);
+        } else {
+          console.log("Successfully joined room:", roomId);
+          showPanel(waitingPanel);
+        }
+      });
+    });
+
+    // Listen for quiz:started events
+    socket.on("quiz:started", (data) => {
+      showPanel(submitAnswerPanel);
+    });
+
+    // Listen for quiz:nextQuestion events
+    socket.on("quiz:nextQuestion", (data) => {
+      console.log("Next Question");
+      questionNumber.textContent = data.questionId; // Update the question number
+
+      // Reset the answer buttons
+      answerButtons.forEach(button => {
+        button.disabled = false; // Re-enable buttons
+        button.classList.remove("selected"); // Remove the selected style
+      });
+    });
+
+    // Handle answer button clicks
+    answerButtons.forEach((button, index) => {
+      button.addEventListener("click", () => {
+        const answer = index + 1; // Map button index to answer value (1-4)
+
+        // Disable all buttons to prevent multiple submissions
+        answerButtons.forEach(btn => btn.disabled = true);
+
+        // Highlight the selected button
+        button.classList.add("selected");
+
+        // Emit the submitAnswer event
+        socket.emit("submitAnswer", { roomId, answer }, (err, result) => {
+          if (err) {
+            console.error("Error submitting answer:", err);
+          } else {
+            console.log("Answer submitted successfully:", result);
+          }
+        });
+      });
+    });
+
+    // Listen for end of round event
+    socket.on("quiz:endOfRound", (data) => {
+      console.log("Round ended:", data.message);
+      showPanel(endOfRoundPanel);
+    });
+
+    // Listen for new round event
+    socket.on("quiz:roundStart", (data) => {
+      console.log("New round:", data.message);
+
+      questionNumber.textContent = 1;
+
+      // Reset the answer buttons
+      answerButtons.forEach(button => {
+        button.disabled = false; // Re-enable buttons
+        button.classList.remove("selected"); // Remove the selected style
+      });
+
+      showPanel(submitAnswerPanel);
+    });
+
+    // Listen for end of game event
+    socket.on("quiz:endOfGame", (data) => {
+      console.log("Game ended:", data.message);
+      showPanel(endOfGamePanel);
+    });
+
+    // Restart button to go back to the welcome screen
+    restartButton.addEventListener("click", () => {
+      showPanel(welcomePanel);
+    });
+
+
+    // Log connection and disconnection events
+    socket.on("connect", () => {
+      console.log("Connected to server.");
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Disconnected from server.");
+    });
+  </script>
+</body>
+</html>
