@@ -293,10 +293,12 @@
             <img src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia Logo">
         </header>
         <div class="container">
-            <div class="content-box content-box-equal">
-                <div class="end-of-round-text">End of</div>
-                <div class="end-of-round-text end-of-round-round">Round</div>
-                <div class="end-of-round-text" id="endRoundNumber">1</div>
+            <div class="content-box content-box-equal end-of-round-detail">
+                <div>
+                    <div class="end-of-round-text">End of</div>
+                    <div class="end-of-round-text end-of-round-round">Round</div>
+                    <div class="end-of-round-text" id="endRoundNumber">1</div>
+                </div>
             </div>
             <div class="content-box content-box-equal">
                 <div class="leaderboard">
@@ -736,6 +738,7 @@
     // Player Connect Screen: Listen for player:joined events
     socket.on("player:joined", (data) => {
       const playerItem = document.createElement("li");
+      playerItem.classList.add("player-reveal");
       playerJoinIndex += 1;
       playerItem.textContent = `${playerJoinIndex}. ${data.name}`;
       playerList.appendChild(playerItem);
@@ -939,7 +942,11 @@
         playerScores.innerHTML = "";
 
         // Display player scores
-        for (const [playerId, playerData] of Object.entries(room.players)) {
+        const sortedPlayers = Object.entries(room.players).sort(
+            (a, b) => (b[1].currentRoundScore || 0) - (a[1].currentRoundScore || 0)
+        );
+
+        for (const [playerId, playerData] of sortedPlayers) {
             const playerScoreItem = document.createElement("div");
             playerScoreItem.classList.add("player");
 
@@ -985,7 +992,7 @@
         // Start a 3-second timer when the round panel is shown
         setTimeout(() => {
             displayNextRound(room);
-        }, 6000); // 6000 milliseconds = 6 seconds
+        }, 600000000); // 6000 milliseconds = 6 seconds
     }
 
 

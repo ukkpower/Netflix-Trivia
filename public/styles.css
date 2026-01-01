@@ -385,6 +385,7 @@ body {
     margin-bottom: 25px;
     font-size: 1.1em;
     opacity: 0.9;
+    color: #fecbcb;
   }
   
   /* Difficulty Label */
@@ -764,6 +765,11 @@ body {
   font-size: 1.5em;
 }
 
+#playerList li.player-reveal {
+  opacity: 0;
+  animation: answer-slide-fade 0.6s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
 #categoryName {
     font-size: 1.5em;
 }
@@ -923,8 +929,14 @@ body {
   font-weight: bold;
   }
 
+  .end-of-round-detail  {
+    justify-content: center;
+  }
+
   #endRoundNumber {
     text-shadow: rgba(255, 255, 255, 0.90) 0px 0px 10px;
+    font-size: 7em;
+    margin-top: 30px;
   }
 
   .end-of-round-text {
@@ -970,8 +982,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: rgba(255, 255, 255, 0.2); /* White with 70% transparency */
-    padding: 15px;
+    background: rgba(255, 255, 255, 0.1); /* White with 70% transparency */
+    padding: 5px 15px;
     border-radius: 10px;
     font-size: 1.2em;
     margin-bottom: 15px;
@@ -997,13 +1009,17 @@ body {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    border: 2px solid black;
+    border: 2px solid #e40915;
   }
   
   /* Filled dot for correct answers */
   .dots-correct {
     background-color: black;
   }
+
+.round {
+    font-size: 40px;
+}
 
 /* Round and Overall Score */
 .round, .overall {
@@ -1016,14 +1032,14 @@ body {
     width: 35px;
     height: 35px;
     font-size: 1em;
-    color: white;
+    color: #f38e8e;
     font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
     margin-right: 10px;
-    border: 2px solid white;
+    border: 2px solid #f38e8e;
 }
 
   #finalPlayerScores {
