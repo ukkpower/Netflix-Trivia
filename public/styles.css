@@ -220,9 +220,19 @@ body {
     z-index: 0;
   }
 
-  .big-box > * {
+  .big-box-content {
     position: relative;
+    z-index: 2;
+  }
+
+  .big-box-graphic {
+    position: absolute;
+    top: -20px;
+    right: 20px;
+    width: 160px;
+    height: auto;
     z-index: 1;
+    pointer-events: none;
   }
   
   .small-box {
