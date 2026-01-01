@@ -376,7 +376,8 @@ body {
     margin: 0 0 10px 0;
     font-size: 2.2em;
     font-weight: bold;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    text-shadow: rgba(255, 255, 255, 0.90) 0px 0px 10px;
+    text-transform: uppercase;
   }
   
   /* Modal Description */
@@ -732,6 +733,7 @@ body {
 
 .badgeContainer-player-connect {
     margin-top: 40px;
+    margin-right: 30px;
   }
   .outerContainer {
     display: flex; /* Enables flexbox */
@@ -754,6 +756,12 @@ body {
 
 #playerList li {
   list-style: none;
+  border: 2px solid #5a2d32;
+  border-radius: 10px;
+  padding: 5px 5px 5px 15px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  font-size: 1.5em;
 }
 
 #categoryName {
@@ -779,7 +787,7 @@ body {
     gap: 10px;
   }
 
-  .answerBox {
+.answerBox {
     flex: 1; /* Ensures all boxes take up equal height */
     display: flex;
     align-items: center;
@@ -789,6 +797,26 @@ body {
     padding: 10px;
     transition: background-color 0.3s ease;
   }
+
+.answerBox.answer-reveal {
+    opacity: 0;
+    animation: answer-slide-fade 1.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  }
+
+@keyframes answer-slide-fade {
+  0% {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.answerBox .text{
+  font-size: 1.5em;;
+}
 
   .answerBox.correct {
     background-color: #28a745;
@@ -1014,6 +1042,11 @@ margin-top: 20px;
   }
 
   #playerAnswerStatus span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5em;
+    text-transform: uppercase;
   padding: 5px 10px;
   border-radius: 5px;
   color: #fff;

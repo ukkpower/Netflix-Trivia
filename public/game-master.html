@@ -387,6 +387,7 @@
     const beginQuizButton = document.getElementById("beginQuizButton");
     const roomIdDisplay = document.getElementById("roomIdDisplay");
     const playerList = document.getElementById("playerList");
+    let playerJoinIndex = 0;
     const startQuizButton = document.getElementById("startQuizButton");
     const questionsPanel = document.getElementById("questionsPanel");
     const questionText = document.getElementById("questionText");
@@ -735,7 +736,8 @@
     // Player Connect Screen: Listen for player:joined events
     socket.on("player:joined", (data) => {
       const playerItem = document.createElement("li");
-      playerItem.textContent = data.name;
+      playerJoinIndex += 1;
+      playerItem.textContent = `${playerJoinIndex}. ${data.name}`;
       playerList.appendChild(playerItem);
 
         // Update the local currentRoom variable with the updated room object
@@ -828,7 +830,8 @@
         answerOptions.innerHTML = "";
         questionData.allAnswers.forEach((answer, index) => {
             const div = document.createElement("div");
-            div.classList.add("answerBox");
+            div.classList.add("answerBox", "answer-reveal");
+            div.style.animationDelay = `${index * 1}s`;
 
             // Mark the correct answer
             if (answer === questionData.correct_answer) {
@@ -1148,6 +1151,7 @@
 
         // 🔹 Clear previous players from the player list
         playerList.innerHTML = "";
+        playerJoinIndex = 0;
 
         // Take the player back to the Setup Panel
         showPanel(setupPanel);
