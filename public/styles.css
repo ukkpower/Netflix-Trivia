@@ -198,20 +198,40 @@ body {
   
   .big-box, .small-box {
     border-radius: 10px;
-    border: 2px solid white;
+    border: 2px solid transparent;
+    background: linear-gradient(145deg, rgba(60, 10, 10, 0.6), rgba(20, 0, 0, 0.95)) padding-box, linear-gradient(135deg, rgba(229, 9, 20, 0.8), rgba(255, 255, 255, 0.2)) border-box;
     padding: 30px;
   }
   
   .big-box {
     flex: 3;
-    background-color: rgba(255, 255, 255, 0.7);
+    border: 2px solid transparent;
+    box-shadow: 0 0 35px rgba(229, 9, 20, 0.4);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .big-box::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("imgs/netflix-logo-bg.png") center / cover no-repeat;
+    opacity: 0.3;
+    z-index: 0;
+  }
+
+  .big-box > * {
+    position: relative;
+    z-index: 1;
   }
   
   .small-box {
     display: flex;
     flex-direction: column;
     flex: 1;
-    background-color: rgba(255, 255, 255, 0.7);
+    font-size: 32px;
+    text-shadow: rgba(255, 255, 255, 0.90) 0px 0px 10px;
+    text-align: center;
   }
 
   .small-box-button {
@@ -234,7 +254,7 @@ body {
   /* Category Cards */
   .box {
     background-color: rgba(255, 255, 255, 0.2);
-    border: 2px solid white;
+    border: 2px solid #ca8686;
     border-radius: 10px;
     display: flex;
     align-items: center;
