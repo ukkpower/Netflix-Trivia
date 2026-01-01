@@ -40,7 +40,7 @@
                 </div>
                 <img class="big-box-graphic" src="imgs/brain-image.png" alt="" aria-hidden="true">
             </div>
-            <div class="small-box"><div>Create your own custom Quiz</div><button class="small-box-button" id="customQuizBtn">Customise</button></div>
+            <div class="small-box"><div>Create your own Custom Quiz</div><button class="small-box-button" id="customQuizBtn">Customise</button></div>
       </div>        
         <!-- Category Grid -->
         <div class="grid">
@@ -87,15 +87,24 @@
                 <p class="difficulty-label">Select Difficulty:</p>
                 <div class="difficulty-options">
                     <div class="difficulty-card selected" data-value="1">
-                        <span class="difficulty-icon">★</span>
+                        <span class="difficulty-icon">
+                            <img class="difficulty-icon-img" src="imgs/netflix-logo.png" alt="" aria-hidden="true">
+                        </span>
                         <span class="difficulty-name">Easy</span>
                     </div>
                     <div class="difficulty-card" data-value="2">
-                        <span class="difficulty-icon">★★</span>
+                        <span class="difficulty-icon">
+                            <img class="difficulty-icon-img" src="imgs/netflix-logo.png" alt="" aria-hidden="true">
+                            <img class="difficulty-icon-img" src="imgs/netflix-logo.png" alt="" aria-hidden="true">
+                        </span>
                         <span class="difficulty-name">Medium</span>
                     </div>
                     <div class="difficulty-card" data-value="3">
-                        <span class="difficulty-icon">★★★</span>
+                        <span class="difficulty-icon">
+                            <img class="difficulty-icon-img" src="imgs/netflix-logo.png" alt="" aria-hidden="true">
+                            <img class="difficulty-icon-img" src="imgs/netflix-logo.png" alt="" aria-hidden="true">
+                            <img class="difficulty-icon-img" src="imgs/netflix-logo.png" alt="" aria-hidden="true">
+                        </span>
                         <span class="difficulty-name">Hard</span>
                     </div>
                 </div>
@@ -187,15 +196,24 @@
                 <p class="difficulty-label">Select Difficulty:</p>
                 <div class="difficulty-options" id="customDifficultyOptions">
                     <div class="difficulty-card selected" data-value="1">
-                        <span class="difficulty-icon">★</span>
+                        <span class="difficulty-icon">
+                            <img class="difficulty-icon-img" src="imgs/netflix-logo.png" alt="" aria-hidden="true">
+                        </span>
                         <span class="difficulty-name">Easy</span>
                     </div>
                     <div class="difficulty-card" data-value="2">
-                        <span class="difficulty-icon">★★</span>
+                        <span class="difficulty-icon">
+                            <img class="difficulty-icon-img" src="imgs/netflix-logo.png" alt="" aria-hidden="true">
+                            <img class="difficulty-icon-img" src="imgs/netflix-logo.png" alt="" aria-hidden="true">
+                        </span>
                         <span class="difficulty-name">Medium</span>
                     </div>
                     <div class="difficulty-card" data-value="3">
-                        <span class="difficulty-icon">★★★</span>
+                        <span class="difficulty-icon">
+                            <img class="difficulty-icon-img" src="imgs/netflix-logo.png" alt="" aria-hidden="true">
+                            <img class="difficulty-icon-img" src="imgs/netflix-logo.png" alt="" aria-hidden="true">
+                            <img class="difficulty-icon-img" src="imgs/netflix-logo.png" alt="" aria-hidden="true">
+                        </span>
                         <span class="difficulty-name">Hard</span>
                     </div>
                 </div>
@@ -483,9 +501,9 @@
         // Set the category image as background (or clear it)
         if (hasImage) {
             const imageName = category.toLowerCase();
-            modalContent.style.backgroundImage = `url('imgs/categories/${imageName}.png')`;
+            modalContent.style.setProperty("--modal-bg-image", `url('imgs/categories/${imageName}.png')`);
         } else {
-            modalContent.style.backgroundImage = 'none';
+            modalContent.style.setProperty("--modal-bg-image", "none");
         }
         
         // Reset round slider to default (2)
@@ -508,6 +526,7 @@
     const generalQuizBtn = document.getElementById('generalQuizBtn');
     generalQuizBtn.addEventListener('click', () => {
         openModal('General', 'Test your general knowledge of the world with a mix of questions from all categories.', false);
+        modalContent.style.setProperty("--modal-bg-image", "url('imgs/netflix-logo-bg.png')");
     });
 
     // Handle category selection
