@@ -227,10 +227,9 @@ body {
 
   .big-box-graphic {
     position: absolute;
-    top: -20px;
+    top: 0;
     right: 20px;
-    width: 160px;
-    height: auto;
+    height: 100%;
     z-index: 1;
     pointer-events: none;
   }
