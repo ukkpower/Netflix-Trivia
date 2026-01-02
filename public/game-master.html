@@ -576,7 +576,7 @@
         // Emit event to create room with selected category and difficulty
         socket.emit("room:create", {
             questionTimeLimit: 30,
-            questionPerRound: 2,
+            questionPerRound: 8,
             rounds: rounds,
             mode: selectedDifficulty
         }, (err, room) => {
