@@ -739,7 +739,14 @@
   </main>
 
   <script>
-    const socket = io({ transports: ["websocket"] });
+    // Configure socket with explicit reconnection settings
+    const socket = io({ 
+      transports: ["websocket"],
+      reconnection: true,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 5000,
+      reconnectionAttempts: Infinity
+    });
 
     // Helper function to format rank as ordinal (1st, 2nd, 3rd, etc.)
     function formatRank(rank) {
@@ -790,12 +797,50 @@
 
     let roomId;
     let playerName;
+    let wasInRoom = false; // Track if player was in a room before disconnect
 
     // Restore last name (small UX win)
     try{
       const savedName = localStorage.getItem("nt_player_name");
       if(savedName){ playerNameInput.value = savedName; }
     }catch(e){}
+
+    // Function to rejoin room if we were previously in one
+    function attemptRejoin() {
+      if (roomId && playerName && wasInRoom) {
+        console.log("Attempting to rejoin room after reconnection...");
+        socket.emit("player:join", { roomId, name: playerName }, (err, room) => {
+          if (err) {
+            console.error("Failed to rejoin room:", err);
+            
+            // If quiz has already started, we can't rejoin as a new player
+            // But we'll keep trying - the connection is restored, answers might still work
+            if (err.message && err.message.includes("already started")) {
+              console.log("Quiz already started - cannot rejoin, but connection is restored");
+              setConnectionState("ok");
+              // Stay on current panel - connection is restored even if we can't rejoin
+              // The player can still try to submit answers if they're on the answer panel
+            } else {
+              setConnectionState("bad");
+              // If rejoin fails for other reasons, reset state
+              wasInRoom = false;
+              roomId = "";
+              // Show join panel if we're not already there
+              if (!joinQuizPanel.classList.contains("active")) {
+                showPanel(joinQuizPanel);
+                setInlineError("Connection lost. Please rejoin the room.");
+              }
+            }
+          } else {
+            console.log("Successfully rejoined room:", roomId);
+            setConnectionState("ok");
+            // If we were on the answer panel, stay there
+            // If we were on waiting panel, stay there
+            // The server will send appropriate updates
+          }
+        });
+      }
+    }
 
     function setInlineError(msg){
       if(!msg){
@@ -862,8 +907,10 @@
       socket.emit("player:join", { roomId, name: playerName }, (err, room) => {
         if(err){
           setInlineError(`Could not join: ${err.message || "Unknown error"}`);
+          wasInRoom = false;
         }else{
           console.log("Successfully joined room:", roomId);
+          wasInRoom = true; // Mark that we're in a room
           showPanel(waitingPanel);
         }
       });
@@ -975,7 +1022,8 @@
       // Hide answer toast
       answerToast.classList.remove("show");
       
-      // Clear room ID (but keep player name)
+      // Clear room state
+      wasInRoom = false;
       roomId = "";
       
       // Clear room ID input field
@@ -989,11 +1037,68 @@
     socket.on("connect", () => {
       console.log("Connected to server.");
       setConnectionState("ok");
+      
+      // If we were in a room before disconnect, attempt to rejoin
+      if (wasInRoom && roomId && playerName) {
+        attemptRejoin();
+      }
     });
 
     socket.on("disconnect", () => {
       console.log("Disconnected from server.");
       setConnectionState("bad");
+      // Don't reset wasInRoom here - we want to rejoin when we reconnect
+    });
+
+    // Handle reconnection events
+    socket.on("reconnect", (attemptNumber) => {
+      console.log("Reconnected to server after", attemptNumber, "attempts");
+      setConnectionState("ok");
+      
+      // Attempt to rejoin room if we were in one
+      if (wasInRoom && roomId && playerName) {
+        attemptRejoin();
+      }
+    });
+
+    socket.on("reconnect_attempt", (attemptNumber) => {
+      console.log("Reconnection attempt", attemptNumber);
+      setConnectionState("idle");
+    });
+
+    socket.on("reconnect_error", (error) => {
+      console.error("Reconnection error:", error);
+      setConnectionState("bad");
+    });
+
+    socket.on("reconnect_failed", () => {
+      console.error("Reconnection failed after all attempts");
+      setConnectionState("bad");
+      wasInRoom = false;
+      if (!joinQuizPanel.classList.contains("active")) {
+        showPanel(joinQuizPanel);
+        setInlineError("Connection lost. Please check your internet and try rejoining.");
+      }
+    });
+
+    // Handle page visibility changes (for iPhone lock screen)
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") {
+        console.log("Page became visible - checking connection");
+        
+        // If socket is disconnected, it should reconnect automatically
+        // But we'll also check and attempt rejoin if needed
+        if (!socket.connected && wasInRoom && roomId && playerName) {
+          console.log("Socket disconnected when page became visible, will rejoin on reconnect");
+          // The reconnect event will handle the rejoin
+        } else if (socket.connected && wasInRoom && roomId && playerName) {
+          // If already connected, verify we're still in the room
+          // The server should handle this, but we can verify
+          console.log("Page visible and socket connected");
+        }
+      } else {
+        console.log("Page became hidden (screen locked)");
+      }
     });
 
     // Initial
