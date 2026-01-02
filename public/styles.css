@@ -1005,7 +1005,6 @@ body {
 .dots {
     display: flex;
     gap: 5px;
-    width: 80px;
     justify-content: center;
   }
   
