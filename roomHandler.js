@@ -453,6 +453,7 @@ const roomHandler = (io, socket, rooms) => {
     if (room) {
       const player = room.players[socket.id]; // Get the player's data
       if (!player) {
+        console.log("Player not found in the room.");
         return callback({ error: true, message: "Player not found in the room." });
       }
   
