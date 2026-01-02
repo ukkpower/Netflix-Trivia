@@ -287,6 +287,78 @@ const roomHandler = (io, socket, rooms) => {
     return callback({ error: true, message: "Room not found or not joinable" });
   };
 
+  // Handle player reconnection - reassigns old player data to new socket.id
+  const playerRejoin = (payload, callback) => {
+    const room = rooms.get(payload.roomId);
+    if (!room) {
+      console.error(`Room not found for rejoin: ${payload.roomId}`);
+      return callback({ error: true, message: "Room not found" });
+    }
+
+    const oldSocketId = payload.oldSocketId;
+    const playerName = payload.name;
+
+    // Check if old player data exists
+    if (oldSocketId && room.players[oldSocketId]) {
+      // Found old player data - reassign to new socket.id
+      console.log(`Reassigning player ${playerName} from ${oldSocketId} to ${socket.id}`);
+      
+      // Copy player data to new socket.id
+      room.players[socket.id] = room.players[oldSocketId];
+      
+      // Remove old socket.id entry
+      delete room.players[oldSocketId];
+      
+      // Join the room with new socket
+      socket.join(room.roomId);
+      
+      // Leave the old room (if socket still exists)
+      if (io.sockets.sockets.has(oldSocketId)) {
+        io.sockets.sockets.get(oldSocketId).leave(room.roomId);
+      }
+
+      console.log(`Player ${playerName} reconnected and reassigned from ${oldSocketId} to ${socket.id}`);
+      return callback(null, room);
+    }
+
+    // If old socket.id not found, try to find by name (fallback)
+    const existingPlayer = Object.entries(room.players).find(
+      ([id, player]) => player.name === playerName
+    );
+
+    if (existingPlayer) {
+      const [oldId, playerData] = existingPlayer;
+      console.log(`Found player ${playerName} by name, reassigning from ${oldId} to ${socket.id}`);
+      
+      // Copy player data to new socket.id
+      room.players[socket.id] = playerData;
+      
+      // Remove old socket.id entry
+      delete room.players[oldId];
+      
+      // Join the room with new socket
+      socket.join(room.roomId);
+      
+      // Leave the old room (if socket still exists)
+      if (io.sockets.sockets.has(oldId)) {
+        io.sockets.sockets.get(oldId).leave(room.roomId);
+      }
+
+      console.log(`Player ${playerName} reconnected and reassigned from ${oldId} to ${socket.id}`);
+      return callback(null, room);
+    }
+
+    // If quiz hasn't started, allow them to join as new player
+    if (!room.quizStarted) {
+      console.log(`Player ${playerName} not found, joining as new player`);
+      return playerJoin(payload, callback);
+    }
+
+    // Quiz has started and player not found - can't rejoin
+    console.error(`Player ${playerName} not found in room ${payload.roomId} and quiz has started`);
+    return callback({ error: true, message: "Player not found in room. Quiz has already started." });
+  };
+
   // Game master will call this function
   // room id will be passed as a paramater
   // question id will be passed as a paramater
@@ -449,11 +521,25 @@ const roomHandler = (io, socket, rooms) => {
   socket.on("room:create", create);
   socket.on("quiz:start", startQuiz);
   socket.on("player:join", playerJoin);
+  socket.on("player:rejoin", playerRejoin);
   socket.on("quiz:nextQuestion", nextQuestion);
   socket.on("quiz:endOfRound", endOfRound);
   socket.on("quiz:nextRound", nextRound);
   socket.on("submitAnswer", submitAnswer);
   socket.on("quiz:endOfGame", endOfGame);
+
+  // Handle player disconnection - keep player data but mark as disconnected
+  socket.on("disconnect", () => {
+    // Find all rooms this socket was in and keep player data
+    // Player data is kept so they can reconnect with their old socket.id
+    for (const [roomId, room] of rooms.entries()) {
+      if (room.players[socket.id]) {
+        console.log(`Player ${room.players[socket.id].name} disconnected from room ${roomId}, keeping player data for reconnection`);
+        // Player data stays in room.players[socket.id] for potential reconnection
+        // The socket will leave the room automatically
+      }
+    }
+  });
 
 };
 

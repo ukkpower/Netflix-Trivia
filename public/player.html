@@ -798,6 +798,7 @@
     let roomId;
     let playerName;
     let wasInRoom = false; // Track if player was in a room before disconnect
+    let originalSocketId = null; // Store the original socket.id for reconnection
 
     // Restore last name (small UX win)
     try{
@@ -809,7 +810,13 @@
     function attemptRejoin() {
       if (roomId && playerName && wasInRoom) {
         console.log("Attempting to rejoin room after reconnection...");
-        socket.emit("player:join", { roomId, name: playerName }, (err, room) => {
+        // Use player:rejoin if we have an original socket.id, otherwise use player:join
+        const eventName = originalSocketId ? "player:rejoin" : "player:join";
+        const payload = originalSocketId 
+          ? { roomId, name: playerName, oldSocketId: originalSocketId }
+          : { roomId, name: playerName };
+        
+        socket.emit(eventName, payload, (err, room) => {
           if (err) {
             console.error("Failed to rejoin room:", err);
             
@@ -825,6 +832,7 @@
               // If rejoin fails for other reasons, reset state
               wasInRoom = false;
               roomId = "";
+              originalSocketId = null;
               // Show join panel if we're not already there
               if (!joinQuizPanel.classList.contains("active")) {
                 showPanel(joinQuizPanel);
@@ -833,6 +841,8 @@
             }
           } else {
             console.log("Successfully rejoined room:", roomId);
+            // Update originalSocketId to the new socket.id
+            originalSocketId = socket.id;
             setConnectionState("ok");
             // If we were on the answer panel, stay there
             // If we were on waiting panel, stay there
@@ -908,9 +918,11 @@
         if(err){
           setInlineError(`Could not join: ${err.message || "Unknown error"}`);
           wasInRoom = false;
+          originalSocketId = null;
         }else{
           console.log("Successfully joined room:", roomId);
           wasInRoom = true; // Mark that we're in a room
+          originalSocketId = socket.id; // Store the original socket.id
           showPanel(waitingPanel);
         }
       });
@@ -1025,6 +1037,7 @@
       // Clear room state
       wasInRoom = false;
       roomId = "";
+      originalSocketId = null;
       
       // Clear room ID input field
       if (roomIdInput) roomIdInput.value = "";
@@ -1035,12 +1048,15 @@
     });
 
     socket.on("connect", () => {
-      console.log("Connected to server.");
+      console.log("Connected to server. New socket.id:", socket.id);
       setConnectionState("ok");
       
       // If we were in a room before disconnect, attempt to rejoin
       if (wasInRoom && roomId && playerName) {
         attemptRejoin();
+      } else if (!originalSocketId) {
+        // First connection - store the socket.id
+        originalSocketId = socket.id;
       }
     });
 
