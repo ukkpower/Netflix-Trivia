@@ -919,6 +919,10 @@ body {
     }
   }
 
+  #endOfRoundPanel .container {
+    height: 100%;
+  }
+
   #roundNumber {
   font-size: 4.5em;
   font-weight: bold;
@@ -994,6 +998,7 @@ body {
     flex-grow: 1; /* Expands to fill available space */
     font-weight: bold;
     text-align: left;
+    text-transform: uppercase;
 }
 
 /* Dots Section */
@@ -1014,7 +1019,7 @@ body {
   
   /* Filled dot for correct answers */
   .dots-correct {
-    background-color: black;
+    background-color: #e40915;
   }
 
 .round {
