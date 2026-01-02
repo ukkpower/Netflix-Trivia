@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
   <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+  <script src="audio-manager.js"></script>
 </head>
 <body>
   <!-- Welcome Screen -->
@@ -333,6 +334,32 @@
     </div>
 
   <script>
+    // Initialize Audio Manager
+    let audioManager = null;
+
+    // Initialize the audio manager once the page is loaded
+    document.addEventListener("DOMContentLoaded", async function () {
+      // Define a global path for the sounds
+      const globalSoundPath = "sounds/";
+
+      // Start the AudioManager
+      audioManager = new AudioManager(globalSoundPath);
+
+      // Configure settings
+      audioManager.settings.fadeOutDuration = 1000; // 1 second
+      audioManager.settings.fadeInDelay = 500; // 0.5 seconds
+
+      // Example: Load sound effects (uncomment and adjust file names as needed)
+      // await audioManager.loadSoundFX("clickSound", "button_click.wav", 80);
+      // await audioManager.loadSoundFX("correctAnswer", "correct.wav", 100);
+
+      // Example: Load music tracks (uncomment and adjust file names as needed)
+      // await audioManager.loadMusic("menuTheme", "menu_loop.mp3", 70);
+      // await audioManager.loadMusic("gameTheme", "game_loop.mp3", 70);
+
+      console.log("Audio Manager initialized");
+    });
+
     const socket = io({ transports: ["websocket"] });
 
     // Helper function to format rank as ordinal (1st, 2nd, 3rd, etc.)
