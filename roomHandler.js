@@ -267,6 +267,14 @@ const roomHandler = (io, socket, rooms) => {
         return callback(null, room); // Player is already in the room
       }
       
+      // Check if player name already exists in room (case-insensitive)
+      const nameExists = Object.values(room.players).some(
+        player => player.name.toLowerCase().trim() === payload.name.toLowerCase().trim()
+      );
+      if (nameExists) {
+        return callback({ error: true, message: "Name already taken. Please choose a different name." });
+      }
+      
       // Add the new player to the room
       room.players[socket.id] = initializePlayer(payload.name);
       socket.join(room.roomId);
@@ -317,6 +325,14 @@ const roomHandler = (io, socket, rooms) => {
         io.sockets.sockets.get(oldSocketId).leave(room.roomId);
       }
 
+      // Notify the Game Master that player reconnected with new socket.id
+      io.to(room.gameMaster).emit("player:reconnected", {
+        oldSocketId: oldSocketId,
+        newSocketId: socket.id,
+        playerName: playerName,
+        room: room
+      });
+
       console.log(`Player ${playerName} reconnected and reassigned from ${oldSocketId} to ${socket.id}`);
       return callback(null, room);
     }
@@ -344,12 +360,28 @@ const roomHandler = (io, socket, rooms) => {
         io.sockets.sockets.get(oldId).leave(room.roomId);
       }
 
+      // Notify the Game Master that player reconnected with new socket.id
+      io.to(room.gameMaster).emit("player:reconnected", {
+        oldSocketId: oldId,
+        newSocketId: socket.id,
+        playerName: playerName,
+        room: room
+      });
+
       console.log(`Player ${playerName} reconnected and reassigned from ${oldId} to ${socket.id}`);
       return callback(null, room);
     }
 
-    // If quiz hasn't started, allow them to join as new player
+    // If quiz hasn't started, allow them to join as new player (but check name uniqueness)
     if (!room.quizStarted) {
+      // Check if player name already exists in room (case-insensitive)
+      const nameExists = Object.values(room.players).some(
+        player => player.name.toLowerCase().trim() === playerName.toLowerCase().trim()
+      );
+      if (nameExists) {
+        return callback({ error: true, message: "Name already taken. Please choose a different name." });
+      }
+      
       console.log(`Player ${playerName} not found, joining as new player`);
       return playerJoin(payload, callback);
     }

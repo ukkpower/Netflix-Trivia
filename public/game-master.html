@@ -777,6 +777,22 @@
         }      
     });
 
+    // Handle player reconnection - update socket.id mapping
+    socket.on("player:reconnected", (data) => {
+      console.log(`Player ${data.playerName} reconnected: ${data.oldSocketId} -> ${data.newSocketId}`);
+      
+      // Update the local currentRoom variable with the updated room object
+      if (data.room) {
+        currentRoom = data.room;
+        console.log("Updated room object after reconnection:", currentRoom);
+      }
+
+      // If we're on the questions panel, update player names display to use new socket.ids
+      if (questionsPanel.classList.contains("active") && currentRoom) {
+        displayPlayerNames(currentRoom);
+      }
+    });
+
     // Player Connect Screen: Start Quiz Button
     startQuizButton.addEventListener("click", () => {
         // Check if there are any connected players
