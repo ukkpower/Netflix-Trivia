@@ -247,7 +247,14 @@
                     <ul id="playerList"></ul>
                 </div>
             </div>
-            <div class="button-container"><button id="startQuizButton">START QUIZ</button></div>
+            <div class="button-container player-connect-actions">
+                <button id="backToSetupButton" aria-label="Back to setup">
+                    <svg class="back-button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+                        <path d="M7 7.00006L17 17.0001M7 17.0001L17 7.00006" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <button id="startQuizButton">START QUIZ</button>
+            </div>
         </div>
     </div>
   </div>
@@ -340,7 +347,7 @@
     // Initialize the audio manager once the page is loaded
     document.addEventListener("DOMContentLoaded", async function () {
       // Define a global path for the sounds
-      const globalSoundPath = "sounds/";
+      const globalSoundPath = "audio/";
 
       // Start the AudioManager
       audioManager = new AudioManager(globalSoundPath);
@@ -349,8 +356,29 @@
       audioManager.settings.fadeOutDuration = 1000; // 1 second
       audioManager.settings.fadeInDelay = 500; // 0.5 seconds
 
-      // Example: Load sound effects (uncomment and adjust file names as needed)
-      // await audioManager.loadSoundFX("clickSound", "button_click.wav", 80);
+      // Load sound effects
+      try {
+        await audioManager.loadSoundFX("buttonClick", "buttonClick.mp3", 80);
+        console.log("Button click sound loaded");
+      } catch (error) {
+        console.error("Failed to load button click sound:", error);
+      }
+      
+      try {
+        await audioManager.loadSoundFX("buttonConfirm", "buttonConfirm.mp3", 80);
+        console.log("Button confirm sound loaded");
+      } catch (error) {
+        console.error("Failed to load button confirm sound:", error);
+      }
+      
+      try {
+        await audioManager.loadSoundFX("buttonNo", "buttonNo.mp3", 80);
+        console.log("Button no sound loaded");
+      } catch (error) {
+        console.error("Failed to load button no sound:", error);
+      }
+
+      // Example: Load additional sound effects (uncomment and adjust file names as needed)
       // await audioManager.loadSoundFX("correctAnswer", "correct.wav", 100);
 
       // Example: Load music tracks (uncomment and adjust file names as needed)
@@ -418,6 +446,7 @@
     const playerList = document.getElementById("playerList");
     let playerJoinIndex = 0;
     const startQuizButton = document.getElementById("startQuizButton");
+    const backToSetupButton = document.getElementById("backToSetupButton");
     const questionsPanel = document.getElementById("questionsPanel");
     const questionText = document.getElementById("questionText");
     const answerOptions = document.getElementById("answerOptions");
@@ -555,6 +584,9 @@
     // Handle General Quiz button click
     const generalQuizBtn = document.getElementById('generalQuizBtn');
     generalQuizBtn.addEventListener('click', () => {
+        if (audioManager) {
+            audioManager.playSoundFX("buttonClick");
+        }
         openModal('General', 'Test your general knowledge of the world with a mix of questions from all categories.', false);
         modalContent.style.setProperty("--modal-bg-image", "url('imgs/netflix-logo-bg.png')");
     });
@@ -563,6 +595,9 @@
     const boxes = document.querySelectorAll('.grid .box');
     boxes.forEach(box => {
         box.addEventListener('click', () => {
+            if (audioManager) {
+                audioManager.playSoundFX("buttonClick");
+            }
             const category = box.getAttribute('data-category');
             const description = box.getAttribute('data-description');
             openModal(category, description);
@@ -583,6 +618,10 @@
 
     // Setup Screen
     confirmBtn.addEventListener('click', () => {
+        if (audioManager) {
+            audioManager.playSoundFX("buttonConfirm");
+        }
+        
         const categoryId = categoryIds[selectedCategory];
         
         if (!categoryId || categoryId.length === 0) {
@@ -645,6 +684,9 @@
 
     // Open custom modal
     function openCustomModal() {
+        if (audioManager) {
+            audioManager.playSoundFX("buttonClick");
+        }
         // Reset all steppers to 0
         document.querySelectorAll('.category-row').forEach(row => {
             const valueSpan = row.querySelector('.stepper-value');
@@ -707,6 +749,10 @@
 
     // Handle custom quiz start
     customConfirmBtn.addEventListener('click', () => {
+        if (audioManager) {
+            audioManager.playSoundFX("buttonConfirm");
+        }
+        
         // Build rounds array from selections
         const rounds = [];
         document.querySelectorAll('.category-row').forEach(row => {
@@ -831,13 +877,20 @@
         }, 3000); // 3000 milliseconds = 3 seconds
     });
 
+    backToSetupButton.addEventListener("click", () => {
+        if (audioManager) {
+            audioManager.playSoundFX("buttonNo");
+        }
+        showPanel(setupPanel);
+    });
+
     // Function to show a modal when no players are connected
     function showNoPlayersModal() {
         const modal = document.createElement("div");
         modal.classList.add("modal", "show");
 
         modal.innerHTML = `
-            <div class="modal-content">
+            <div class="modal-content no-players-modal-content">
                 <div class="modal-inner">
                     <h2>No Players Yet</h2>
                     <p>You need at least one player to start the quiz.</p>

@@ -225,6 +225,10 @@ body {
     z-index: 2;
   }
 
+.big-box-content p {
+  color: #ffdcdc
+}
+
   .big-box-graphic {
     position: absolute;
     top: 0;
@@ -241,6 +245,11 @@ body {
     font-size: 32px;
     text-shadow: rgba(255, 255, 255, 0.90) 0px 0px 10px;
     text-align: center;
+  }
+
+  .no-players-modal-content {
+    border: 2px solid transparent;
+    background: linear-gradient(145deg, rgba(60, 10, 10, 0.6), rgba(20, 0, 0, 0.95)) padding-box, linear-gradient(135deg, rgba(229, 9, 20, 0.8), rgba(255, 255, 255, 0.2)) border-box;
   }
 
   .small-box-button {
@@ -711,6 +720,12 @@ body {
 #roomIdDisplay {
     text-shadow: 2px 4px 0px rgba(0,0,0,1);
 }
+
+.playertContainer p {
+  font-size: 1.5em;
+  text-align: left;
+}
+
 .badgeContainer {
     position: relative;
     height: 45px;
@@ -733,7 +748,7 @@ body {
   }
 
 .badgeContainer-player-connect {
-    margin-top: 40px;
+    margin-top: 60px;
     margin-right: 30px;
   }
   .outerContainer {
@@ -744,8 +759,45 @@ body {
 .playerContainer {
     flex-grow: 1; /* Makes this container take remaining space */
 }
+#backToSetupButton,
 #startQuizButton {
     width: 60%;
+}
+
+.player-connect-actions #backToSetupButton,
+.player-connect-actions #startQuizButton {
+    width: 48%;
+}
+
+.player-connect-actions #backToSetupButton {
+    width: 12%;
+}
+
+.player-connect-actions {
+    gap: 12px;
+}
+
+#backToSetupButton {
+    background: #6b6b6b;
+    box-shadow: 0 5px #4f4f4f;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+}
+
+#backToSetupButton:hover {
+    background: #808080;
+}
+
+#backToSetupButton:active {
+    box-shadow: 0 3px #4f4f4f;
+    top: 2px;
+}
+
+.back-button-icon {
+    width: 20px;
+    height: 20px;
 }
 
 #playerList {
@@ -1074,6 +1126,6 @@ margin-top: 20px;
   }
 
   #playerAnswerStatus span.answered {
-  background-color: #28a745; /* Green */
+  background-color: #B70710;
   color: white;
   }
