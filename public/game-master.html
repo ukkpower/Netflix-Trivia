@@ -328,15 +328,38 @@
             <img src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia Logo">
         </header>
         <div class="container">
-            <div class="content-box content-box-outline">
-                <div class="content-box-inner">        
-                    <h1>End of Quiz</h1>
-                    <div id="finalPlayerScores">
-                    <!-- Player total scores will be dynamically added here -->
+            <h1>Game Over</h1>
+            
+            <div class="podium-stack">
+                <!-- 1st Place -->
+                <div id="firstPlaceName"></div>
+                
+                <!-- 2nd and 3rd Place -->
+                <div class="second-third-place">
+                    <div id="secondPlaceName"></div>
+                    <div id="thirdPlaceName"></div>
+                </div>
+                
+                <!-- Podium Images -->
+                <div class="podium-container">
+                    <div class="podium-item">
+                        <img src="imgs/2ndPlace.png" alt="2nd Place">
                     </div>
-                    <button id="restartQuizButton">Restart Quiz</button>
+                    <div class="podium-item">
+                        <img src="imgs/1stPlace.png" alt="1st Place">
+                    </div>
+                    <div class="podium-item">
+                        <img src="imgs/3rdPlace.png" alt="3rd Place">
+                    </div>
                 </div>
             </div>
+            
+            <!-- Runners Up Section -->
+            <div id="runnersUpSection">
+                <!-- Runners up will be dynamically added here -->
+            </div>
+            
+            <button id="restartQuizButton">Restart Quiz</button>
         </div>  
     </div>
 
@@ -642,7 +665,7 @@
         // Emit event to create room with selected category and difficulty
         socket.emit("room:create", {
             questionTimeLimit: 30,
-            questionPerRound: 8,
+            questionPerRound: 1,
             rounds: rounds,
             mode: selectedDifficulty
         }, (err, room) => {
@@ -1161,20 +1184,41 @@
                 currentRoom = updatedRoom;
             }
 
-            // Clear previous player scores
-            finalPlayerScores.innerHTML = "";
+            // Get references to display elements
+            const firstPlaceName = document.getElementById("firstPlaceName");
+            const secondPlaceName = document.getElementById("secondPlaceName");
+            const thirdPlaceName = document.getElementById("thirdPlaceName");
+            const runnersUpSection = document.getElementById("runnersUpSection");
 
-            // Display player total scores and rankings using updated room data
-            for (const [playerId, playerData] of Object.entries(updatedRoom.players)) {
-                const playerScoreItem = document.createElement("div");
+            // Clear previous content
+            firstPlaceName.innerHTML = "";
+            secondPlaceName.innerHTML = "";
+            thirdPlaceName.innerHTML = "";
+            runnersUpSection.innerHTML = "";
 
-                playerScoreItem.innerHTML = `
-                <p><strong>${playerData.name}</strong></p>
-                <p>Total Score: ${playerData.totalScore}</p>
-                <p>Rank: ${formatRank(playerData.overallRank)}</p>
-                `;
-                finalPlayerScores.appendChild(playerScoreItem);
-            }
+            // Sort players by overall rank
+            const sortedPlayers = Object.entries(updatedRoom.players).sort(
+                (a, b) => (a[1].overallRank || 999) - (b[1].overallRank || 999)
+            );
+
+            // Display top 3 players
+            sortedPlayers.forEach(([playerId, playerData], index) => {
+                const rank = playerData.overallRank || index + 1;
+                
+                if (rank === 1) {
+                    firstPlaceName.textContent = playerData.name;
+                } else if (rank === 2) {
+                    secondPlaceName.textContent = playerData.name;
+                } else if (rank === 3) {
+                    thirdPlaceName.textContent = playerData.name;
+                } else {
+                    // Runners up (4th place and below)
+                    const runnerUpItem = document.createElement("div");
+                    runnerUpItem.className = "runner-up-item";
+                    runnerUpItem.textContent = `${rank}. ${playerData.name}`;
+                    runnersUpSection.appendChild(runnerUpItem);
+                }
+            });
 
             // Show the end of quiz panel
             showPanel(endOfQuizPanel);
@@ -1245,7 +1289,10 @@
 
         // Clear any displayed player scores
         playerScores.innerHTML = "";
-        finalPlayerScores.innerHTML = "";
+        document.getElementById("firstPlaceName").innerHTML = "";
+        document.getElementById("secondPlaceName").innerHTML = "";
+        document.getElementById("thirdPlaceName").innerHTML = "";
+        document.getElementById("runnersUpSection").innerHTML = "";
 
         // Reset UI elements (if needed)
         roundNumber.textContent = "1"; // Reset displayed round number
