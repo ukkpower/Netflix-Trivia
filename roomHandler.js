@@ -102,6 +102,29 @@ const initializePlayer = (playerName) => ({
   overallRank: null
 });
 
+const TIMER_OPTION_SECONDS = new Set([30, 60, 120]);
+
+const normalizeTimerSettings = (answerTimerEnabled, answerTimerSeconds, legacyQuestionTimeLimit) => {
+  const fallbackSeconds = TIMER_OPTION_SECONDS.has(Number(answerTimerSeconds))
+    ? Number(answerTimerSeconds)
+    : TIMER_OPTION_SECONDS.has(Number(legacyQuestionTimeLimit))
+      ? Number(legacyQuestionTimeLimit)
+      : 30;
+
+  const enabled =
+    typeof answerTimerEnabled === "boolean"
+      ? answerTimerEnabled
+      : Number(legacyQuestionTimeLimit) > 0;
+
+  return {
+    answerTimerEnabled: enabled,
+    answerTimerSeconds: fallbackSeconds
+  };
+};
+
+const hasAnsweredQuestion = (player, questionId) =>
+  Object.prototype.hasOwnProperty.call(player.currentRoundAnswers, questionId);
+
 // Helper function to shuffle an array
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -472,19 +495,25 @@ const generateRound = async (currentRoundIndex, rounds, mode, questionsPerRound,
 const createRoom = async (
   socket,
   rooms,
-  questionTimeLimit,
+  answerTimerEnabled,
+  answerTimerSeconds,
   questionsPerRound,
   rounds,
   mode,
-  questionImageBasePath
+  questionImageBasePath,
+  legacyQuestionTimeLimit
 ) => {
-  questionTimeLimit = questionTimeLimit !== undefined ? questionTimeLimit : 0;
   questionsPerRound = questionsPerRound !== undefined ? questionsPerRound : 5;
   const DEFAULT_QUESTION_IMAGE_BASE_PATH = "imgs/questions";
   const normalizedQuestionImageBasePath =
     typeof questionImageBasePath === "string" && questionImageBasePath.trim().length > 0
       ? questionImageBasePath.trim()
       : DEFAULT_QUESTION_IMAGE_BASE_PATH;
+  const timerSettings = normalizeTimerSettings(
+    answerTimerEnabled,
+    answerTimerSeconds,
+    legacyQuestionTimeLimit
+  );
 
   const roomId = generateUniqueRoomId(rooms);
   let roundPlan;
@@ -499,11 +528,13 @@ const createRoom = async (
   const room = {
     roomId,
     gameMaster: socket.id,
-    questionTimeLimit : questionTimeLimit,
+    questionTimeLimit: timerSettings.answerTimerEnabled ? timerSettings.answerTimerSeconds : 0,
     questionPerRound: questionsPerRound,
     mode: mode,
     settings: {
-      questionImageBasePath: normalizedQuestionImageBasePath
+      questionImageBasePath: normalizedQuestionImageBasePath,
+      answerTimerEnabled: timerSettings.answerTimerEnabled,
+      answerTimerSeconds: timerSettings.answerTimerSeconds
     },
     rounds: roundPlan,
     players: {
@@ -514,6 +545,8 @@ const createRoom = async (
       currentRoundIndex: null,
       currentRound: null,
       currentQuestion: 1,
+      questionId: 1,
+      questionOpen: false,
       roundQuestions: null
     }
   };
@@ -564,11 +597,13 @@ const roomHandler = (io, socket, rooms) => {
       const newRoom = await createRoom(
         socket,
         rooms,
-        payload.questionTimeLimit,
+        payload.answerTimerEnabled,
+        payload.answerTimerSeconds,
         payload.questionPerRound,
         payload.rounds,
         payload.mode,
-        payload.questionImageBasePath
+        payload.questionImageBasePath,
+        payload.questionTimeLimit
       );
       callback(null, newRoom);
     } catch (error) {
@@ -608,6 +643,9 @@ const roomHandler = (io, socket, rooms) => {
       }
 
       room.quizStarted = true; // Mark Quiz as started
+      room.currentProgress.currentQuestion = 1;
+      room.currentProgress.questionId = 1;
+      room.currentProgress.questionOpen = true;
 
       // Notify all players in the room that the quiz has started
       io.to(room.roomId).emit("quiz:started", { message: "The quiz has started!" });
@@ -765,15 +803,22 @@ const roomHandler = (io, socket, rooms) => {
   const nextQuestion = (payload, callback) => {
     const room = rooms.get(payload.roomId); // Get the room from the Map
     if (room) {
+      const nextQuestionId = Number(payload.questionId);
+      if (!Number.isInteger(nextQuestionId) || nextQuestionId < 1) {
+        return callback({ error: true, message: "Invalid question ID" });
+      }
+
       // Update the currentQuestion in the room object
-      room.currentProgress.currentQuestion = payload.questionId;
+      room.currentProgress.currentQuestion = nextQuestionId;
+      room.currentProgress.questionId = nextQuestionId;
+      room.currentProgress.questionOpen = true;
   
       // Notify all players in the room about the new question ID
       io.to(room.roomId).emit("quiz:nextQuestion", { 
-        questionId: payload.questionId 
+        questionId: nextQuestionId 
       });
   
-      console.log(`Question updated to: ${payload.questionId} in room: ${room.roomId}`);
+      console.log(`Question updated to: ${nextQuestionId} in room: ${room.roomId}`);
       return callback(null, room);
     }
   
@@ -785,6 +830,8 @@ const roomHandler = (io, socket, rooms) => {
   const endOfRound = (payload, callback) => {
     const room = rooms.get(payload.roomId); // Retrieve the room from the Map
     if (room) {
+      room.currentProgress.questionOpen = false;
+
       // Calculate rankings before returning room object
       calculateRankings(room);
       
@@ -821,6 +868,8 @@ const roomHandler = (io, socket, rooms) => {
         // Update the room object with the new round data
         room.currentProgress.roundQuestions = roundQuestions;
         room.currentProgress.currentQuestion = 1; // Reset the question index
+        room.currentProgress.questionId = 1;
+        room.currentProgress.questionOpen = true;
 
         // Reset each player's current round score and per-question tracking
         Object.keys(room.players).forEach((playerId) => {
@@ -846,6 +895,71 @@ const roomHandler = (io, socket, rooms) => {
     return callback({ error: true, message: "Room not found" });
   };
 
+  const closeQuestion = (payload, callback) => {
+    const room = rooms.get(payload.roomId);
+    if (!room) {
+      console.error(`Room not found closeQuestion: ${payload.roomId}`);
+      return callback({ error: true, message: "Room not found" });
+    }
+
+    if (room.gameMaster !== socket.id) {
+      return callback({ error: true, message: "Only the game master can close questions" });
+    }
+
+    const activeQuestionId = room.currentProgress.currentQuestion;
+    const requestedQuestionId = Number(payload.questionId);
+    if (requestedQuestionId !== activeQuestionId) {
+      return callback({ error: true, message: "Question is no longer active" });
+    }
+
+    if (!["all_answered", "timeout"].includes(payload.reason)) {
+      return callback({ error: true, message: "Invalid close reason" });
+    }
+
+    if (!room.currentProgress.questionOpen) {
+      return callback(null, {
+        room,
+        questionId: activeQuestionId,
+        reason: payload.reason,
+        alreadyClosed: true
+      });
+    }
+
+    room.currentProgress.questionOpen = false;
+
+    if (payload.reason === "timeout") {
+      Object.entries(room.players).forEach(([playerId, player]) => {
+        if (hasAnsweredQuestion(player, activeQuestionId)) {
+          return;
+        }
+
+        player.currentRoundAnswers[activeQuestionId] = false;
+
+        io.to(room.gameMaster).emit("playerAnswered", {
+          playerId,
+          playerName: player.name,
+          answer: null,
+          isCorrect: false,
+          autoLocked: true
+        });
+      });
+    }
+
+    Object.keys(room.players).forEach((playerId) => {
+      io.to(playerId).emit("quiz:questionClosed", {
+        questionId: activeQuestionId,
+        reason: payload.reason
+      });
+    });
+
+    return callback(null, {
+      room,
+      questionId: activeQuestionId,
+      reason: payload.reason,
+      alreadyClosed: false
+    });
+  };
+
   const submitAnswer = (payload, callback) => {
     const room = rooms.get(payload.roomId); // Get the room from the Map
     if (room) {
@@ -860,6 +974,19 @@ const roomHandler = (io, socket, rooms) => {
       if (!currentQuestion) {
         return callback({ error: true, message: "No active question found." });
       }
+
+      const submittedQuestionId = Number(payload.questionId);
+      if (submittedQuestionId !== currentQid || submittedQuestionId !== room.currentProgress.questionId) {
+        return callback({ error: true, message: "Question is no longer active." });
+      }
+
+      if (!room.currentProgress.questionOpen) {
+        return callback({ error: true, message: "Question is already closed." });
+      }
+
+      if (hasAnsweredQuestion(player, currentQid)) {
+        return callback({ error: true, message: "Answer already submitted for this question." });
+      }
   
       // Check if the answer is correct
       const correctAnswer = currentQuestion.correct_answer;
@@ -867,6 +994,9 @@ const roomHandler = (io, socket, rooms) => {
   
       // Map the player's answer to the actual answer text
       const selectedAnswer = currentQuestion.allAnswers[playerAnswer - 1]; // Adjust for 0-based index
+      if (!selectedAnswer) {
+        return callback({ error: true, message: "Invalid answer choice." });
+      }
 
       const isCorrect = selectedAnswer === correctAnswer;
       // Record the answer for the current question:
@@ -898,6 +1028,8 @@ const roomHandler = (io, socket, rooms) => {
   const endOfGame = (payload, callback) => {
     const room = rooms.get(payload.roomId); // Retrieve the room from the Map
     if (room) {
+      room.currentProgress.questionOpen = false;
+
       // Calculate rankings before returning room object
       calculateRankings(room);
       
@@ -925,6 +1057,7 @@ const roomHandler = (io, socket, rooms) => {
   socket.on("player:join", playerJoin);
   socket.on("player:rejoin", playerRejoin);
   socket.on("quiz:nextQuestion", nextQuestion);
+  socket.on("quiz:closeQuestion", closeQuestion);
   socket.on("quiz:endOfRound", endOfRound);
   socket.on("quiz:nextRound", nextRound);
   socket.on("submitAnswer", submitAnswer);

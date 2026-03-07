@@ -786,6 +786,7 @@
     const questionNumber = document.getElementById("questionNumber");
     const answerButtons = document.querySelectorAll("#answerButtons button");
     const answerToast = document.getElementById("answerToast");
+    const DEFAULT_ANSWER_TOAST_MESSAGE = answerToast.textContent;
 
     // Inline error
     const joinError = document.getElementById("joinError");
@@ -797,6 +798,7 @@
 
     let roomId;
     let playerName;
+    let currentQuestionId = 1;
     let wasInRoom = false; // Track if player was in a room before disconnect
     let originalSocketId = null; // Store the original socket.id for reconnection
 
@@ -882,6 +884,15 @@
       panel.classList.add("active");
     }
 
+    function resetAnswerState() {
+      answerToast.textContent = DEFAULT_ANSWER_TOAST_MESSAGE;
+      answerToast.classList.remove("show");
+      answerButtons.forEach((button) => {
+        button.disabled = false;
+        button.classList.remove("selected");
+      });
+    }
+
     // Splash -> Welcome (auto, or tap to skip)
     let splashDismissed = false;
     function exitSplash(){
@@ -940,19 +951,29 @@
 
     // quiz started
     socket.on("quiz:started", (data) => {
+      currentQuestionId = 1;
+      questionNumber.textContent = 1;
+      resetAnswerState();
       showPanel(submitAnswerPanel);
     });
 
     // Next question
     socket.on("quiz:nextQuestion", (data) => {
       console.log("Next Question");
+      currentQuestionId = data.questionId;
       questionNumber.textContent = data.questionId;
 
       // Reset answer state
-      answerToast.classList.remove("show");
-      answerButtons.forEach(button => {
-        button.disabled = false;
-        button.classList.remove("selected");
+      resetAnswerState();
+    });
+
+    socket.on("quiz:questionClosed", (data) => {
+      if (Number(data.questionId) !== Number(currentQuestionId)) {
+        return;
+      }
+
+      answerButtons.forEach((button) => {
+        button.disabled = true;
       });
     });
 
@@ -964,11 +985,14 @@
         // Disable all buttons + show selected
         answerButtons.forEach(btn => btn.disabled = true);
         button.classList.add("selected");
+        answerToast.textContent = DEFAULT_ANSWER_TOAST_MESSAGE;
         answerToast.classList.add("show");
 
-        socket.emit("submitAnswer", { roomId, answer }, (err, result) => {
+        socket.emit("submitAnswer", { roomId, questionId: currentQuestionId, answer }, (err, result) => {
           if(err){
             console.error("Error submitting answer:", err);
+            answerToast.textContent = err.message || "Answer not accepted.";
+            answerToast.classList.add("show");
           }else{
             console.log("Answer submitted successfully:", result);
           }
@@ -996,12 +1020,9 @@
     socket.on("quiz:roundStart", (data) => {
       console.log("New round:", data.message);
 
+      currentQuestionId = 1;
       questionNumber.textContent = 1;
-      answerToast.classList.remove("show");
-      answerButtons.forEach(button => {
-        button.disabled = false;
-        button.classList.remove("selected");
-      });
+      resetAnswerState();
 
       showPanel(submitAnswerPanel);
     });
@@ -1023,16 +1044,11 @@
 
     restartButton.addEventListener("click", () => {
       // Reset answer buttons state
-      answerButtons.forEach(button => {
-        button.disabled = false;
-        button.classList.remove("selected");
-      });
+      resetAnswerState();
       
       // Reset question number
+      currentQuestionId = 1;
       questionNumber.textContent = 1;
-      
-      // Hide answer toast
-      answerToast.classList.remove("show");
       
       // Clear room state
       wasInRoom = false;

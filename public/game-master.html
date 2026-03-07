@@ -111,6 +111,23 @@
                     </div>
                 </div>
 
+                <div class="timer-settings" id="timerSettings">
+                    <div class="timer-toggle-row">
+                        <p class="difficulty-label timer-label">Answer Timer:</p>
+                        <button type="button" class="timer-toggle" id="timerToggleBtn" aria-pressed="false">
+                            <span class="timer-toggle-track" aria-hidden="true">
+                                <span class="timer-toggle-thumb"></span>
+                            </span>
+                            <span class="timer-toggle-status">Off</span>
+                        </button>
+                    </div>
+                    <div class="timer-options is-disabled" id="timerOptions">
+                        <button type="button" class="timer-option selected" data-seconds="30">30 secs</button>
+                        <button type="button" class="timer-option" data-seconds="60">1 minute</button>
+                        <button type="button" class="timer-option" data-seconds="120">2 minutes</button>
+                    </div>
+                </div>
+
                 <div class="modal-buttons">
                     <button id="confirmBtn">Start Quiz</button>
                     <button id="closeBtn">Cancel</button>
@@ -220,6 +237,23 @@
                     </div>
                 </div>
 
+                <div class="timer-settings" id="customTimerSettings">
+                    <div class="timer-toggle-row">
+                        <p class="difficulty-label timer-label">Answer Timer:</p>
+                        <button type="button" class="timer-toggle" id="customTimerToggleBtn" aria-pressed="false">
+                            <span class="timer-toggle-track" aria-hidden="true">
+                                <span class="timer-toggle-thumb"></span>
+                            </span>
+                            <span class="timer-toggle-status">Off</span>
+                        </button>
+                    </div>
+                    <div class="timer-options is-disabled" id="customTimerOptions">
+                        <button type="button" class="timer-option selected" data-seconds="30">30 secs</button>
+                        <button type="button" class="timer-option" data-seconds="60">1 minute</button>
+                        <button type="button" class="timer-option" data-seconds="120">2 minutes</button>
+                    </div>
+                </div>
+
                 <div class="modal-buttons">
                     <button id="customConfirmBtn">Start Quiz</button>
                     <button id="customCloseBtn">Cancel</button>
@@ -283,7 +317,10 @@
     </header>
     <div class="container">
         <div class="content-box content-box-outline content-box-equal">
-            <div id="questionDisplay"><p id="questionText"></p></div>
+            <div id="questionDisplay">
+                <div id="questionTimer" hidden>00:30</div>
+                <p id="questionText"></p>
+            </div>
         </div>
         <div id="answerOptions" class="content-box content-box-equal">
             <!-- <ul id="answerOptions"></ul> -->
@@ -447,6 +484,7 @@
     const backToSetupButton = document.getElementById("backToSetupButton");
     const questionsPanel = document.getElementById("questionsPanel");
     const questionDisplay = document.getElementById("questionDisplay");
+    const questionTimer = document.getElementById("questionTimer");
     const questionText = document.getElementById("questionText");
     const answerOptions = document.getElementById("answerOptions");
     const nextQuestionButton = document.getElementById("nextQuestionButton");
@@ -468,7 +506,11 @@
     const modalContent = document.getElementById('modalContent');
     const modalTitle = document.querySelector('.modal-title');
     const modalDescription = document.querySelector('.modal-description');
-    const difficultyCards = document.querySelectorAll('.difficulty-options .difficulty-card');
+    const difficultyCards = document.querySelectorAll('#modal .difficulty-options .difficulty-card');
+    const timerSettings = document.getElementById("timerSettings");
+    const timerToggleBtn = document.getElementById("timerToggleBtn");
+    const timerToggleStatus = timerToggleBtn.querySelector(".timer-toggle-status");
+    const timerOptionButtons = timerSettings.querySelectorAll(".timer-option");
     const confirmBtn = document.getElementById('confirmBtn');
     const closeBtn = document.getElementById('closeBtn');
 
@@ -476,19 +518,29 @@
     const roundSlider = document.getElementById('roundSlider');
     const rangeLabels = document.getElementById('rangeLabels');
     const rangeLabelItems = rangeLabels.querySelectorAll('li');
+    const customTimerSettings = document.getElementById("customTimerSettings");
+    const customTimerToggleBtn = document.getElementById("customTimerToggleBtn");
+    const customTimerToggleStatus = customTimerToggleBtn.querySelector(".timer-toggle-status");
+    const customTimerOptionButtons = customTimerSettings.querySelectorAll(".timer-option");
 
     let selectedCategory = null; // Store the selected category
     let selectedDifficulty = "1"; // Default difficulty
     let selectedRounds = 1; // Default number of rounds
+    let selectedTimerEnabled = false;
+    let selectedTimerSeconds = 30;
     let roomId;
     let isCreatingRoom = false;
     let roomCreateRequestToken = 0;
 
     let currentRoundNumber = 1;
     let currentQuestionIndex = 1; // Track the current question index
+    let customSelectedTimerEnabled = false;
+    let customSelectedTimerSeconds = 30;
     const QUESTION_IMAGE_BASE_PATH = "imgs/questions";
+    const QUESTION_REVEAL_DELAY_MS = 6000;
     const ROOM_ID_DIGIT_COUNT = 6;
     const ROOM_ID_PLACEHOLDER = "000000";
+    const TIMER_DEFAULT_SECONDS = 30;
     const WELCOME_TO_SETUP_DELAY_MS = 6000;
     const WELCOME_FADE_OUT_DURATION_MS = 500;
     const ROUND_START_PANEL_DURATION_MS = 5000;
@@ -501,6 +553,12 @@
     let roomIdDigitEls = [];
     let roomIdScrambleIntervalIds = [];
     let roomIdRevealTimeoutIds = [];
+    let questionAdvanceTimeoutId = null;
+    let questionTimerIntervalId = null;
+    let questionTimerDeadline = null;
+    let questionCloseInFlight = false;
+    let currentQuestionClosed = false;
+    let questionRevealScheduled = false;
     let setupPanelAssetsPreloadPromise = null;
     let hasCompletedWelcomeToSetupTransition = false;
 
@@ -526,6 +584,196 @@
 
       endOfRoundRevealTimeoutIds.forEach(timeoutId => clearTimeout(timeoutId));
       endOfRoundRevealTimeoutIds = [];
+    }
+
+    function updateTimerControls(toggleButton, toggleStatus, optionButtons, enabled, seconds) {
+      toggleButton.classList.toggle("is-enabled", enabled);
+      toggleButton.setAttribute("aria-pressed", enabled ? "true" : "false");
+      toggleStatus.textContent = enabled ? "On" : "Off";
+
+      const optionContainer = optionButtons[0]?.parentElement;
+      if (optionContainer) {
+        optionContainer.classList.toggle("is-disabled", !enabled);
+      }
+
+      optionButtons.forEach((button) => {
+        const isSelected = Number(button.dataset.seconds) === Number(seconds);
+        button.classList.toggle("selected", isSelected);
+        button.disabled = !enabled;
+      });
+    }
+
+    function resetStandardTimerControls() {
+      selectedTimerEnabled = false;
+      selectedTimerSeconds = TIMER_DEFAULT_SECONDS;
+      updateTimerControls(
+        timerToggleBtn,
+        timerToggleStatus,
+        timerOptionButtons,
+        selectedTimerEnabled,
+        selectedTimerSeconds
+      );
+    }
+
+    function resetCustomTimerControls() {
+      customSelectedTimerEnabled = false;
+      customSelectedTimerSeconds = TIMER_DEFAULT_SECONDS;
+      updateTimerControls(
+        customTimerToggleBtn,
+        customTimerToggleStatus,
+        customTimerOptionButtons,
+        customSelectedTimerEnabled,
+        customSelectedTimerSeconds
+      );
+    }
+
+    function formatCountdown(totalSeconds) {
+      const safeSeconds = Math.max(0, totalSeconds);
+      const minutes = Math.floor(safeSeconds / 60);
+      const seconds = safeSeconds % 60;
+      return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+    }
+
+    function setQuestionTimerDisplay(totalSeconds, visible) {
+      questionTimer.textContent = formatCountdown(totalSeconds);
+      questionTimer.hidden = !visible;
+    }
+
+    function clearQuestionAdvanceTimeout() {
+      if (questionAdvanceTimeoutId) {
+        clearTimeout(questionAdvanceTimeoutId);
+        questionAdvanceTimeoutId = null;
+      }
+    }
+
+    function clearQuestionTimer() {
+      if (questionTimerIntervalId) {
+        clearInterval(questionTimerIntervalId);
+        questionTimerIntervalId = null;
+      }
+
+      questionTimerDeadline = null;
+      questionTimer.hidden = true;
+    }
+
+    function resetQuestionResolutionState() {
+      clearQuestionTimer();
+      clearQuestionAdvanceTimeout();
+      questionCloseInFlight = false;
+      currentQuestionClosed = false;
+      questionRevealScheduled = false;
+    }
+
+    function isAnswerTimerEnabled(room) {
+      return Boolean(room?.settings?.answerTimerEnabled);
+    }
+
+    function getAnswerTimerSeconds(room) {
+      const seconds = Number(room?.settings?.answerTimerSeconds);
+      return [30, 60, 120].includes(seconds) ? seconds : TIMER_DEFAULT_SECONDS;
+    }
+
+    function getPlayerAnswerBadges() {
+      const playerAnswerStatus = document.getElementById("playerAnswerStatus");
+      return playerAnswerStatus.querySelectorAll(":scope > .player-answer-badge");
+    }
+
+    function areAllPlayersAnswered() {
+      const playerSpans = getPlayerAnswerBadges();
+      return playerSpans.length > 0 && Array.from(playerSpans).every(
+        (span) => span.classList.contains("answered")
+      );
+    }
+
+    function revealCorrectAnswerAndQueueNext() {
+      if (questionRevealScheduled) {
+        return;
+      }
+
+      questionRevealScheduled = true;
+      clearQuestionTimer();
+
+      const correctAnswerBox = document.querySelector('.answerBox[data-correct="true"]');
+      if (correctAnswerBox) {
+        correctAnswerBox.classList.add("correct");
+      }
+
+      questionAdvanceTimeoutId = setTimeout(() => {
+        questionAdvanceTimeoutId = null;
+        nextQuestion();
+      }, QUESTION_REVEAL_DELAY_MS);
+    }
+
+    function maybeResolveClosedQuestion() {
+      if (!currentQuestionClosed || !areAllPlayersAnswered()) {
+        return;
+      }
+
+      revealCorrectAnswerAndQueueNext();
+    }
+
+    function requestQuestionClose(reason) {
+      if (!currentRoom || !roomId || questionCloseInFlight || currentQuestionClosed) {
+        return;
+      }
+
+      questionCloseInFlight = true;
+      clearQuestionTimer();
+
+      socket.emit("quiz:closeQuestion", {
+        roomId,
+        questionId: currentQuestionIndex,
+        reason
+      }, (err, response) => {
+        questionCloseInFlight = false;
+
+        if (err) {
+          console.error("Error closing question:", err);
+          return;
+        }
+
+        if (response?.room) {
+          currentRoom = response.room;
+        }
+
+        currentQuestionClosed = true;
+
+        if (response?.reason === "all_answered" && !response?.alreadyClosed) {
+          revealCorrectAnswerAndQueueNext();
+          return;
+        }
+
+        maybeResolveClosedQuestion();
+      });
+    }
+
+    function startQuestionTimer(room, questionIndex) {
+      clearQuestionTimer();
+
+      if (!isAnswerTimerEnabled(room) || room?.currentProgress?.questionOpen === false) {
+        return;
+      }
+
+      const durationSeconds = getAnswerTimerSeconds(room);
+      questionTimer.hidden = false;
+      questionTimerDeadline = Date.now() + (durationSeconds * 1000);
+      setQuestionTimerDisplay(durationSeconds, true);
+
+      questionTimerIntervalId = setInterval(() => {
+        const remainingSeconds = Math.max(
+          0,
+          Math.ceil((questionTimerDeadline - Date.now()) / 1000)
+        );
+
+        setQuestionTimerDisplay(remainingSeconds, true);
+
+        if (remainingSeconds === 0) {
+          clearQuestionTimer();
+          if (questionIndex === currentQuestionIndex) {
+            requestQuestionClose("timeout");
+          }
+        }
+      }, 250);
     }
 
     function launchEndQuizConfettiCannon() {
@@ -913,6 +1161,9 @@
       if (panel !== endOfRoundPanel) {
         clearEndOfRoundTimers();
       }
+      if (panel !== questionsPanel) {
+        resetQuestionResolutionState();
+      }
     }
 
     // Welcome Screen: Next Button
@@ -967,6 +1218,7 @@
         playerJoinIndex = 0;
         isCreatingRoom = false;
         setRoomCreateLoadingState(false);
+        resetQuestionResolutionState();
         resetRoomIdDisplay();
     }
 
@@ -1066,8 +1318,9 @@
 
         // Reset difficulty selection to Easy
         difficultyCards.forEach(card => card.classList.remove('selected'));
-        document.querySelector('.difficulty-options .difficulty-card[data-value="1"]').classList.add('selected');
+        document.querySelector('#modal .difficulty-options .difficulty-card[data-value="1"]').classList.add('selected');
         selectedDifficulty = "1";
+        resetStandardTimerControls();
         
         showModalWithAnimation(modal);
     }
@@ -1112,6 +1365,30 @@
         });
     });
 
+    timerToggleBtn.addEventListener("click", () => {
+        selectedTimerEnabled = !selectedTimerEnabled;
+        updateTimerControls(
+            timerToggleBtn,
+            timerToggleStatus,
+            timerOptionButtons,
+            selectedTimerEnabled,
+            selectedTimerSeconds
+        );
+    });
+
+    timerOptionButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            selectedTimerSeconds = Number(button.dataset.seconds) || TIMER_DEFAULT_SECONDS;
+            updateTimerControls(
+                timerToggleBtn,
+                timerToggleStatus,
+                timerOptionButtons,
+                selectedTimerEnabled,
+                selectedTimerSeconds
+            );
+        });
+    });
+
     // Setup Screen
     confirmBtn.addEventListener('click', () => {
         if (audioManager) {
@@ -1136,7 +1413,8 @@
         currentRoundNumber = 1;
 
         createRoomAndShowConnectPanel({
-            questionTimeLimit: 30,
+            answerTimerEnabled: selectedTimerEnabled,
+            answerTimerSeconds: selectedTimerSeconds,
             questionPerRound: 1,
             rounds: rounds,
             mode: selectedDifficulty,
@@ -1180,6 +1458,7 @@
         customDifficultyCards.forEach(card => card.classList.remove('selected'));
         document.querySelector('#customDifficultyOptions .difficulty-card[data-value="1"]').classList.add('selected');
         customSelectedDifficulty = "1";
+        resetCustomTimerControls();
 
         showModalWithAnimation(customModal);
     }
@@ -1228,6 +1507,30 @@
         });
     });
 
+    customTimerToggleBtn.addEventListener("click", () => {
+        customSelectedTimerEnabled = !customSelectedTimerEnabled;
+        updateTimerControls(
+            customTimerToggleBtn,
+            customTimerToggleStatus,
+            customTimerOptionButtons,
+            customSelectedTimerEnabled,
+            customSelectedTimerSeconds
+        );
+    });
+
+    customTimerOptionButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            customSelectedTimerSeconds = Number(button.dataset.seconds) || TIMER_DEFAULT_SECONDS;
+            updateTimerControls(
+                customTimerToggleBtn,
+                customTimerToggleStatus,
+                customTimerOptionButtons,
+                customSelectedTimerEnabled,
+                customSelectedTimerSeconds
+            );
+        });
+    });
+
     // Handle custom quiz start
     customConfirmBtn.addEventListener('click', () => {
         if (audioManager) {
@@ -1256,7 +1559,8 @@
         currentRoundNumber = 1;
 
         createRoomAndShowConnectPanel({
-            questionTimeLimit: 30,
+            answerTimerEnabled: customSelectedTimerEnabled,
+            answerTimerSeconds: customSelectedTimerSeconds,
             questionPerRound: 5,
             rounds: rounds,
             mode: customSelectedDifficulty,
@@ -1331,6 +1635,9 @@
                     console.error("Error starting quiz:", err);
                 } else {
                     console.log("Quiz Status:", message);
+                    currentRoom.currentProgress.currentQuestion = 1;
+                    currentRoom.currentProgress.questionId = 1;
+                    currentRoom.currentProgress.questionOpen = true;
 
                     // Show the questions panel
                     showPanel(questionsPanel);
@@ -1396,6 +1703,9 @@
             return;
         }
 
+        resetQuestionResolutionState();
+        currentQuestionClosed = !room?.currentProgress?.questionOpen;
+
         const hasQuestionImage =
             typeof questionData.imageName === "string" && questionData.imageName.trim().length > 0;
         const imageBasePath = room?.settings?.questionImageBasePath || QUESTION_IMAGE_BASE_PATH;
@@ -1442,6 +1752,8 @@
 
             answerOptions.appendChild(div);
         });
+
+        startQuestionTimer(room, questionIndex);
     }
 
     // Function to display player names
@@ -1473,6 +1785,8 @@
     }
 
     function nextQuestion () {
+        resetQuestionResolutionState();
+
         // Move to the next question
         currentQuestionIndex++;
 
@@ -1528,6 +1842,7 @@
 
     // Function to display the end of round panel
     function displayEndOfRound(room) {
+        resetQuestionResolutionState();
         clearEndOfRoundTimers();
 
         //For testing, log room object
@@ -1700,6 +2015,8 @@
 
     // Function to display the end of quiz panel
     function displayEndOfQuiz() {
+        resetQuestionResolutionState();
+
         // Emit end of game event to the server and get updated room object
         socket.emit("quiz:endOfGame", { roomId: roomId }, (err, updatedRoom) => {
             if (err) {
@@ -1787,23 +2104,16 @@
 
     // Function to check if all players have answered
     function checkAllPlayersAnswered() {
-        const playerAnswerStatus = document.getElementById("playerAnswerStatus");
-        const playerSpans = playerAnswerStatus.querySelectorAll(":scope > .player-answer-badge");
-        const allAnswered = Array.from(playerSpans).every(span => span.classList.contains("answered"));
-
-        // Enable or disable the "Next Question" button
-        if (allAnswered) {
-            // Find and highlight the correct answer
-            const correctAnswerBox = document.querySelector('.answerBox[data-correct="true"]');
-            if (correctAnswerBox) {
-                correctAnswerBox.classList.add("correct");
-            }
-
-            // Wait 6 seconds before moving to the next question
-            setTimeout(() => {
-                nextQuestion(); // Automatically move to the next question
-            }, 6000);
+        if (!areAllPlayersAnswered()) {
+            return;
         }
+
+        if (currentQuestionClosed) {
+            maybeResolveClosedQuestion();
+            return;
+        }
+
+        requestQuestionClose("all_answered");
     }
 
     // Restart Quiz Button: Reset everything and go back to the Setup Panel
@@ -1816,6 +2126,11 @@
         roomId = null;            // Clear room ID
         selectedCategory = null;  // Reset selected category
         selectedDifficulty = "1"; // Reset difficulty to default
+        selectedTimerEnabled = false;
+        selectedTimerSeconds = TIMER_DEFAULT_SECONDS;
+        customSelectedTimerEnabled = false;
+        customSelectedTimerSeconds = TIMER_DEFAULT_SECONDS;
+        resetQuestionResolutionState();
 
         // Clear any displayed player scores
         playerScores.innerHTML = "";
