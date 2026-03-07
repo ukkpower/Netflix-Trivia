@@ -6,7 +6,9 @@ import path from "path";
 import { fileURLToPath } from "url";
 import roomHandler from "./roomHandler.js";
 
-dotenv.config();
+// Load .env first, then .env.local (if present) to allow local overrides.
+dotenv.config({ path: ".env" });
+dotenv.config({ path: ".env.local", override: true });
 const app = express();
  
 const __filename = fileURLToPath(import.meta.url);

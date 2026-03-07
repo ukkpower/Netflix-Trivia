@@ -22,6 +22,7 @@
   
     <!-- Trivia Logo -->
     <img src="imgs/trivia-logo.png" alt="Trivia Logo" class="trivia-logo">
+    <h2 class="welcome-slogan">WORLDS <span class="welcome-slogan-highlight">BIGGEST</span> TRIVIA GAME</h2>
   </div>
   
 
@@ -49,7 +50,7 @@
             <div class="box" style="background-image: url('imgs/categories/entertainment.png');" data-category="Entertainment" data-description="Dive into the world of movies, music, and pop culture."><span class="box-label">Entertainment</span></div>
             <div class="box" style="background-image: url('imgs/categories/history.png');" data-category="History" data-description="Explore historical events and figures from around the world."><span class="box-label">History</span></div>
             <div class="box" style="background-image: url('imgs/categories/science.png');" data-category="Science" data-description="Discover scientific breakthroughs, famous scientists, and natural wonders."><span class="box-label">Science</span></div>
-            <div class="box" style="background-image: url('imgs/categories/technology.png');" data-category="Technology" data-description="Test your knowledge of modern and historical technological advancements."><span class="box-label">Technology</span></div>
+            <div class="box" style="background-image: url('imgs/categories/geography.png');" data-category="Geography" data-description="Test your knowledge of countries, capitals, landmarks, and world geography."><span class="box-label">Geography</span></div>
             <div class="box" style="background-image: url('imgs/categories/decades.png');" data-category="Decades" data-description="Identify key moments from different decades in history."><span class="box-label">Decades</span></div>
             <div class="box" style="background-image: url('imgs/categories/politics.png');" data-category="Politics" data-description="Learn about global leaders, policies, and historical political events."><span class="box-label">Politics</span></div>
             <div class="box" style="background-image: url('imgs/categories/mythology.png');" data-category="Mythology" data-description="Unravel the stories of gods, legends, and ancient myths."><span class="box-label">Mythology</span></div>
@@ -68,19 +69,19 @@
                 <p class="difficulty-label">Number of Rounds:</p>
                 <div class="range-container">
                     <div class="range">
-                        <input type="range" id="roundSlider" min="1" max="10" step="1" value="2">
+                        <input type="range" id="roundSlider" min="1" max="10" step="1" value="1">
                     </div>
                     <ul class="range-labels" id="rangeLabels">
-                        <li>1</li>
-                        <li class="active selected">2</li>
-                        <li>3</li>
-                        <li>4</li>
-                        <li>5</li>
-                        <li>6</li>
-                        <li>7</li>
-                        <li>8</li>
-                        <li>9</li>
-                        <li>10</li>
+                        <li class="active selected"><span class="range-label-number">1</span></li>
+                        <li><span class="range-label-number">2</span></li>
+                        <li><span class="range-label-number">3</span></li>
+                        <li><span class="range-label-number">4</span></li>
+                        <li><span class="range-label-number">5</span></li>
+                        <li><span class="range-label-number">6</span></li>
+                        <li><span class="range-label-number">7</span></li>
+                        <li><span class="range-label-number">8</span></li>
+                        <li><span class="range-label-number">9</span></li>
+                        <li><span class="range-label-number">10</span></li>
                     </ul>
                 </div>
 
@@ -127,7 +128,7 @@
                 
                 <!-- Category List with Steppers -->
                 <div class="category-list">
-                    <div class="category-row" data-category-id="21">
+                    <div class="category-row" data-category="Sports">
                         <span class="category-name">Sports</span>
                         <div class="round-stepper">
                             <button class="stepper-btn stepper-minus" disabled>−</button>
@@ -135,7 +136,7 @@
                             <button class="stepper-btn stepper-plus">+</button>
                         </div>
                     </div>
-                    <div class="category-row" data-category-id="10">
+                    <div class="category-row" data-category="Entertainment">
                         <span class="category-name">Entertainment</span>
                         <div class="round-stepper">
                             <button class="stepper-btn stepper-minus" disabled>−</button>
@@ -143,7 +144,7 @@
                             <button class="stepper-btn stepper-plus">+</button>
                         </div>
                     </div>
-                    <div class="category-row" data-category-id="23">
+                    <div class="category-row" data-category="History">
                         <span class="category-name">History</span>
                         <div class="round-stepper">
                             <button class="stepper-btn stepper-minus" disabled>−</button>
@@ -151,7 +152,7 @@
                             <button class="stepper-btn stepper-plus">+</button>
                         </div>
                     </div>
-                    <div class="category-row" data-category-id="17">
+                    <div class="category-row" data-category="Science">
                         <span class="category-name">Science</span>
                         <div class="round-stepper">
                             <button class="stepper-btn stepper-minus" disabled>−</button>
@@ -159,15 +160,15 @@
                             <button class="stepper-btn stepper-plus">+</button>
                         </div>
                     </div>
-                    <div class="category-row" data-category-id="18">
-                        <span class="category-name">Technology</span>
+                    <div class="category-row" data-category="Geography">
+                        <span class="category-name">Geography</span>
                         <div class="round-stepper">
                             <button class="stepper-btn stepper-minus" disabled>−</button>
                             <span class="stepper-value">0</span>
                             <button class="stepper-btn stepper-plus">+</button>
                         </div>
                     </div>
-                    <div class="category-row" data-category-id="32">
+                    <div class="category-row" data-category="Decades">
                         <span class="category-name">Decades</span>
                         <div class="round-stepper">
                             <button class="stepper-btn stepper-minus" disabled>−</button>
@@ -175,7 +176,7 @@
                             <button class="stepper-btn stepper-plus">+</button>
                         </div>
                     </div>
-                    <div class="category-row" data-category-id="24">
+                    <div class="category-row" data-category="Politics">
                         <span class="category-name">Politics</span>
                         <div class="round-stepper">
                             <button class="stepper-btn stepper-minus" disabled>−</button>
@@ -183,7 +184,7 @@
                             <button class="stepper-btn stepper-plus">+</button>
                         </div>
                     </div>
-                    <div class="category-row" data-category-id="20">
+                    <div class="category-row" data-category="Mythology">
                         <span class="category-name">Mythology</span>
                         <div class="round-stepper">
                             <button class="stepper-btn stepper-minus" disabled>−</button>
@@ -327,6 +328,7 @@
         <header>
             <img src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia Logo">
         </header>
+        <div id="endQuizConfettiLayer" aria-hidden="true"></div>
         <div class="container">
             <h1>Game Over</h1>
             
@@ -431,33 +433,6 @@
       }
     }
 
-    const categories = {
-      "9": "General Knowledge",
-      "10": "Entertainment: Books",
-      "11": "Entertainment: Film",
-      "12": "Entertainment: Music",
-      "13": "Entertainment: Musicals & Theatres",
-      "14": "Entertainment: Television",
-      "15": "Entertainment: Video Games",
-      "16": "Entertainment: Board Games",
-      "17": "Science & Nature",
-      "18": "Science: Computers",
-      "19": "Science: Mathematics",
-      "20": "Mythology",
-      "21": "Sports",
-      "22": "Geography",
-      "23": "History",
-      "24": "Politics",
-      "25": "Art",
-      "26": "Celebrities",
-      "27": "Animals",
-      "28": "Vehicles",
-      "29": "Entertainment: Comics",
-      "30": "Science: Gadgets",
-      "31": "Entertainment: Japanese Anime & Manga",
-      "32": "Entertainment: Cartoon & Animations"
-    };
-
     // Get references to HTML elements
     const welcomePanel = document.getElementById("welcomePanel");
     const setupPanel = document.getElementById("setupPanel");
@@ -471,6 +446,7 @@
     const startQuizButton = document.getElementById("startQuizButton");
     const backToSetupButton = document.getElementById("backToSetupButton");
     const questionsPanel = document.getElementById("questionsPanel");
+    const questionDisplay = document.getElementById("questionDisplay");
     const questionText = document.getElementById("questionText");
     const answerOptions = document.getElementById("answerOptions");
     const nextQuestionButton = document.getElementById("nextQuestionButton");
@@ -479,9 +455,13 @@
     const categoryName = document.getElementById("categoryName");
     const startRoundButton = document.getElementById("startRoundButton");
     const endOfRoundPanel = document.getElementById("endOfRoundPanel");
+    const endOfQuizPanel = document.getElementById("endOfQuizPanel");
     const endRoundNumber = document.getElementById("endRoundNumber");
     const playerScores = document.getElementById("playerScores");
     const nextRoundButton = document.getElementById("nextRoundButton");
+    const restartQuizButton = document.getElementById("restartQuizButton");
+    const endQuizConfettiLayer = document.getElementById("endQuizConfettiLayer");
+    const firstPlacePodiumImage = endOfQuizPanel.querySelector('img[alt="1st Place"]');
 
     // Get references to modal elements
     const modal = document.getElementById('modal');
@@ -499,47 +479,538 @@
 
     let selectedCategory = null; // Store the selected category
     let selectedDifficulty = "1"; // Default difficulty
-    let selectedRounds = 2; // Default number of rounds
+    let selectedRounds = 1; // Default number of rounds
     let roomId;
+    let isCreatingRoom = false;
+    let roomCreateRequestToken = 0;
 
     let currentRoundNumber = 1;
     let currentQuestionIndex = 1; // Track the current question index
+    const QUESTION_IMAGE_BASE_PATH = "imgs/questions";
+    const ROOM_ID_DIGIT_COUNT = 6;
+    const ROOM_ID_PLACEHOLDER = "000000";
+    const WELCOME_TO_SETUP_DELAY_MS = 6000;
+    const WELCOME_FADE_OUT_DURATION_MS = 500;
+    const ROUND_START_PANEL_DURATION_MS = 5000;
+    const END_OF_ROUND_PLAYER_STAGGER_MS = 350;
+    const END_OF_ROUND_NEXT_PANEL_DELAY_MS = 6000;
+    let endQuizConfettiTimeoutId = null;
+    let endQuizConfettiCleanupId = null;
+    let endOfRoundTransitionTimeoutId = null;
+    let endOfRoundRevealTimeoutIds = [];
+    let roomIdDigitEls = [];
+    let roomIdScrambleIntervalIds = [];
+    let roomIdRevealTimeoutIds = [];
+    let setupPanelAssetsPreloadPromise = null;
+    let hasCompletedWelcomeToSetupTransition = false;
 
-    // Category ID mapping
-    const categoryIds = {
-        "General": [9],
-        "Sports": [21],
-        "Entertainment": [10],
-        "History": [23],
-        "Science": [17],
-        "Technology": [18],
-        "Decades": [32],
-        "Politics": [24],
-        "Mythology": [20]
-    };
+    function clearEndQuizConfetti() {
+      if (endQuizConfettiTimeoutId) {
+        clearTimeout(endQuizConfettiTimeoutId);
+        endQuizConfettiTimeoutId = null;
+      }
 
+      if (endQuizConfettiCleanupId) {
+        clearTimeout(endQuizConfettiCleanupId);
+        endQuizConfettiCleanupId = null;
+      }
+
+      endQuizConfettiLayer.innerHTML = "";
+    }
+
+    function clearEndOfRoundTimers() {
+      if (endOfRoundTransitionTimeoutId) {
+        clearTimeout(endOfRoundTransitionTimeoutId);
+        endOfRoundTransitionTimeoutId = null;
+      }
+
+      endOfRoundRevealTimeoutIds.forEach(timeoutId => clearTimeout(timeoutId));
+      endOfRoundRevealTimeoutIds = [];
+    }
+
+    function launchEndQuizConfettiCannon() {
+      if (!firstPlacePodiumImage || !endQuizConfettiLayer) return;
+
+      const panelRect = endOfQuizPanel.getBoundingClientRect();
+      const firstPlaceRect = firstPlacePodiumImage.getBoundingClientRect();
+
+      const startX = firstPlaceRect.left + firstPlaceRect.width / 2 - panelRect.left;
+      const startY = firstPlaceRect.top + firstPlaceRect.height * 0.82 - panelRect.top;
+
+      const colors = ["#03a561", "#00a4ff", "#f04813", "#ff04d2", "#fed500"];
+      const particleCount = 120;
+      const fragment = document.createDocumentFragment();
+      let maxParticleLifetime = 0;
+
+      for (let i = 0; i < particleCount; i++) {
+        const confetti = document.createElement("span");
+        const size = 6 + Math.random() * 9;
+        const direction = Math.random() < 0.5 ? -1 : 1;
+        const driftX = direction * (40 + Math.random() * 220);
+        const endX = driftX + direction * (30 + Math.random() * 140);
+        const peakY = -(260 + Math.random() * 380);
+        const fallY = 120 + Math.random() * 260;
+        const duration = 3400 + Math.random() * 2200;
+        const delay = Math.random() * 320;
+        const spin = -420 + Math.random() * 840;
+        maxParticleLifetime = Math.max(maxParticleLifetime, duration + delay);
+
+        confetti.className = "end-quiz-confetti";
+        if (Math.random() > 0.6) {
+          confetti.classList.add("is-round");
+        }
+
+        confetti.style.setProperty("--start-x", `${startX}px`);
+        confetti.style.setProperty("--start-y", `${startY}px`);
+        confetti.style.setProperty("--drift-x", `${driftX}px`);
+        confetti.style.setProperty("--end-x", `${endX}px`);
+        confetti.style.setProperty("--peak-y", `${peakY}px`);
+        confetti.style.setProperty("--fall-y", `${fallY}px`);
+        confetti.style.setProperty("--piece-w", `${size}px`);
+        confetti.style.setProperty("--piece-h", `${Math.max(4, size * 0.55)}px`);
+        confetti.style.setProperty("--spin-mid", `${spin * 0.5}deg`);
+        confetti.style.setProperty("--spin-end", `${spin}deg`);
+        confetti.style.setProperty("--duration", `${duration}ms`);
+        confetti.style.setProperty("--delay", `${delay}ms`);
+        confetti.style.setProperty("--piece-color", colors[Math.floor(Math.random() * colors.length)]);
+        fragment.appendChild(confetti);
+      }
+
+      endQuizConfettiLayer.innerHTML = "";
+      endQuizConfettiLayer.appendChild(fragment);
+
+      endQuizConfettiCleanupId = setTimeout(() => {
+        endQuizConfettiLayer.innerHTML = "";
+        endQuizConfettiCleanupId = null;
+      }, maxParticleLifetime + 650);
+    }
+
+    function scheduleEndQuizConfetti() {
+      clearEndQuizConfetti();
+      endQuizConfettiTimeoutId = setTimeout(() => {
+        if (endOfQuizPanel.classList.contains("active")) {
+          launchEndQuizConfettiCannon();
+        }
+        endQuizConfettiTimeoutId = null;
+      }, 1000);
+    }
+
+    function animateRoundCategoryName() {
+      if (!categoryName) return;
+      categoryName.classList.remove("category-name-animate");
+      void categoryName.offsetWidth; // Force reflow to restart the CSS animation
+      categoryName.classList.add("category-name-animate");
+    }
+
+    function setRoomCreateLoadingState(isLoading) {
+      startQuizButton.disabled = isLoading;
+      startQuizButton.setAttribute("aria-disabled", String(isLoading));
+    }
+
+    function randomDigitChar() {
+      return Math.floor(Math.random() * 10).toString();
+    }
+
+    function normalizeRoomIdDigits(value) {
+      return String(value ?? "")
+        .replace(/\D/g, "")
+        .slice(0, ROOM_ID_DIGIT_COUNT)
+        .padStart(ROOM_ID_DIGIT_COUNT, "0");
+    }
+
+    function clearRoomIdAnimationTimers() {
+      roomIdScrambleIntervalIds.forEach((intervalId) => clearInterval(intervalId));
+      roomIdRevealTimeoutIds.forEach((timeoutId) => clearTimeout(timeoutId));
+      roomIdScrambleIntervalIds = [];
+      roomIdRevealTimeoutIds = [];
+    }
+
+    function renderRoomIdDigits(digits = ROOM_ID_PLACEHOLDER) {
+      const normalizedDigits = normalizeRoomIdDigits(digits);
+      roomIdDisplay.innerHTML = "";
+      roomIdDigitEls = [];
+
+      for (let i = 0; i < ROOM_ID_DIGIT_COUNT; i += 1) {
+        const digitEl = document.createElement("span");
+        digitEl.className = "room-id-digit";
+        digitEl.textContent = normalizedDigits[i];
+        roomIdDisplay.appendChild(digitEl);
+        roomIdDigitEls.push(digitEl);
+
+        if (i === 2) {
+          const gapEl = document.createElement("span");
+          gapEl.className = "room-id-gap";
+          gapEl.textContent = " ";
+          roomIdDisplay.appendChild(gapEl);
+        }
+      }
+    }
+
+    function resetRoomIdDisplay() {
+      clearRoomIdAnimationTimers();
+      roomIdDisplay.classList.remove("is-loading", "is-ready");
+      renderRoomIdDigits(ROOM_ID_PLACEHOLDER);
+      roomIdDisplay.setAttribute("aria-label", "Quiz code");
+    }
+
+    function startRoomIdScramble() {
+      clearRoomIdAnimationTimers();
+      roomIdDisplay.classList.add("is-loading");
+      roomIdDisplay.classList.remove("is-ready");
+      renderRoomIdDigits(
+        Array.from({ length: ROOM_ID_DIGIT_COUNT }, () => randomDigitChar()).join("")
+      );
+      roomIdDisplay.setAttribute("aria-label", "Generating quiz code");
+
+      roomIdDigitEls.forEach((digitEl, digitIndex) => {
+        digitEl.classList.remove("is-locked");
+        const tick = () => {
+          digitEl.textContent = randomDigitChar();
+        };
+        tick();
+        const intervalMs = 52 + Math.floor(Math.random() * 96) + digitIndex * 7;
+        roomIdScrambleIntervalIds[digitIndex] = setInterval(tick, intervalMs);
+      });
+    }
+
+    function revealRoomId(targetRoomId) {
+      const finalDigits = normalizeRoomIdDigits(targetRoomId);
+      if (roomIdDigitEls.length !== ROOM_ID_DIGIT_COUNT) {
+        renderRoomIdDigits();
+      }
+
+      const lockSequence = roomIdDigitEls.map((_, index) => ({
+        index,
+        delay: 120 + Math.floor(Math.random() * 720)
+      }));
+
+      let maxDelay = 0;
+      lockSequence.forEach(({ index, delay }) => {
+        maxDelay = Math.max(maxDelay, delay);
+        const lockTimeoutId = setTimeout(() => {
+          clearInterval(roomIdScrambleIntervalIds[index]);
+          roomIdDigitEls[index].textContent = finalDigits[index];
+          roomIdDigitEls[index].classList.add("is-locked");
+        }, delay);
+        roomIdRevealTimeoutIds.push(lockTimeoutId);
+      });
+
+      const finishTimeoutId = setTimeout(() => {
+        roomIdDisplay.classList.remove("is-loading");
+        roomIdDisplay.classList.add("is-ready");
+        roomIdDisplay.setAttribute(
+          "aria-label",
+          `Quiz code ${finalDigits.slice(0, 3)} ${finalDigits.slice(3)}`
+        );
+      }, maxDelay + 60);
+      roomIdRevealTimeoutIds.push(finishTimeoutId);
+    }
+
+    function showModalWithAnimation(modalElement) {
+      if (modalElement._closeAnimTimeoutId) {
+        clearTimeout(modalElement._closeAnimTimeoutId);
+        modalElement._closeAnimTimeoutId = null;
+      }
+      if (modalElement._closeAnimHandler) {
+        modalElement.removeEventListener("animationend", modalElement._closeAnimHandler);
+        modalElement._closeAnimHandler = null;
+      }
+
+      modalElement.classList.remove("is-closing", "show");
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          modalElement.classList.add("show");
+        });
+      });
+    }
+
+    function closeModalWithAnimation(modalElement) {
+      if (!modalElement.classList.contains("show") || modalElement.classList.contains("is-closing")) {
+        return;
+      }
+
+      modalElement.classList.add("is-closing");
+
+      if (modalElement._closeAnimTimeoutId) {
+        clearTimeout(modalElement._closeAnimTimeoutId);
+        modalElement._closeAnimTimeoutId = null;
+      }
+      if (modalElement._closeAnimHandler) {
+        modalElement.removeEventListener("animationend", modalElement._closeAnimHandler);
+      }
+
+      const handleCloseEnd = (event) => {
+        if (event.target !== modalElement || event.animationName !== "modal-overlay-fade-out") {
+          return;
+        }
+        modalElement.classList.remove("show", "is-closing");
+        modalElement.removeEventListener("animationend", handleCloseEnd);
+        modalElement._closeAnimHandler = null;
+        modalElement._closeAnimTimeoutId = null;
+      };
+
+      modalElement._closeAnimHandler = handleCloseEnd;
+      modalElement.addEventListener("animationend", handleCloseEnd);
+
+      modalElement._closeAnimTimeoutId = setTimeout(() => {
+        if (modalElement.classList.contains("is-closing")) {
+          modalElement.classList.remove("show", "is-closing");
+        }
+        modalElement.removeEventListener("animationend", handleCloseEnd);
+        modalElement._closeAnimHandler = null;
+        modalElement._closeAnimTimeoutId = null;
+      }, 260);
+    }
+
+    function extractBackgroundImageUrls(backgroundValue) {
+      if (typeof backgroundValue !== "string" || backgroundValue === "none") {
+        return [];
+      }
+
+      const urls = [];
+      const urlPattern = /url\((['"]?)(.*?)\1\)/g;
+      let match;
+      while ((match = urlPattern.exec(backgroundValue)) !== null) {
+        if (match[2]) {
+          urls.push(match[2]);
+        }
+      }
+
+      return urls;
+    }
+
+    function collectSetupPanelAssetUrls() {
+      const urls = new Set();
+
+      setupPanel.querySelectorAll("img[src]").forEach((imgEl) => {
+        const src = imgEl.getAttribute("src");
+        if (src) {
+          urls.add(src);
+        }
+      });
+
+      extractBackgroundImageUrls(getComputedStyle(setupPanel).backgroundImage).forEach((url) =>
+        urls.add(url)
+      );
+
+      setupPanel.querySelectorAll("[style*='background-image']").forEach((el) => {
+        extractBackgroundImageUrls(el.style.backgroundImage).forEach((url) => urls.add(url));
+      });
+
+      const bigBox = setupPanel.querySelector(".big-box");
+      if (bigBox) {
+        extractBackgroundImageUrls(getComputedStyle(bigBox, "::before").backgroundImage).forEach((url) =>
+          urls.add(url)
+        );
+      }
+
+      return Array.from(urls);
+    }
+
+    function preloadImageAsset(url) {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.decoding = "async";
+
+        let isSettled = false;
+        const finish = () => {
+          if (isSettled) {
+            return;
+          }
+          isSettled = true;
+          resolve();
+        };
+
+        img.onload = finish;
+        img.onerror = finish;
+        img.src = url;
+
+        if (img.complete) {
+          finish();
+          return;
+        }
+
+        if (typeof img.decode === "function") {
+          img.decode().then(finish).catch(() => {});
+        }
+      });
+    }
+
+    function preloadSetupPanelAssets() {
+      if (setupPanelAssetsPreloadPromise) {
+        return setupPanelAssetsPreloadPromise;
+      }
+
+      const urls = collectSetupPanelAssetUrls();
+      setupPanelAssetsPreloadPromise = Promise.allSettled(
+        urls.map((url) => preloadImageAsset(url))
+      ).then(() => undefined);
+
+      return setupPanelAssetsPreloadPromise;
+    }
+
+    function transitionWelcomeToSetupPanel() {
+      if (hasCompletedWelcomeToSetupTransition || !welcomePanel.classList.contains("active")) {
+        return;
+      }
+
+      hasCompletedWelcomeToSetupTransition = true;
+      document.body.classList.add("welcome-to-setup-transition");
+      setupPanel.classList.add("active");
+      welcomePanel.classList.add("welcome-panel-fade-out");
+
+      let didFinish = false;
+      const finishTransition = () => {
+        if (didFinish) {
+          return;
+        }
+        didFinish = true;
+        welcomePanel.classList.remove("active", "welcome-panel-fade-out");
+        document.body.classList.remove("welcome-to-setup-transition");
+      };
+
+      const handleAnimationEnd = (event) => {
+        if (event.target !== welcomePanel || event.animationName !== "welcome-panel-fade-out") {
+          return;
+        }
+        welcomePanel.removeEventListener("animationend", handleAnimationEnd);
+        finishTransition();
+      };
+
+      welcomePanel.addEventListener("animationend", handleAnimationEnd);
+      setTimeout(() => {
+        welcomePanel.removeEventListener("animationend", handleAnimationEnd);
+        finishTransition();
+      }, WELCOME_FADE_OUT_DURATION_MS + 80);
+    }
+
+    function preloadModalBackgroundImages() {
+      const urls = new Set(["imgs/netflix-logo-bg.png"]);
+      document.querySelectorAll(".grid .box").forEach((box) => {
+        const category = box.getAttribute("data-category");
+        if (category) {
+          urls.add(`imgs/categories/${category.toLowerCase()}.png`);
+        }
+      });
+
+      urls.forEach((url) => {
+        const img = new Image();
+        img.decoding = "async";
+        img.src = url;
+        if (typeof img.decode === "function") {
+          img.decode().catch(() => {});
+        }
+      });
+    }
 
     // Function to switch panels
     function showPanel(panel) {
       document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
       panel.classList.add("active");
+      if (panel !== endOfQuizPanel) {
+        clearEndQuizConfetti();
+      }
+      if (panel !== endOfRoundPanel) {
+        clearEndOfRoundTimers();
+      }
     }
 
     // Welcome Screen: Next Button
     document.addEventListener("DOMContentLoaded", () => {
-        // Automatically redirect from Welcome Panel after 3 seconds
-        setTimeout(() => {
-            if (welcomePanel.classList.contains("active")) {
-                showPanel(setupPanel);
+        // Start setup-panel image loading right away while welcome is on screen.
+        preloadSetupPanelAssets();
+
+        // Automatically redirect from Welcome Panel after the welcome delay.
+        setTimeout(async () => {
+            if (!welcomePanel.classList.contains("active")) {
+                return;
             }
-        }, 6000);
+
+            await preloadSetupPanelAssets();
+
+            if (welcomePanel.classList.contains("active")) {
+                transitionWelcomeToSetupPanel();
+            }
+        }, WELCOME_TO_SETUP_DELAY_MS);
 
         // Initialize the range slider with default value
-        updateRangeSlider(2);
+        updateRangeSlider(1);
+        preloadModalBackgroundImages();
     });
 
 
     let currentRoom; // Store the room object
+    resetRoomIdDisplay();
+
+    function deleteRoomById(roomIdToDelete) {
+        return new Promise((resolve) => {
+            if (!roomIdToDelete) {
+                resolve();
+                return;
+            }
+
+            socket.emit("room:delete", { roomId: roomIdToDelete }, (err) => {
+                if (err) {
+                    console.error("Error deleting room:", err);
+                } else {
+                    console.log("Room deleted successfully:", roomIdToDelete);
+                }
+                resolve();
+            });
+        });
+    }
+
+    function resetPlayerConnectState() {
+        currentRoom = null;
+        roomId = null;
+        playerList.innerHTML = "";
+        playerJoinIndex = 0;
+        isCreatingRoom = false;
+        setRoomCreateLoadingState(false);
+        resetRoomIdDisplay();
+    }
+
+    function createRoomAndShowConnectPanel(roomConfig) {
+        if (isCreatingRoom) {
+            return;
+        }
+
+        const requestToken = ++roomCreateRequestToken;
+        isCreatingRoom = true;
+        currentRoom = null;
+        roomId = null;
+        playerList.innerHTML = "";
+        playerJoinIndex = 0;
+        setRoomCreateLoadingState(true);
+        showPanel(playerConnectPanel);
+        startRoomIdScramble();
+
+        socket.emit("room:create", roomConfig, (err, room) => {
+            if (requestToken !== roomCreateRequestToken) {
+                if (!err && room?.roomId) {
+                    deleteRoomById(room.roomId);
+                }
+                return;
+            }
+
+            isCreatingRoom = false;
+
+            if (err) {
+                console.error("Error creating room:", err);
+                setRoomCreateLoadingState(false);
+                resetRoomIdDisplay();
+                showPanel(setupPanel);
+                alert("Failed to create room. Please try again.");
+                return;
+            }
+
+            console.log("Room created successfully:", room);
+            currentRoom = room;
+            roomId = room.roomId;
+            revealRoomId(roomId);
+            setRoomCreateLoadingState(false);
+        });
+    }
 
     // Update range slider UI
     function updateRangeSlider(value) {
@@ -558,7 +1029,9 @@
         });
 
         // Update track fill using CSS custom property
-        const percent = ((value - 1) / 9) * 100;
+        const min = Number(roundSlider.min);
+        const max = Number(roundSlider.max);
+        const percent = max > min ? ((value - min) / (max - min)) * 100 : 0;
         roundSlider.parentElement.style.setProperty('--range-progress', `${percent}%`);
     }
 
@@ -588,20 +1061,20 @@
             modalContent.style.setProperty("--modal-bg-image", "none");
         }
         
-        // Reset round slider to default (2)
-        updateRangeSlider(2);
+        // Reset round slider to default (1)
+        updateRangeSlider(1);
 
         // Reset difficulty selection to Easy
         difficultyCards.forEach(card => card.classList.remove('selected'));
         document.querySelector('.difficulty-options .difficulty-card[data-value="1"]').classList.add('selected');
         selectedDifficulty = "1";
         
-        modal.classList.add('show');
+        showModalWithAnimation(modal);
     }
 
     // Close modal
     function closeModal() {
-        modal.classList.remove('show');
+        closeModalWithAnimation(modal);
     }
 
     // Handle General Quiz button click
@@ -645,44 +1118,29 @@
             audioManager.playSoundFX("buttonConfirm");
         }
         
-        const categoryId = categoryIds[selectedCategory];
-        
-        if (!categoryId || categoryId.length === 0) {
+        const categoryName = selectedCategory;
+
+        if (!categoryName || categoryName.trim().length === 0) {
             console.error("Invalid category selected:", selectedCategory);
             alert("Invalid category selection. Please try again.");
             return;
         }
 
-        // Generate rounds array by repeating the category ID
-        const rounds = Array(selectedRounds).fill(categoryId[0]);
+        // Generate rounds array by repeating the category name
+        const rounds = Array(selectedRounds).fill(categoryName);
 
-        console.log(`Selected Category: ${selectedCategory} (ID: ${categoryId[0]}), Rounds: ${selectedRounds}, Difficulty: ${selectedDifficulty}`);
+        console.log(`Selected Category: ${categoryName}, Rounds: ${selectedRounds}, Difficulty: ${selectedDifficulty}`);
 
 
         // Reset the round number to 1 for a new game
         currentRoundNumber = 1;
 
-        // Emit event to create room with selected category and difficulty
-        socket.emit("room:create", {
+        createRoomAndShowConnectPanel({
             questionTimeLimit: 30,
             questionPerRound: 1,
             rounds: rounds,
-            mode: selectedDifficulty
-        }, (err, room) => {
-            if (err) {
-                console.error("Error creating room:", err);
-                alert("Failed to create room. Please try again."); // Notify the user
-            } else {
-                console.log("Room created successfully:", room);
-                
-                // Store room details globally
-                currentRoom = room;
-                roomId = room.roomId;
-                roomIdDisplay.textContent = roomId.toString().replace(/(\d{3})(\d{3})/, "$1 $2");
-
-                // Move to player connect screen only after successful response
-                showPanel(playerConnectPanel);
-            }
+            mode: selectedDifficulty,
+            questionImageBasePath: QUESTION_IMAGE_BASE_PATH
         });
 
         closeModal(); // Close modal after selection
@@ -723,12 +1181,12 @@
         document.querySelector('#customDifficultyOptions .difficulty-card[data-value="1"]').classList.add('selected');
         customSelectedDifficulty = "1";
 
-        customModal.classList.add('show');
+        showModalWithAnimation(customModal);
     }
 
     // Close custom modal
     function closeCustomModal() {
-        customModal.classList.remove('show');
+        closeModalWithAnimation(customModal);
     }
 
     // Handle custom quiz button click
@@ -779,10 +1237,10 @@
         // Build rounds array from selections
         const rounds = [];
         document.querySelectorAll('.category-row').forEach(row => {
-            const categoryId = parseInt(row.getAttribute('data-category-id'));
+            const categoryName = row.getAttribute('data-category');
             const roundCount = parseInt(row.querySelector('.stepper-value').textContent);
             for (let i = 0; i < roundCount; i++) {
-                rounds.push(categoryId);
+                rounds.push(categoryName);
             }
         });
 
@@ -797,25 +1255,12 @@
         // Reset the round number to 1 for a new game
         currentRoundNumber = 1;
 
-        // Emit event to create room with custom rounds
-        socket.emit("room:create", {
+        createRoomAndShowConnectPanel({
             questionTimeLimit: 30,
             questionPerRound: 5,
             rounds: rounds,
-            mode: customSelectedDifficulty
-        }, (err, room) => {
-            if (err) {
-                console.error("Error creating room:", err);
-                alert("Failed to create room. Please try again.");
-            } else {
-                console.log("Room created successfully:", room);
-                
-                currentRoom = room;
-                roomId = room.roomId;
-                roomIdDisplay.textContent = roomId.toString().replace(/(\d{3})(\d{3})/, "$1 $2");
-
-                showPanel(playerConnectPanel);
-            }
+            mode: customSelectedDifficulty,
+            questionImageBasePath: QUESTION_IMAGE_BASE_PATH
         });
 
         closeCustomModal();
@@ -873,11 +1318,12 @@
         showPanel(roundStartPanel);
 
         // Display the round number and category name
-        const currentRoundId = currentRoom.currentProgress.currentRound;
+        const currentRound = currentRoom.currentProgress.currentRound;
         roundNumber.textContent = currentRoundNumber; // Start with round 1
-        categoryName.textContent = categories[currentRoundId] || "Unknown Category";
+        categoryName.textContent = currentRound?.subcategoryName || currentRound?.categoryName || "Unknown Category";
+        animateRoundCategoryName();
 
-        // Start a 3-second timer when the round panel is shown
+        // Keep the round start panel visible before showing questions
         setTimeout(() => {
             // Emit quiz:start event
             socket.emit("quiz:start", { roomId: roomId }, (err, message) => {
@@ -897,13 +1343,18 @@
                     displayPlayerNames(currentRoom);
                 }
             });
-        }, 3000); // 3000 milliseconds = 3 seconds
+        }, ROUND_START_PANEL_DURATION_MS);
     });
 
     backToSetupButton.addEventListener("click", () => {
         if (audioManager) {
             audioManager.playSoundFX("buttonNo");
         }
+
+        const roomIdToDelete = currentRoom?.roomId || roomId;
+        roomCreateRequestToken++;
+        deleteRoomById(roomIdToDelete);
+        resetPlayerConnectState();
         showPanel(setupPanel);
     });
 
@@ -945,6 +1396,21 @@
             return;
         }
 
+        const hasQuestionImage =
+            typeof questionData.imageName === "string" && questionData.imageName.trim().length > 0;
+        const imageBasePath = room?.settings?.questionImageBasePath || QUESTION_IMAGE_BASE_PATH;
+
+        if (hasQuestionImage) {
+            const normalizedBasePath = imageBasePath.replace(/\/+$/, "");
+            const normalizedImageName = questionData.imageName.trim().replace(/^\/+/, "");
+            const imageUrl = `${normalizedBasePath}/${normalizedImageName}`;
+            questionDisplay.style.backgroundImage = `url('${encodeURI(imageUrl)}')`;
+            questionDisplay.classList.add("has-question-image");
+        } else {
+            questionDisplay.style.backgroundImage = "";
+            questionDisplay.classList.remove("has-question-image");
+        }
+
         // Display the question
         questionText.textContent = decodeHtmlEntities(questionData.question);
 
@@ -982,14 +1448,26 @@
     function displayPlayerNames(room) {
         const playerAnswerStatus = document.getElementById("playerAnswerStatus");
         
-        // Remove only existing player name spans, keeping the SVG
-        const existingSpans = playerAnswerStatus.querySelectorAll("span");
-        existingSpans.forEach(span => span.remove());
+        // Remove only existing player name badges, keeping the leading SVG badge container
+        const existingSpans = playerAnswerStatus.querySelectorAll(":scope > span");
+        existingSpans.forEach((span) => span.remove());
 
         for (const [playerId, playerData] of Object.entries(room.players)) {
             const playerNameSpan = document.createElement("span");
-            playerNameSpan.textContent = playerData.name;
+            playerNameSpan.classList.add("player-answer-badge");
             playerNameSpan.id = `player-${playerId}`; // Unique ID for each player
+
+            const playerNameText = document.createElement("span");
+            playerNameText.classList.add("player-name");
+            playerNameText.textContent = playerData.name;
+
+            const playerLockIcon = document.createElement("span");
+            playerLockIcon.classList.add("player-lock");
+            playerLockIcon.setAttribute("aria-hidden", "true");
+            playerLockIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M128 96l0 64 128 0 0-64c0-35.3-28.7-64-64-64s-64 28.7-64 64zM64 160l0-64C64 25.3 121.3-32 192-32S320 25.3 320 96l0 64c35.3 0 64 28.7 64 64l0 224c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 224c0-35.3 28.7-64 64-64z"/></svg>`;
+
+            playerNameSpan.appendChild(playerNameText);
+            playerNameSpan.appendChild(playerLockIcon);
             playerAnswerStatus.appendChild(playerNameSpan);
         }
     }
@@ -1041,8 +1519,8 @@
 
             // Reset player names for the next question
             const playerAnswerStatus = document.getElementById("playerAnswerStatus");
-            const playerSpans = playerAnswerStatus.querySelectorAll("span");
-            playerSpans.forEach(span => span.classList.remove("answered"));
+            const playerSpans = playerAnswerStatus.querySelectorAll(":scope > .player-answer-badge");
+            playerSpans.forEach((span) => span.classList.remove("answered"));
 
             }
         });
@@ -1050,6 +1528,7 @@
 
     // Function to display the end of round panel
     function displayEndOfRound(room) {
+        clearEndOfRoundTimers();
 
         //For testing, log room object
         console.log("Room object:", room);
@@ -1065,9 +1544,9 @@
             (a, b) => (b[1].currentRoundScore || 0) - (a[1].currentRoundScore || 0)
         );
 
-        for (const [playerId, playerData] of sortedPlayers) {
+        const playerRows = sortedPlayers.map(([, playerData]) => {
             const playerScoreItem = document.createElement("div");
-            playerScoreItem.classList.add("player");
+            playerScoreItem.classList.add("player", "player-reveal");
 
             // Generate dots based on currentRoundAnswers
             const dotsContainer = document.createElement("span");
@@ -1101,21 +1580,36 @@
                 </span>
             `;
 
-            // Add player row to the scoreboard
-            playerScores.appendChild(playerScoreItem);
-        }
+            return playerScoreItem;
+        });
 
         // Show the end of round panel
         showPanel(endOfRoundPanel);
-        
-        // Start a 3-second timer when the round panel is shown
-        setTimeout(() => {
-            displayNextRound(room);
-        }, 6000); // 6000 milliseconds = 6 seconds
+
+        if (playerRows.length === 0) {
+            endOfRoundTransitionTimeoutId = setTimeout(() => {
+                displayNextRound();
+            }, END_OF_ROUND_NEXT_PANEL_DELAY_MS);
+            return;
+        }
+
+        playerRows.forEach((playerRow, index) => {
+            const revealTimeoutId = setTimeout(() => {
+                playerScores.appendChild(playerRow);
+
+                if (index === playerRows.length - 1) {
+                    endOfRoundTransitionTimeoutId = setTimeout(() => {
+                        displayNextRound();
+                    }, END_OF_ROUND_NEXT_PANEL_DELAY_MS);
+                }
+            }, index * END_OF_ROUND_PLAYER_STAGGER_MS);
+
+            endOfRoundRevealTimeoutIds.push(revealTimeoutId);
+        });
     }
 
 
-    function displayNextRound (room) {
+    function displayNextRound () {
          // Ensure currentRoom is defined before proceeding
          if (!currentRoom || !currentRoom.rounds) {
             console.error("Error: currentRoom is not properly set up.");
@@ -1132,27 +1626,33 @@
         // Increment the round number
         currentRoundNumber++;  
         
-        // Display the round number and category name
-        const currentRoundId = room.rounds[currentRoundNumber - 1];
-        roundNumber.textContent = currentRoundNumber;
-        categoryName.textContent = categories[currentRoundId] || "Unknown Category";
-
-        // Show the round start panel for the next round
-        showPanel(roundStartPanel);
-
-        setTimeout(() => {
-            // Emit the quiz:nextRound event to the server
-            socket.emit("quiz:nextRound", {
-                roomId: roomId // Pass the room ID
-            }, (err, nextRoundData) => {
-                if (err) {
+        // Emit the quiz:nextRound event to the server first so UI uses actual generated round data.
+        socket.emit("quiz:nextRound", {
+            roomId: roomId // Pass the room ID
+        }, (err, nextRoundData) => {
+            if (err) {
                 console.error("Error moving to the next round:", err);
-                } else {
-                console.log("Next round data:", nextRoundData);
+                return;
+            }
 
-                // Update the room object with the new round data
-                currentRoom = nextRoundData;
+            console.log("Next round data:", nextRoundData);
 
+            // Update the room object with the new round data
+            currentRoom = nextRoundData;
+
+            // Display the round number and category name from generated round metadata
+            const currentRound =
+              currentRoom?.currentProgress?.currentRound ||
+              currentRoom?.rounds?.[currentRoundNumber - 1];
+            roundNumber.textContent = currentRoundNumber;
+            categoryName.textContent =
+              currentRound?.subcategoryName || currentRound?.categoryName || "Unknown Category";
+
+            // Show the round start panel for the next round
+            showPanel(roundStartPanel);
+            animateRoundCategoryName();
+
+            setTimeout(() => {
                 // Show the questions panel
                 showPanel(questionsPanel);
 
@@ -1162,11 +1662,40 @@
 
                 // Display player names
                 displayPlayerNames(currentRoom);
+            }, ROUND_START_PANEL_DURATION_MS);
+        });
 
-                }
-            });
-        }, 3000);         
+    }
 
+    function setAnimatedFirstPlaceName(name) {
+        const firstPlaceName = document.getElementById("firstPlaceName");
+        firstPlaceName.innerHTML = "";
+
+        if (!name) {
+            return;
+        }
+
+        const motionOK = window.matchMedia("(prefers-reduced-motion: no-preference)").matches;
+        if (!motionOK) {
+            firstPlaceName.textContent = name;
+            return;
+        }
+
+        const letterNodes = Array.from(name).map((character, index) => {
+            const span = document.createElement("span");
+            span.style.setProperty("--index", index);
+
+            if (character === " ") {
+                span.textContent = "\u00A0";
+                span.classList.add("name-space");
+            } else {
+                span.textContent = character;
+            }
+
+            return span;
+        });
+
+        firstPlaceName.replaceChildren(...letterNodes);
     }
 
     // Function to display the end of quiz panel
@@ -1206,7 +1735,7 @@
                 const rank = playerData.overallRank || index + 1;
                 
                 if (rank === 1) {
-                    firstPlaceName.textContent = playerData.name;
+                    setAnimatedFirstPlaceName(playerData.name);
                 } else if (rank === 2) {
                     secondPlaceName.textContent = playerData.name;
                 } else if (rank === 3) {
@@ -1222,6 +1751,7 @@
 
             // Show the end of quiz panel
             showPanel(endOfQuizPanel);
+            scheduleEndQuizConfetti();
         });
     }
 
@@ -1258,7 +1788,7 @@
     // Function to check if all players have answered
     function checkAllPlayersAnswered() {
         const playerAnswerStatus = document.getElementById("playerAnswerStatus");
-        const playerSpans = playerAnswerStatus.querySelectorAll("span");
+        const playerSpans = playerAnswerStatus.querySelectorAll(":scope > .player-answer-badge");
         const allAnswered = Array.from(playerSpans).every(span => span.classList.contains("answered"));
 
         // Enable or disable the "Next Question" button
@@ -1297,7 +1827,7 @@
         // Reset UI elements (if needed)
         roundNumber.textContent = "1"; // Reset displayed round number
         categoryName.textContent = ""; // Clear category name display
-        roomIdDisplay.textContent = ""; // Clear room ID display
+        resetRoomIdDisplay();
 
         // 🔹 Clear previous players from the player list
         playerList.innerHTML = "";

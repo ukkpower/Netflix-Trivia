@@ -1,31 +1,84 @@
-import axios from "axios"; // Use axios for making HTTP requests
+import { ConvexHttpClient } from "convex/browser";
+import { api } from "./convex/_generated/api.js";
 
-const categories = {
-  "9": "General Knowledge",
-  "10": "Entertainment: Books",
-  "11": "Entertainment: Film",
-  "12": "Entertainment: Music",
-  "13": "Entertainment: Musicals & Theatres",
-  "14": "Entertainment: Television",
-  "15": "Entertainment: Video Games",
-  "16": "Entertainment: Board Games",
-  "17": "Science & Nature",
-  "18": "Science: Computers",
-  "19": "Science: Mathematics",
-  "20": "Mythology",
-  "21": "Sports",
-  "22": "Geography",
-  "23": "History",
-  "24": "Politics",
-  "25": "Art",
-  "26": "Celebrities",
-  "27": "Animals",
-  "28": "Vehicles",
-  "29": "Entertainment: Comics",
-  "30": "Science: Gadgets",
-  "31": "Entertainment: Japanese Anime & Manga",
-  "32": "Entertainment: Cartoon & Animations"
+const LEGACY_CATEGORY_ID_TO_NAME = {
+  9: "General",
+  10: "Entertainment",
+  17: "Science",
+  20: "Mythology",
+  21: "Sports",
+  22: "Geography",
+  23: "History",
+  24: "Politics",
+  32: "Decades"
 };
+
+const SPECIAL_CATEGORY_RULES = {
+  general: { type: "general" },
+  general_knowledge: { type: "general" }
+};
+
+let convexClient = null;
+
+const getConvexClient = () => {
+  if (convexClient) {
+    return convexClient;
+  }
+
+  const url = process.env.CONVEX_URL;
+  if (!url) {
+    throw new Error("CONVEX_URL is not set. Add it to your environment variables.");
+  }
+
+  if (typeof fetch !== "function") {
+    throw new Error("Global fetch is not available. Use Node 18+ or add a fetch polyfill.");
+  }
+
+  convexClient = new ConvexHttpClient(url);
+  return convexClient;
+};
+
+function slugify(input) {
+  const slug = input
+    .trim()
+    .toLowerCase()
+    .replace(/['’]/g, "")
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "")
+    .replace(/_+/g, "_");
+  return slug.length > 0 ? slug : "untitled";
+}
+
+function normalizeCategoryValue(value) {
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    if (trimmed.length === 0) {
+      return null;
+    }
+    if (/^\d+$/.test(trimmed)) {
+      return LEGACY_CATEGORY_ID_TO_NAME[Number(trimmed)] || null;
+    }
+    return trimmed;
+  }
+
+  if (typeof value === "number") {
+    return LEGACY_CATEGORY_ID_TO_NAME[value] || null;
+  }
+
+  if (value && typeof value === "object") {
+    if (typeof value.category === "string") {
+      return value.category.trim();
+    }
+    if (typeof value.categoryName === "string") {
+      return value.categoryName.trim();
+    }
+    if (typeof value.slug === "string") {
+      return value.slug.trim();
+    }
+  }
+
+  return null;
+}
 
 //Generate 6 digit room code
 const generateUniqueRoomId = (rooms) => {
@@ -56,6 +109,167 @@ function shuffleArray(array) {
     [array[i], array[j]] = [array[j], array[i]];
   }
 }
+
+const createPool = (items) => {
+  const pool = items.slice();
+  shuffleArray(pool);
+  return { pool, index: 0 };
+};
+
+const pickFromPool = (poolState) => {
+  if (!poolState || poolState.pool.length === 0) {
+    return null;
+  }
+
+  if (poolState.index >= poolState.pool.length) {
+    shuffleArray(poolState.pool);
+    poolState.index = 0;
+  }
+
+  const item = poolState.pool[poolState.index];
+  poolState.index += 1;
+  return item;
+};
+
+const buildRoundPlan = async (rounds) => {
+  if (!Array.isArray(rounds) || rounds.length === 0) {
+    throw new Error("rounds must be a non-empty array");
+  }
+
+  if (
+    rounds.every(
+      (round) => round && typeof round === "object" && round.subcategoryId && round.categoryId
+    )
+  ) {
+    return rounds;
+  }
+
+  const normalized = rounds.map(normalizeCategoryValue);
+  if (normalized.some((value) => !value)) {
+    throw new Error("Invalid category selection in rounds");
+  }
+
+  const convex = getConvexClient();
+  const categoryCache = new Map();
+  const subsetPoolCache = new Map();
+  let generalCategoryPoolState = null;
+
+  const getCategoryData = async (categorySlug) => {
+    if (categoryCache.has(categorySlug)) {
+      return categoryCache.get(categorySlug);
+    }
+
+    const tree = await convex.query(api.categories.getCategoryTreeBySlug, {
+      slug: categorySlug,
+      enabledOnly: true
+    });
+
+    if (!tree) {
+      throw new Error(`Category not found: ${categorySlug}`);
+    }
+
+    if (!tree.subcategories || tree.subcategories.length === 0) {
+      throw new Error(`No subcategories found for category: ${tree.category.name}`);
+    }
+
+    const entry = {
+      category: tree.category,
+      subcategories: tree.subcategories,
+      poolState: createPool(tree.subcategories)
+    };
+
+    categoryCache.set(categorySlug, entry);
+    return entry;
+  };
+
+  const getGeneralCategoryPool = async () => {
+    if (generalCategoryPoolState) {
+      return generalCategoryPoolState;
+    }
+
+    const tree = await convex.query(api.categories.listTree, { enabledOnly: true });
+    const categories = tree.map((entry) => entry.category);
+
+    if (categories.length === 0) {
+      throw new Error("No categories available for General rounds");
+    }
+
+    generalCategoryPoolState = createPool(categories);
+    return generalCategoryPoolState;
+  };
+
+  const getSubsetPool = async (ruleKey, rule) => {
+    if (subsetPoolCache.has(ruleKey)) {
+      return subsetPoolCache.get(ruleKey);
+    }
+
+    const parent = await getCategoryData(rule.categorySlug);
+    const allowed = new Set(rule.subcategorySlugs || []);
+
+    const filtered = parent.subcategories.filter((subcategory) => {
+      const slug = subcategory.slug || slugify(subcategory.name);
+      return allowed.has(slug);
+    });
+
+    if (filtered.length === 0) {
+      throw new Error(`No subcategories matched for ${ruleKey}`);
+    }
+
+    const entry = {
+      category: parent.category,
+      subcategories: filtered,
+      poolState: createPool(filtered)
+    };
+
+    subsetPoolCache.set(ruleKey, entry);
+    return entry;
+  };
+
+  const makeRound = (category, subcategory, generalOnly = false) => ({
+    categoryId: category._id,
+    categoryName: category.name,
+    categorySlug: category.slug || slugify(category.name),
+    subcategoryId: subcategory ? subcategory._id : undefined,
+    subcategoryName: subcategory ? subcategory.name : undefined,
+    subcategorySlug: subcategory ? subcategory.slug || slugify(subcategory.name) : undefined,
+    generalOnly
+  });
+
+  const plan = [];
+  for (const selection of normalized) {
+    const selectionSlug = slugify(selection);
+    const rule = SPECIAL_CATEGORY_RULES[selectionSlug];
+
+    if (rule && rule.type === "general") {
+      const categoryPool = await getGeneralCategoryPool();
+      const category = pickFromPool(categoryPool);
+      if (!category) {
+        throw new Error("No categories available for General rounds");
+      }
+      plan.push(makeRound(category, null, true));
+      continue;
+    }
+
+    if (rule && rule.type === "subset") {
+      const subset = await getSubsetPool(selectionSlug, rule);
+      const subcategory = pickFromPool(subset.poolState);
+      if (!subcategory) {
+        throw new Error(`No subcategories available for ${selection}`);
+      }
+      plan.push(makeRound(subset.category, subcategory));
+      continue;
+    }
+
+    const categoryData = await getCategoryData(selectionSlug);
+    const subcategory = pickFromPool(categoryData.poolState);
+    if (!subcategory) {
+      throw new Error(`No subcategories available for ${categoryData.category.name}`);
+    }
+    plan.push(makeRound(categoryData.category, subcategory));
+  }
+
+  return plan;
+};
 
 // Helper function to calculate player rankings
 // Calculates both endOfRoundRank (based on currentRoundScore) and overallRank (based on totalScore)
@@ -98,17 +312,11 @@ const calculateRankings = (room) => {
   }
 };
 
-// Gets a list of questions from Open Trivia Database
-// First it must determine what the next category id is from the rounds array
-// Mode parameter is difficulty level
-// All question types are multiple choice
-// If currentRound is null then use the first entry in the array
-// Else if currentRound is a value then find its position in the array and get the next
-// If currentRound is alreay at the end of the array the return "end of round"
-// When the Open Trivia json is returned simply its format starting at 1 for the first question eg 1: {question":"In the server hosting industry IaaS stands for...","correct_answer":"Infrastructure as a Service","incorrect_answers":["Internet as a Service","Internet and a Server","Infrastructure as a Server"}
-// Return the quesions for easy access latter in the currentProgress
-const generateRound = async (currentRound, rounds, mode, questionsPerRound, room) => {
-  // Map mode to difficulty levels
+// Gets a list of questions from Convex for the next round.
+// - Picks the next round from the planned subcategory list
+// - Randomizes question order + answer order
+// - Stores the current round metadata on the room
+const generateRound = async (currentRoundIndex, rounds, mode, questionsPerRound, room) => {
   const difficultyMap = {
     1: "easy",
     2: "medium",
@@ -116,66 +324,177 @@ const generateRound = async (currentRound, rounds, mode, questionsPerRound, room
     4: "easy" // Assuming 'kids' translates to 'easy'
   };
 
-  // Determine the difficulty level
   const difficulty = difficultyMap[mode] || "easy";
 
-  // Determine the next category ID
-  let nextCategoryId;
-  if (currentRound === null) {
-    nextCategoryId = rounds[0]; // Use the first entry if currentRound is null
-  } else {
-    const currentIndex = rounds.indexOf(currentRound);
-    if (currentIndex >= 0 && currentIndex < rounds.length - 1) {
-      nextCategoryId = rounds[currentIndex + 1]; // Get the next category
-    } else {
-      return "end of round"; // Reached the end of the array
-    }
+  const nextRoundIndex =
+    currentRoundIndex === null || currentRoundIndex === undefined
+      ? 0
+      : currentRoundIndex + 1;
+
+  if (nextRoundIndex < 0 || nextRoundIndex >= rounds.length) {
+    return "end of round";
   }
 
-  // Fetch questions from the Open Trivia API
+  const plannedRound = rounds[nextRoundIndex];
+  if (!plannedRound) {
+    throw new Error(`Round not found at index ${nextRoundIndex}`);
+  }
+
+  // Work on a copy so fallback adjustments don't mutate room.rounds.
+  const round = { ...plannedRound };
+  const convex = getConvexClient();
+
   try {
-    const response = await axios.get(
-      `https://opentdb.com/api.php?amount=${questionsPerRound}&category=${nextCategoryId}&difficulty=${difficulty}&type=multiple`
-    );
+    const fetchLimit = Math.min(Math.max(questionsPerRound * 4, questionsPerRound), 200);
+    const queryArgs = {
+      categoryId: round.categoryId,
+      difficulty,
+      enabledOnly: true,
+      limit: fetchLimit
+    };
 
-    const { results } = response.data;
+    if (!round.generalOnly && round.subcategoryId) {
+      queryArgs.subcategoryId = round.subcategoryId;
+    }
 
-    // Format the questions and shuffle the answers
+    if (round.generalOnly) {
+      queryArgs.generalOnly = true;
+    }
+
+    let rows = await convex.query(api.questions.listByFilter, queryArgs);
+
+    if (rows.length < questionsPerRound && !round.generalOnly && round.subcategoryId) {
+      const categorySlug = round.categorySlug || slugify(round.categoryName || "");
+      const tree = await convex.query(api.categories.getCategoryTreeBySlug, {
+        slug: categorySlug,
+        enabledOnly: true
+      });
+
+      if (tree && Array.isArray(tree.subcategories)) {
+        if (rows.length === 0 && round.subcategoryName) {
+          const targetSlug = slugify(round.subcategoryName);
+          const match = tree.subcategories.find(
+            (sub) => (sub.slug || slugify(sub.name)) === targetSlug
+          );
+
+          if (match && match._id !== round.subcategoryId) {
+            const candidateRows = await convex.query(api.questions.listByFilter, {
+              categoryId: round.categoryId,
+              subcategoryId: match._id,
+              difficulty,
+              enabledOnly: true,
+              limit: fetchLimit
+            });
+
+            if (candidateRows.length > 0) {
+              round.subcategoryId = match._id;
+              round.subcategoryName = match.name;
+              round.subcategorySlug = match.slug || slugify(match.name);
+              rows = candidateRows;
+            }
+          }
+        }
+
+        if (rows.length < questionsPerRound) {
+          const candidates = tree.subcategories.filter((sub) => sub._id !== round.subcategoryId);
+          shuffleArray(candidates);
+
+          for (const candidate of candidates) {
+            const candidateRows = await convex.query(api.questions.listByFilter, {
+              categoryId: round.categoryId,
+              subcategoryId: candidate._id,
+              difficulty,
+              enabledOnly: true,
+              limit: fetchLimit
+            });
+
+            if (candidateRows.length >= questionsPerRound) {
+              round.subcategoryId = candidate._id;
+              round.subcategoryName = candidate.name;
+              round.subcategorySlug = candidate.slug || slugify(candidate.name);
+              rows = candidateRows;
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    if (rows.length < questionsPerRound) {
+      const roundLabel = round.subcategoryName || round.categoryName;
+      throw new Error(
+        `Not enough questions for ${roundLabel} (${rows.length}/${questionsPerRound})`
+      );
+    }
+
+    shuffleArray(rows);
+    const selected = rows.slice(0, questionsPerRound);
+
     const formattedQuestions = {};
-    results.forEach((questionData, index) => {
-      const allAnswers = [
-        questionData.correct_answer,
-        ...questionData.incorrect_answers
-      ];
-      shuffleArray(allAnswers); // Shuffle the answers
+    selected.forEach((questionData, index) => {
+      const options = Array.isArray(questionData.options)
+        ? questionData.options.slice()
+        : [];
+
+      if (options.length !== 4) {
+        throw new Error(`Invalid options count for question: ${questionData._id}`);
+      }
+
+      const correctAnswer = options[questionData.answerIndex];
+      if (typeof correctAnswer !== "string") {
+        throw new Error(`Invalid answerIndex for question: ${questionData._id}`);
+      }
+
+      shuffleArray(options);
 
       formattedQuestions[index + 1] = {
         question: questionData.question,
-        correct_answer: questionData.correct_answer,
-        allAnswers: allAnswers // Store the shuffled answers
+        correct_answer: correctAnswer,
+        allAnswers: options,
+        imageName: questionData.imageName ?? null
       };
     });
 
-    room.currentProgress.currentRound = nextCategoryId;
+    room.currentProgress.currentRoundIndex = nextRoundIndex;
+    room.currentProgress.currentRound = round;
 
-    // Return the formatted questions
     return formattedQuestions;
-
   } catch (error) {
-    console.error("Error fetching questions from Open Trivia API:", error);
+    console.error("Error fetching questions from Convex:", error);
     throw new Error("Failed to generate round questions");
   }
 };
 
 // Called by the Game Master App
 // Creates a new game room for the quiz session and add to Rooms
-// rounds is passed as an array representing the category id of the round eg. [10, 10, 12, 30, 9, 12]
+// rounds is passed as an array representing the category selection per round (name or legacy id)
 // mode is the level of difficulty of the quiz. (1 = Easy, 2 = Medium, 3 = Hard, 4 = Kids)
-const createRoom = async (socket, rooms, questionTimeLimit, questionsPerRound, rounds, mode) => {
+const createRoom = async (
+  socket,
+  rooms,
+  questionTimeLimit,
+  questionsPerRound,
+  rounds,
+  mode,
+  questionImageBasePath
+) => {
   questionTimeLimit = questionTimeLimit !== undefined ? questionTimeLimit : 0;
   questionsPerRound = questionsPerRound !== undefined ? questionsPerRound : 5;
+  const DEFAULT_QUESTION_IMAGE_BASE_PATH = "imgs/questions";
+  const normalizedQuestionImageBasePath =
+    typeof questionImageBasePath === "string" && questionImageBasePath.trim().length > 0
+      ? questionImageBasePath.trim()
+      : DEFAULT_QUESTION_IMAGE_BASE_PATH;
 
   const roomId = generateUniqueRoomId(rooms);
+  let roundPlan;
+
+  try {
+    roundPlan = await buildRoundPlan(rounds);
+  } catch (error) {
+    console.error("Error building round plan:", error);
+    throw new Error("Failed to create room due to round planning error");
+  }
 
   const room = {
     roomId,
@@ -183,12 +502,16 @@ const createRoom = async (socket, rooms, questionTimeLimit, questionsPerRound, r
     questionTimeLimit : questionTimeLimit,
     questionPerRound: questionsPerRound,
     mode: mode,
-    rounds: rounds,
+    settings: {
+      questionImageBasePath: normalizedQuestionImageBasePath
+    },
+    rounds: roundPlan,
     players: {
  
     },
     quizStarted: false,
     currentProgress: {
+      currentRoundIndex: null,
       currentRound: null,
       currentQuestion: 1,
       roundQuestions: null
@@ -197,7 +520,13 @@ const createRoom = async (socket, rooms, questionTimeLimit, questionsPerRound, r
 
   // Generate the first round of questions and update the room object
   try {
-    const roundQuestions = await generateRound(null, rounds, mode, questionsPerRound, room);
+    const roundQuestions = await generateRound(
+      room.currentProgress.currentRoundIndex,
+      room.rounds,
+      mode,
+      questionsPerRound,
+      room
+    );
     room.currentProgress.roundQuestions = roundQuestions; // Update roundQuestions in the room object
   } catch (error) {
     console.error("Error generating round questions:", error);
@@ -213,6 +542,22 @@ const createRoom = async (socket, rooms, questionTimeLimit, questionsPerRound, r
 };
 
 const roomHandler = (io, socket, rooms) => {
+  const deleteRoom = (roomId) => {
+    const room = rooms.get(roomId);
+
+    if (!room) {
+      return null;
+    }
+
+    io.to(roomId).emit("room:deleted", { roomId });
+    io.in(roomId).socketsLeave(roomId);
+    rooms.delete(roomId);
+
+    console.log(`Room deleted: ${roomId} (Total rooms: ${rooms.size})`);
+
+    return room;
+  };
+
   const create = async (payload, callback) => {
 
     try {
@@ -222,13 +567,34 @@ const roomHandler = (io, socket, rooms) => {
         payload.questionTimeLimit,
         payload.questionPerRound,
         payload.rounds,
-        payload.mode
+        payload.mode,
+        payload.questionImageBasePath
       );
       callback(null, newRoom);
     } catch (error) {
       console.error("Error creating room:", error);
       callback({ error: "Failed to create room" });
     }
+  };
+
+  const removeRoom = (payload, callback) => {
+    const roomId = payload?.roomId;
+
+    if (!roomId) {
+      return callback({ error: true, message: "Room ID is required" });
+    }
+
+    const room = rooms.get(roomId);
+    if (!room) {
+      return callback({ error: true, message: "Room not found" });
+    }
+
+    if (room.gameMaster !== socket.id) {
+      return callback({ error: true, message: "Only the game master can delete this room" });
+    }
+
+    deleteRoom(roomId);
+    return callback(null, { roomId });
   };
 
   const startQuiz = (payload, callback) => {
@@ -445,7 +811,7 @@ const roomHandler = (io, socket, rooms) => {
         console.log("Next Round")
         // Generate the next round of questions
         const roundQuestions = await generateRound(
-          room.currentProgress.currentRound,
+          room.currentProgress.currentRoundIndex,
           room.rounds,
           room.mode,
           room.questionPerRound,
@@ -544,7 +910,9 @@ const roomHandler = (io, socket, rooms) => {
         });
       });
       console.log(`End-of-game broadcasted in room: ${room.roomId}`);
-      return callback(null, room); // Return the updated room object
+      callback(null, room); // Return the updated room object
+      deleteRoom(room.roomId);
+      return;
     } else {
       console.error(`Room not found endOfGame: ${payload.roomId}`);
       return callback({ error: true, message: "Room not found" });
@@ -552,6 +920,7 @@ const roomHandler = (io, socket, rooms) => {
   };  
 
   socket.on("room:create", create);
+  socket.on("room:delete", removeRoom);
   socket.on("quiz:start", startQuiz);
   socket.on("player:join", playerJoin);
   socket.on("player:rejoin", playerRejoin);
