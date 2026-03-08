@@ -924,29 +924,158 @@ body {
     box-shadow: none;
   }
 
-  .modal-buttons #closeBtn:hover,
-  .modal-buttons #customCloseBtn:hover {
+  .modal-buttons #closeBtn:hover {
     background: rgba(255, 255, 255, 0.1);
     border-color: rgba(255, 255, 255, 0.8);
   }
 
-  .modal-buttons #customCloseBtn {
-    background: transparent;
-    border: 2px solid rgba(255, 255, 255, 0.5);
-    box-shadow: none;
-  }
-
   /* Custom Modal Specific Styles */
   .custom-modal-content {
-    max-width: 500px;
+    max-width: 540px;
     background: linear-gradient(135deg, rgba(30, 30, 30, 0.98) 0%, rgba(20, 20, 20, 0.98) 100%);
+  }
+
+  .custom-modal-inner {
+    display: flex;
+    flex-direction: column;
+    min-height: 560px;
+  }
+
+  .custom-step-stage {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-height: 340px;
+  }
+
+  .custom-step-panel {
+    width: 100%;
+    opacity: 0;
+    transform: translateY(36px);
+  }
+
+  .custom-step-panel.is-active {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    pointer-events: auto;
+  }
+
+  .custom-step-panel.is-entering {
+    animation: custom-step-entrance 560ms cubic-bezier(0.6, 1, 0.36, 1) forwards;
+  }
+
+  .custom-step-label {
+    margin-top: 0;
+  }
+
+  .custom-step-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    margin-top: 12px;
+  }
+
+  .custom-modal-buttons {
+    width: 100%;
+    align-items: center;
+  }
+
+  .custom-modal-buttons button {
+    height: 56px;
+  }
+
+  .custom-modal-buttons #customConfirmBtn {
+    flex: 1;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .custom-modal-buttons.is-pre-enter,
+  .slide-counter.is-pre-enter {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  .custom-modal-buttons.is-entering,
+  .slide-counter.is-entering {
+    animation: custom-footer-entrance 440ms cubic-bezier(0.6, 1, 0.36, 1) forwards;
+  }
+
+  .step-nav-btn {
+    min-width: 72px;
+    width: 72px;
+    height: 56px;
+    padding: 0 18px;
+    border-radius: 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+  }
+
+  .step-nav-back {
+    background: #6b6b6b;
+    box-shadow: 0 5px #4f4f4f;
+  }
+
+  .step-nav-back:hover {
+    background: #808080;
+  }
+
+  .step-nav-back:active {
+    box-shadow: 0 3px #4f4f4f;
+    top: 2px;
+  }
+
+  .step-nav-icon {
+    display: none;
+    color: #ffffff;
+  }
+
+  .step-nav-back.is-first-step .step-nav-icon-close,
+  .step-nav-back:not(.is-first-step) .step-nav-icon-arrow {
+    display: block;
+  }
+
+  .step-nav-icon-close {
+    width: 20px;
+    height: 20px;
+  }
+
+  .step-nav-icon-arrow {
+    width: 22px;
+    height: 15.14px;
+  }
+
+  .slide-counter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    background-color: rgba(91, 97, 124, 0.1);
+    border-radius: 100px;
+    margin-left: 8px;
+    margin-right: 8px;
+    transition: background-color 0.25s ease, transform 0.25s ease;
+  }
+
+  .dot.active-dot {
+    background-color: #e50914;
+    transform: scale(1.05);
   }
 
   /* Category List */
   .category-list {
-    margin-bottom: 25px;
     max-height: 320px;
     overflow-y: auto;
+    padding-right: 4px;
   }
 
   .category-row {
@@ -1012,6 +1141,57 @@ body {
     font-size: 1.3em;
     font-weight: bold;
     color: #fff;
+  }
+
+  @keyframes custom-step-entrance {
+    from {
+      opacity: 0;
+      transform: translateY(36px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes custom-footer-entrance {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .custom-modal-inner {
+      min-height: auto;
+    }
+
+    .custom-step-stage {
+      min-height: auto;
+    }
+
+    .category-row {
+      gap: 12px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .custom-step-panel.is-entering,
+    .custom-modal-buttons.is-entering,
+    .slide-counter.is-entering {
+      animation: none;
+    }
+
+    .custom-step-panel,
+    .custom-modal-buttons,
+    .slide-counter {
+      opacity: 1;
+      transform: none;
+    }
   }
 
 /* Player Connect Screen Styles */
