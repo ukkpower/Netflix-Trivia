@@ -1,0 +1,103 @@
+{
+  "meta": {
+    "title": "Netflix Trivia Night • Spieler"
+  },
+  "player": {
+    "appAria": "Netflix Trivia Night Spielersteuerung",
+    "panels": {
+      "splash": "Startbildschirm",
+      "welcome": "Willkommensbildschirm",
+      "join": "Beitrittsbildschirm",
+      "waiting": "Wartebildschirm",
+      "answer": "Antwortbildschirm",
+      "endOfRound": "Rundenende-Bildschirm",
+      "endOfGame": "Spielende-Bildschirm"
+    },
+    "splash": {
+      "brandAria": "Netflix Trivia Night",
+      "netflixAlt": "Netflix",
+      "titleAlt": "Trivia Night",
+      "hint": "Tippe zum Fortfahren"
+    },
+    "welcome": {
+      "kicker": "SPIELER-FERNBEDIENUNG",
+      "title": "Bereit zum Spielen",
+      "chip": "Bereit",
+      "headline": "Nutze dein Handy als Controller.",
+      "description": "Tritt dem Raum auf dem TV bei und tippe dann auf A/B/C/D, um deine Antwort festzulegen.",
+      "button": "Spiel beitreten"
+    },
+    "join": {
+      "kicker": "BEITRETEN",
+      "title": "Gib deine Daten ein",
+      "connectionConnecting": "Verbinde…",
+      "connectionConnected": "Verbunden",
+      "connectionDisconnected": "Getrennt",
+      "headline": "Gib deine Daten ein",
+      "description": "Dein Name erscheint auf der Punkteanzeige am TV. Dein Quizcode wird auf dem Host-Bildschirm angezeigt.",
+      "nameLabel": "Name",
+      "nameHint": "z. B. Keith",
+      "namePlaceholder": "Dein Name",
+      "quizCodeLabel": "Quizcode",
+      "quizCodeHint": "4–8 Zeichen",
+      "quizCodePlaceholder": "ABCD",
+      "button": "Beitreten",
+      "footerHint": "Tipp: Lass diese Seite geöffnet, während du spielst."
+    },
+    "waiting": {
+      "kicker": "VERBUNDEN",
+      "title": "Warten auf den Host",
+      "chip": "Im Raum",
+      "headline": "Du bist drin.",
+      "description": "Warte darauf, dass der Host die erste Runde startet.",
+      "cardHint": "Sobald die Runde beginnt, erscheinen deine Antworttasten automatisch hier."
+    },
+    "answer": {
+      "kicker": "LIVE",
+      "title": "Tippe A / B / C / D",
+      "chip": "Einmal tippen",
+      "questionLabel": "Frage",
+      "questionSub": "Wähle A, B, C oder D",
+      "toastDefault": "Antwort gesendet. Viel Glück.",
+      "buttonsAria": "Antworttasten",
+      "tapHint": "Dein erster Tipp fixiert deine Antwort.",
+      "submitError": "Antwort wurde nicht akzeptiert."
+    },
+    "endOfRound": {
+      "kicker": "RUNDE BEENDET",
+      "title": "Deine Statistik",
+      "chip": "Punkte",
+      "headline": "Gut gemacht.",
+      "description": "Hier ist dein bisheriger Fortschritt. Die nächste Runde startet auf dem TV.",
+      "roundScoreLabel": "Rundenpunkte",
+      "roundScoreSub": "Punkte in dieser Runde",
+      "totalLabel": "Gesamt",
+      "totalSub": "Gesamtpunkte",
+      "positionLabel": "Platz",
+      "positionSub": "aktuelle Platzierung",
+      "waitingHint": "Warte auf die nächste Runde…"
+    },
+    "endOfGame": {
+      "kicker": "FINALE",
+      "title": "Spiel vorbei",
+      "chip": "Fertig",
+      "headline": "Danke fürs Mitspielen.",
+      "description": "Noch eine Runde? Kehre zum Start zurück und tritt mit einem neuen Raumcode erneut bei.",
+      "finalScoreLabel": "Endpunktzahl",
+      "finalScoreSub": "Gesamtpunkte",
+      "finishLabel": "Platzierung",
+      "finishSub": "Platz",
+      "button": "Zurück zum Start"
+    },
+    "errors": {
+      "enterNameAndCode": "Bitte gib deinen Namen und den auf dem TV angezeigten Quizcode ein.",
+      "couldNotJoin": "Beitritt fehlgeschlagen: {message}",
+      "unknownError": "Unbekannter Fehler",
+      "rejoinRoom": "Verbindung verloren. Bitte tritt dem Raum erneut bei.",
+      "connectionLostRetry": "Verbindung verloren. Bitte prüfe dein Internet und versuche es erneut."
+    }
+  },
+  "images": {
+    "netflixTriviaLogo": "Netflix Trivia-Logo"
+  }
+}

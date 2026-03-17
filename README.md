@@ -49,8 +49,9 @@ The Game Master UI in [public/game-master.html](/Users/keithpower/Documents/Webs
 ### How It Works
 - Locale selection is driven by the `lang` query parameter.
 - English is the default fallback locale.
-- Locale files live in [public/lang/](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang/).
-- [public/lang.js](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang.js) loads the requested JSON file, falls back to English if needed, and applies translations to the page.
+- Game Master locale files live in [public/lang/game-master/](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang/game-master/).
+- Game Master uses its own loader at [public/lang/game-master/lang.js](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang/game-master/lang.js).
+- Player uses a separate loader and separate locale files in [public/lang/player/](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang/player/).
 
 Examples:
 
@@ -59,9 +60,12 @@ Examples:
 - `http://localhost:8080/game-master.html?lang=de`
 
 ### Files
-- [public/lang.js](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang.js) - Browser-side i18n loader and helper API
-- [public/lang/en.json](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang/en.json) - Source/default locale
-- [public/lang/de.json](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang/de.json) - German locale
+- [public/lang/game-master/lang.js](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang/game-master/lang.js) - Game Master browser-side i18n loader
+- [public/lang/game-master/en.json](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang/game-master/en.json) - Game Master source/default locale
+- [public/lang/game-master/de.json](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang/game-master/de.json) - Game Master German locale
+- [public/lang/player/lang.js](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang/player/lang.js) - Player browser-side i18n loader
+- [public/lang/player/en.json](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang/player/en.json) - Player source/default locale
+- [public/lang/player/de.json](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang/player/de.json) - Player German locale
 
 ### Markup and Script Conventions
 - Use `data-i18n` for plain text nodes.
@@ -72,7 +76,7 @@ Examples:
 - Keep internal category identifiers such as `data-category="Sports"` in English. These are part of the game logic and should not be localized.
 
 ### `window.i18n` API
-[public/lang.js](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang.js) exposes:
+Both page-specific loaders expose the same API:
 
 - `init({ defaultLang, supportedLangs })`
 - `t(key, vars = {})`
@@ -81,11 +85,16 @@ Examples:
 - `getLocale()`
 
 ### Adding a New Language
-1. Copy [public/lang/en.json](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang/en.json) to a new file such as `public/lang/fr.json`.
-2. Translate the values but keep the JSON structure and keys identical to English.
-3. Add the new locale code to the `supportedLangs` list in [public/game-master.html](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/game-master.html).
-4. Load the page with the new query param, for example `game-master.html?lang=fr`.
-5. Click through the Game Master flow and verify:
+1. Decide which page you are translating:
+   - Game Master: [public/lang/game-master/](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang/game-master/)
+   - Player: [public/lang/player/](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang/player/)
+2. Copy that page's `en.json` to a new file such as `fr.json`.
+3. Translate the values but keep the JSON structure and keys identical to that page's English file.
+4. Add the new locale code to the `supportedLangs` list in the page entrypoint:
+   - [public/game-master.html](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/game-master.html)
+   - [public/player.html](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/player.html)
+5. Load the page with the new query param, for example `game-master.html?lang=fr` or `player.html?lang=fr`.
+6. For Game Master, click through and verify:
    - welcome/setup copy
    - category modal copy
    - custom quiz modal copy
@@ -93,6 +102,17 @@ Examples:
    - room-code ARIA labels
    - alert/modal messages
    - round/category labels for known categories
+7. For Player, verify:
+   - splash/welcome/join screens
+   - placeholders and connection status
+   - join/rejoin error messages
+   - answer toast text
+   - end-of-round and end-of-game panels
+
+### Why It Is Split
+- Game Master may be packaged into Electron later.
+- Player remains a web page served independently.
+- The two pages follow the same translation standards, but keep separate loaders and JSON files so their release and packaging paths stay decoupled.
 
 ### Important Scope Rule
 - Only the Game Master UI is translated right now.

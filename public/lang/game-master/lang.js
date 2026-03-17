@@ -11,6 +11,9 @@
     Politics: "politics",
     Mythology: "mythology"
   };
+  const loaderScriptUrl = document.currentScript?.src
+    ? new URL(document.currentScript.src, window.location.href)
+    : new URL(window.location.href);
 
   let currentLang = FALLBACK_LANG;
   let currentTranslations = {};
@@ -46,7 +49,7 @@
   }
 
   async function loadTranslations(lang) {
-    const localeUrl = new URL(`./lang/${lang}.json`, window.location.href);
+    const localeUrl = new URL(`./${lang}.json`, loaderScriptUrl);
     const response = await fetch(localeUrl);
 
     if (!response.ok) {
@@ -90,12 +93,7 @@
 
   function getResolvedTranslation(key, vars = {}) {
     const translatedValue = t(key, vars);
-
-    if (translatedValue === key) {
-      return null;
-    }
-
-    return translatedValue;
+    return translatedValue === key ? null : translatedValue;
   }
 
   function applyTranslation(root, selector, callback) {
@@ -145,6 +143,13 @@
       const translatedValue = getResolvedTranslation(element.dataset.i18nAlt);
       if (translatedValue !== null) {
         element.setAttribute("alt", translatedValue);
+      }
+    });
+
+    applyTranslation(root, "[data-i18n-placeholder]", (element) => {
+      const translatedValue = getResolvedTranslation(element.dataset.i18nPlaceholder);
+      if (translatedValue !== null) {
+        element.setAttribute("placeholder", translatedValue);
       }
     });
   }
@@ -197,8 +202,11 @@
         }
       }
 
-      const translatedTitle = t("meta.title");
-      if (translatedTitle && translatedTitle !== "meta.title") {
+      const titleKey = typeof options.titleKey === "string" && options.titleKey
+        ? options.titleKey
+        : "meta.title";
+      const translatedTitle = t(titleKey);
+      if (translatedTitle && translatedTitle !== titleKey) {
         document.title = translatedTitle;
       }
 

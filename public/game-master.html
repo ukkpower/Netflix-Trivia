@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
   <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
   <script src="audio-manager.js"></script>
-  <script src="lang.js"></script>
+  <script src="lang/game-master/lang.js"></script>
 </head>
 <body>
   <!-- Welcome Screen -->
@@ -518,6 +518,7 @@
       .init({ defaultLang: "en", supportedLangs: ["en", "de"] })
       .then(() => {
         window.i18n.apply();
+        updatePlayerConnectQrCode();
       });
 
     function t(key, vars = {}) {
@@ -530,6 +531,22 @@
       }
 
       return window.i18n.translateCategory(categoryValue.trim());
+    }
+
+    function updatePlayerConnectQrCode() {
+      const qrImage = document.querySelector(".player-connect-qr");
+      if (!qrImage) {
+        return;
+      }
+
+      const playerUrl = new URL(PLAYER_APP_BASE_URL);
+      const activeLocale = window.i18n.getLocale();
+
+      if (activeLocale && activeLocale !== "en") {
+        playerUrl.searchParams.set("lang", activeLocale);
+      }
+
+      qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=${PLAYER_QR_SIZE}&data=${encodeURIComponent(playerUrl.toString())}`;
     }
 
     // Helper function to format rank as ordinal (1st, 2nd, 3rd, etc.)
@@ -636,6 +653,8 @@
     const END_OF_ROUND_NEXT_PANEL_DELAY_MS = 6000;
     const QUESTION_COUNTDOWN_TRACK = "questionCountdown";
     const QUESTION_END_TRACK = "questionEnd";
+    const PLAYER_APP_BASE_URL = "https://netflix-trivia.onrender.com/player.html";
+    const PLAYER_QR_SIZE = "150x150";
     let endQuizConfettiTimeoutId = null;
     let endQuizConfettiCleanupId = null;
     let endOfRoundTransitionTimeoutId = null;

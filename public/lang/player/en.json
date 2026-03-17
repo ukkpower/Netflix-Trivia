@@ -1,0 +1,103 @@
+{
+  "meta": {
+    "title": "Netflix Trivia Night • Player"
+  },
+  "player": {
+    "appAria": "Netflix Trivia Night player controller",
+    "panels": {
+      "splash": "Splash screen",
+      "welcome": "Welcome screen",
+      "join": "Join game screen",
+      "waiting": "Waiting screen",
+      "answer": "Answer screen",
+      "endOfRound": "End of round screen",
+      "endOfGame": "End of game screen"
+    },
+    "splash": {
+      "brandAria": "Netflix Trivia Night",
+      "netflixAlt": "Netflix",
+      "titleAlt": "Trivia Night",
+      "hint": "Tap to continue"
+    },
+    "welcome": {
+      "kicker": "PLAYER REMOTE",
+      "title": "Ready to play",
+      "chip": "Ready",
+      "headline": "Use your phone as the controller.",
+      "description": "Join the room on the TV, then tap A/B/C/D to lock in your answer.",
+      "button": "Join a game"
+    },
+    "join": {
+      "kicker": "JOIN",
+      "title": "Enter your details",
+      "connectionConnecting": "Connecting…",
+      "connectionConnected": "Connected",
+      "connectionDisconnected": "Disconnected",
+      "headline": "Enter your details",
+      "description": "Your name appears on the TV scoreboard. Your quiz code is shown on the host screen.",
+      "nameLabel": "Name",
+      "nameHint": "e.g., Keith",
+      "namePlaceholder": "Your name",
+      "quizCodeLabel": "Quiz code",
+      "quizCodeHint": "4–8 chars",
+      "quizCodePlaceholder": "ABCD",
+      "button": "Join",
+      "footerHint": "Tip: keep this page open while you play."
+    },
+    "waiting": {
+      "kicker": "CONNECTED",
+      "title": "Waiting for host",
+      "chip": "In room",
+      "headline": "You're in.",
+      "description": "Waiting for the host to start the first round.",
+      "cardHint": "When the round begins, your answer buttons will appear here automatically."
+    },
+    "answer": {
+      "kicker": "LIVE",
+      "title": "Tap A / B / C / D",
+      "chip": "Tap once",
+      "questionLabel": "Question",
+      "questionSub": "Pick A, B, C or D",
+      "toastDefault": "Answer submitted. Good luck.",
+      "buttonsAria": "Answer buttons",
+      "tapHint": "Your first tap locks your answer.",
+      "submitError": "Answer not accepted."
+    },
+    "endOfRound": {
+      "kicker": "ROUND COMPLETE",
+      "title": "Your stats",
+      "chip": "Scores",
+      "headline": "Nice one.",
+      "description": "Here's your progress so far. Next round will start on the TV.",
+      "roundScoreLabel": "Round score",
+      "roundScoreSub": "points this round",
+      "totalLabel": "Total",
+      "totalSub": "overall points",
+      "positionLabel": "Position",
+      "positionSub": "current ranking",
+      "waitingHint": "Waiting for the next round…"
+    },
+    "endOfGame": {
+      "kicker": "FINAL",
+      "title": "Game over",
+      "chip": "Done",
+      "headline": "Thanks for playing.",
+      "description": "Want another go? Return to the start screen and join a new room code.",
+      "finalScoreLabel": "Final score",
+      "finalScoreSub": "total points",
+      "finishLabel": "Finish",
+      "finishSub": "place",
+      "button": "Return to start"
+    },
+    "errors": {
+      "enterNameAndCode": "Please enter your name and the quiz code shown on the TV.",
+      "couldNotJoin": "Could not join: {message}",
+      "unknownError": "Unknown error",
+      "rejoinRoom": "Connection lost. Please rejoin the room.",
+      "connectionLostRetry": "Connection lost. Please check your internet and try rejoining."
+    }
+  },
+  "images": {
+    "netflixTriviaLogo": "Netflix Trivia logo"
+  }
+}

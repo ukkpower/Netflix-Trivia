@@ -6,6 +6,7 @@
   <meta name="theme-color" content="#0B0B0B">
   <title>Netflix Trivia Night • Player</title>
   <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+  <script src="lang/player/lang.js"></script>
   <style>
     :root{
       --bg0:#070707;
@@ -477,68 +478,68 @@
   </style>
 </head>
 <body>
-  <main class="app" role="application" aria-label="Netflix Trivia Night Player Controller">
+  <main class="app" role="application" aria-label="Netflix Trivia Night Player Controller" data-i18n-aria-label="player.appAria">
 
     <!-- Splash Screen -->
-    <section id="splashPanel" class="panel active splash" aria-label="Splash Screen">
-      <div class="splash-logos" role="img" aria-label="Netflix Trivia Night">
-        <img class="splash-n" src="imgs/netflix-logo.png" alt="Netflix">
-        <img class="splash-title" src="imgs/trivia-logo.png" alt="Trivia Night">
+    <section id="splashPanel" class="panel active splash" aria-label="Splash Screen" data-i18n-aria-label="player.panels.splash">
+      <div class="splash-logos" role="img" aria-label="Netflix Trivia Night" data-i18n-aria-label="player.splash.brandAria">
+        <img class="splash-n" src="imgs/netflix-logo.png" alt="Netflix" data-i18n-alt="player.splash.netflixAlt">
+        <img class="splash-title" src="imgs/trivia-logo.png" alt="Trivia Night" data-i18n-alt="player.splash.titleAlt">
       </div>
-      <div class="splash-hint">Tap to continue</div>
+      <div class="splash-hint" data-i18n="player.splash.hint">Tap to continue</div>
     </section>
 
     <!-- Welcome Screen -->
-    <section id="welcomePanel" class="panel" aria-label="Welcome Screen">
+    <section id="welcomePanel" class="panel" aria-label="Welcome Screen" data-i18n-aria-label="player.panels.welcome">
       <div class="brand">
         <div class="brand-left">
           <div class="brand-stack">
             <div class="brand-logos">
-              <img class="brand-app" src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia">
+              <img class="brand-app" src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia" data-i18n-alt="images.netflixTriviaLogo">
             </div>
             <div class="brand-title">
-              <div class="kicker">PLAYER REMOTE</div>
-              <div class="name">Ready to play</div>
+              <div class="kicker" data-i18n="player.welcome.kicker">PLAYER REMOTE</div>
+              <div class="name" data-i18n="player.welcome.title">Ready to play</div>
             </div>
           </div>
         </div>
-        <div class="chip" aria-hidden="true"><span class="dot ok"></span><span>Ready</span></div>
+        <div class="chip" aria-hidden="true"><span class="dot ok"></span><span data-i18n="player.welcome.chip">Ready</span></div>
       </div>
 
       <div class="spacer"></div>
 
       <div class="hero center">
-        <h1>Use your phone as the controller.</h1>
-        <p>Join the room on the TV, then tap A/B/C/D to lock in your answer.</p>
+        <h1 data-i18n="player.welcome.headline">Use your phone as the controller.</h1>
+        <p data-i18n="player.welcome.description">Join the room on the TV, then tap A/B/C/D to lock in your answer.</p>
       </div>
 
       <div class="spacer"></div>
 
       <div class="btn-row">
-        <button id="welcomeButton" class="btn btn-primary btn-block">Join a game</button>
+        <button id="welcomeButton" class="btn btn-primary btn-block" data-i18n="player.welcome.button">Join a game</button>
       </div>
     </section>
 
     <!-- Join Quiz Screen -->
-    <section id="joinQuizPanel" class="panel" aria-label="Join Game Screen">
+    <section id="joinQuizPanel" class="panel" aria-label="Join Game Screen" data-i18n-aria-label="player.panels.join">
       <div class="brand">
         <div class="brand-left">
           <div class="brand-stack">
             <div class="brand-logos">
-              <img class="brand-app" src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia">
+              <img class="brand-app" src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia" data-i18n-alt="images.netflixTriviaLogo">
             </div>
             <div class="brand-title">
-              <div class="kicker">JOIN</div>
-              <div class="name">Enter your details</div>
+              <div class="kicker" data-i18n="player.join.kicker">JOIN</div>
+              <div class="name" data-i18n="player.join.title">Enter your details</div>
             </div>
           </div>
         </div>
-        <div id="connectionChip" class="chip"><span id="connectionDot" class="dot"></span><span id="connectionText">Connecting…</span></div>
+        <div id="connectionChip" class="chip"><span id="connectionDot" class="dot"></span><span id="connectionText" data-i18n="player.join.connectionConnecting">Connecting…</span></div>
       </div>
 
       <div class="hero">
-        <h1>Enter your details</h1>
-        <p>Your name appears on the TV scoreboard. Your quiz code is shown on the host screen.</p>
+        <h1 data-i18n="player.join.headline">Enter your details</h1>
+        <p data-i18n="player.join.description">Your name appears on the TV scoreboard. Your quiz code is shown on the host screen.</p>
       </div>
 
       <div id="joinError" class="form-error" role="alert" aria-live="polite"></div>
@@ -547,90 +548,90 @@
         <form class="form" onsubmit="return false;">
           <div class="field">
             <div class="label-row">
-              <label for="playerName">Name</label>
-              <span class="hint">e.g., Keith</span>
+              <label for="playerName" data-i18n="player.join.nameLabel">Name</label>
+              <span class="hint" data-i18n="player.join.nameHint">e.g., Keith</span>
             </div>
-            <input type="text" id="playerName" placeholder="Your name" autocomplete="nickname" inputmode="text">
+            <input type="text" id="playerName" placeholder="Your name" autocomplete="nickname" inputmode="text" data-i18n-placeholder="player.join.namePlaceholder">
           </div>
 
           <div class="field">
             <div class="label-row">
-              <label for="roomId">Quiz code</label>
-              <span class="hint">4–8 chars</span>
+              <label for="roomId" data-i18n="player.join.quizCodeLabel">Quiz code</label>
+              <span class="hint" data-i18n="player.join.quizCodeHint">4–8 chars</span>
             </div>
-            <input type="text" id="roomId" placeholder="ABCD" autocomplete="off" inputmode="text" autocapitalize="characters">
+            <input type="text" id="roomId" placeholder="ABCD" autocomplete="off" inputmode="text" autocapitalize="characters" data-i18n-placeholder="player.join.quizCodePlaceholder">
           </div>
 
           <div class="btn-row">
-            <button id="joinButton" class="btn btn-primary btn-block">Join</button>
+            <button id="joinButton" class="btn btn-primary btn-block" data-i18n="player.join.button">Join</button>
           </div>
         </form>
       </div>
 
       <div class="spacer"></div>
 
-      <p class="hint center">Tip: keep this page open while you play.</p>
+      <p class="hint center" data-i18n="player.join.footerHint">Tip: keep this page open while you play.</p>
     </section>
 
     <!-- Waiting Panel -->
-    <section id="waitingPanel" class="panel" aria-label="Waiting Screen">
+    <section id="waitingPanel" class="panel" aria-label="Waiting Screen" data-i18n-aria-label="player.panels.waiting">
       <div class="brand">
         <div class="brand-left">
           <div class="brand-stack">
             <div class="brand-logos">
-              <img class="brand-app" src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia">
+              <img class="brand-app" src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia" data-i18n-alt="images.netflixTriviaLogo">
             </div>
             <div class="brand-title">
-              <div class="kicker">CONNECTED</div>
-              <div class="name">Waiting for host</div>
+              <div class="kicker" data-i18n="player.waiting.kicker">CONNECTED</div>
+              <div class="name" data-i18n="player.waiting.title">Waiting for host</div>
             </div>
           </div>
         </div>
-        <div class="chip"><span class="dot ok"></span><span>In room</span></div>
+        <div class="chip"><span class="dot ok"></span><span data-i18n="player.waiting.chip">In room</span></div>
       </div>
 
       <div class="spacer"></div>
 
       <div class="hero center">
-        <h1>You're in.</h1>
-        <p>Waiting for the host to start the first round.</p>
+        <h1 data-i18n="player.waiting.headline">You're in.</h1>
+        <p data-i18n="player.waiting.description">Waiting for the host to start the first round.</p>
       </div>
 
       <div class="spacer"></div>
 
       <div class="card">
-        <p class="hint">When the round begins, your answer buttons will appear here automatically.</p>
+        <p class="hint" data-i18n="player.waiting.cardHint">When the round begins, your answer buttons will appear here automatically.</p>
       </div>
     </section>
 
     <!-- Submit Answer Panel -->
-    <section id="submitAnswerPanel" class="panel" aria-label="Answer Screen">
+    <section id="submitAnswerPanel" class="panel" aria-label="Answer Screen" data-i18n-aria-label="player.panels.answer">
       <div class="brand">
         <div class="brand-left">
           <div class="brand-stack">
             <div class="brand-logos">
-              <img class="brand-app" src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia">
+              <img class="brand-app" src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia" data-i18n-alt="images.netflixTriviaLogo">
             </div>
             <div class="brand-title">
-              <div class="kicker">LIVE</div>
-              <div class="name">Tap A / B / C / D</div>
+              <div class="kicker" data-i18n="player.answer.kicker">LIVE</div>
+              <div class="name" data-i18n="player.answer.title">Tap A / B / C / D</div>
             </div>
           </div>
         </div>
-        <div class="chip"><span class="dot ok"></span><span>Tap once</span></div>
+        <div class="chip"><span class="dot ok"></span><span data-i18n="player.answer.chip">Tap once</span></div>
       </div>
 
       <div class="q-top">
         <div class="q-meta">
-          <div class="q-label">Question</div>
+          <div class="q-label" data-i18n="player.answer.questionLabel">Question</div>
           <div class="q-number"><span id="questionNumber">1</span></div>
-          <div class="q-sub">Pick A, B, C or D</div>
+          <div class="q-sub" data-i18n="player.answer.questionSub">Pick A, B, C or D</div>
         </div>
       </div>
 
-      <div id="answerToast" class="toast" aria-live="polite">Answer submitted. Good luck 🤞</div>
+      <div id="answerToast" class="toast" aria-live="polite" data-i18n="player.answer.toastDefault">Answer submitted. Good luck.</div>
 
-      <div id="answerButtons" aria-label="Answer Buttons">
+      <div id="answerButtons" aria-label="Answer Buttons" data-i18n-aria-label="player.answer.buttonsAria">
         <button id="answerA" class="answer-btn" type="button">A</button>
         <button id="answerB" class="answer-btn" type="button">B</button>
         <button id="answerC" class="answer-btn" type="button">C</button>
@@ -639,92 +640,92 @@
 
       <div class="spacer"></div>
 
-      <p class="hint center">Your first tap locks your answer.</p>
+      <p class="hint center" data-i18n="player.answer.tapHint">Your first tap locks your answer.</p>
     </section>
 
     <!-- End of Round Panel -->
-    <section id="endOfRoundPanel" class="panel" aria-label="End of Round Screen">
+    <section id="endOfRoundPanel" class="panel" aria-label="End of Round Screen" data-i18n-aria-label="player.panels.endOfRound">
       <div class="brand">
         <div class="brand-left">
           <div class="brand-stack">
             <div class="brand-logos">
-              <img class="brand-app" src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia">
+              <img class="brand-app" src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia" data-i18n-alt="images.netflixTriviaLogo">
             </div>
             <div class="brand-title">
-              <div class="kicker">ROUND COMPLETE</div>
-              <div class="name">Your stats</div>
+              <div class="kicker" data-i18n="player.endOfRound.kicker">ROUND COMPLETE</div>
+              <div class="name" data-i18n="player.endOfRound.title">Your stats</div>
             </div>
           </div>
         </div>
-        <div class="chip"><span class="dot ok"></span><span>Scores</span></div>
+        <div class="chip"><span class="dot ok"></span><span data-i18n="player.endOfRound.chip">Scores</span></div>
       </div>
 
       <div class="hero">
-        <h1>Nice one.</h1>
-        <p>Here’s your progress so far. Next round will start on the TV.</p>
+        <h1 data-i18n="player.endOfRound.headline">Nice one.</h1>
+        <p data-i18n="player.endOfRound.description">Here's your progress so far. Next round will start on the TV.</p>
       </div>
 
       <div class="scores">
         <div class="score-grid">
           <div class="metric">
-            <div class="k">Round score</div>
+            <div class="k" data-i18n="player.endOfRound.roundScoreLabel">Round score</div>
             <div class="v" id="roundScoreValue">3</div>
-            <div class="s">points this round</div>
+            <div class="s" data-i18n="player.endOfRound.roundScoreSub">points this round</div>
           </div>
           <div class="metric">
-            <div class="k">Total</div>
+            <div class="k" data-i18n="player.endOfRound.totalLabel">Total</div>
             <div class="v" id="totalScoreValue">3</div>
-            <div class="s">overall points</div>
+            <div class="s" data-i18n="player.endOfRound.totalSub">overall points</div>
           </div>
         </div>
 
         <div class="metric">
-          <div class="k">Position</div>
+          <div class="k" data-i18n="player.endOfRound.positionLabel">Position</div>
           <div class="v" id="roundRankValue">3rd</div>
-          <div class="s">current ranking</div>
+          <div class="s" data-i18n="player.endOfRound.positionSub">current ranking</div>
         </div>
       </div>
 
       <div class="spacer"></div>
 
       <div class="card center">
-        <p class="hint">Waiting for the next round…</p>
+        <p class="hint" data-i18n="player.endOfRound.waitingHint">Waiting for the next round…</p>
       </div>
     </section>
 
     <!-- End of Game Panel -->
-    <section id="endOfGamePanel" class="panel" aria-label="End of Game Screen">
+    <section id="endOfGamePanel" class="panel" aria-label="End of Game Screen" data-i18n-aria-label="player.panels.endOfGame">
       <div class="brand">
         <div class="brand-left">
           <div class="brand-stack">
             <div class="brand-logos">
-              <img class="brand-app" src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia">
+              <img class="brand-app" src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia" data-i18n-alt="images.netflixTriviaLogo">
             </div>
             <div class="brand-title">
-              <div class="kicker">FINAL</div>
-              <div class="name">Game over</div>
+              <div class="kicker" data-i18n="player.endOfGame.kicker">FINAL</div>
+              <div class="name" data-i18n="player.endOfGame.title">Game over</div>
             </div>
           </div>
         </div>
-        <div class="chip"><span class="dot ok"></span><span>Done</span></div>
+        <div class="chip"><span class="dot ok"></span><span data-i18n="player.endOfGame.chip">Done</span></div>
       </div>
 
       <div class="hero">
-        <h1>Thanks for playing.</h1>
-        <p>Want another go? Return to the start screen and join a new room code.</p>
+        <h1 data-i18n="player.endOfGame.headline">Thanks for playing.</h1>
+        <p data-i18n="player.endOfGame.description">Want another go? Return to the start screen and join a new room code.</p>
       </div>
 
       <div class="scores">
         <div class="score-grid">
           <div class="metric">
-            <div class="k">Final score</div>
+            <div class="k" data-i18n="player.endOfGame.finalScoreLabel">Final score</div>
             <div class="v" id="finalScoreValue">10</div>
-            <div class="s">total points</div>
+            <div class="s" data-i18n="player.endOfGame.finalScoreSub">total points</div>
           </div>
           <div class="metric">
-            <div class="k">Finish</div>
+            <div class="k" data-i18n="player.endOfGame.finishLabel">Finish</div>
             <div class="v" id="finalRankValue">3rd</div>
-            <div class="s">place</div>
+            <div class="s" data-i18n="player.endOfGame.finishSub">place</div>
           </div>
         </div>
       </div>
@@ -732,7 +733,7 @@
       <div class="spacer"></div>
 
       <div class="btn-row">
-        <button id="restartButton" class="btn btn-primary btn-block">Return to start</button>
+        <button id="restartButton" class="btn btn-primary btn-block" data-i18n="player.endOfGame.button">Return to start</button>
       </div>
     </section>
 
@@ -740,6 +741,17 @@
 
   <script>
     // Configure socket with explicit reconnection settings
+    const i18nReady = window.i18n
+      .init({ defaultLang: "en", supportedLangs: ["en", "de"] })
+      .then(() => {
+        window.i18n.apply();
+      });
+
+    function t(key, fallback, vars = {}) {
+      const translatedValue = window.i18n.t(key, vars);
+      return translatedValue === key ? fallback : translatedValue;
+    }
+
     const socket = io({ 
       transports: ["websocket"],
       reconnection: true,
@@ -751,6 +763,9 @@
     // Helper function to format rank as ordinal (1st, 2nd, 3rd, etc.)
     function formatRank(rank) {
       if (!rank) return "—";
+      if (window.i18n.getLocale() === "de") {
+        return `${rank}.`;
+      }
       const lastDigit = rank % 10;
       const lastTwoDigits = rank % 100;
       
@@ -786,7 +801,6 @@
     const questionNumber = document.getElementById("questionNumber");
     const answerButtons = document.querySelectorAll("#answerButtons button");
     const answerToast = document.getElementById("answerToast");
-    const DEFAULT_ANSWER_TOAST_MESSAGE = answerToast.textContent;
 
     // Inline error
     const joinError = document.getElementById("joinError");
@@ -838,7 +852,7 @@
               // Show join panel if we're not already there
               if (!joinQuizPanel.classList.contains("active")) {
                 showPanel(joinQuizPanel);
-                setInlineError("Connection lost. Please rejoin the room.");
+                setInlineError(t("player.errors.rejoinRoom", "Connection lost. Please rejoin the room."));
               }
             }
           } else {
@@ -870,11 +884,11 @@
       connectionDot.className = dotClass;
 
       if(state === "ok"){
-        connectionText.textContent = "Connected";
+        connectionText.textContent = t("player.join.connectionConnected", "Connected");
       }else if(state === "bad"){
-        connectionText.textContent = "Disconnected";
+        connectionText.textContent = t("player.join.connectionDisconnected", "Disconnected");
       }else{
-        connectionText.textContent = "Connecting…";
+        connectionText.textContent = t("player.join.connectionConnecting", "Connecting…");
       }
     }
 
@@ -885,7 +899,7 @@
     }
 
     function resetAnswerState() {
-      answerToast.textContent = DEFAULT_ANSWER_TOAST_MESSAGE;
+      answerToast.textContent = t("player.answer.toastDefault", "Answer submitted. Good luck.");
       answerToast.classList.remove("show");
       answerButtons.forEach((button) => {
         button.disabled = false;
@@ -916,7 +930,7 @@
       roomId = (roomIdInput.value || "").trim();
 
       if(!playerName || !roomId){
-        setInlineError("Please enter your name and the quiz code shown on the TV.");
+        setInlineError(t("player.errors.enterNameAndCode", "Please enter your name and the quiz code shown on the TV."));
         return;
       }
 
@@ -927,7 +941,9 @@
 
       socket.emit("player:join", { roomId, name: playerName }, (err, room) => {
         if(err){
-          setInlineError(`Could not join: ${err.message || "Unknown error"}`);
+          setInlineError(t("player.errors.couldNotJoin", "Could not join: {message}", {
+            message: err.message || t("player.errors.unknownError", "Unknown error")
+          }));
           wasInRoom = false;
           originalSocketId = null;
         }else{
@@ -985,13 +1001,13 @@
         // Disable all buttons + show selected
         answerButtons.forEach(btn => btn.disabled = true);
         button.classList.add("selected");
-        answerToast.textContent = DEFAULT_ANSWER_TOAST_MESSAGE;
+        answerToast.textContent = t("player.answer.toastDefault", "Answer submitted. Good luck.");
         answerToast.classList.add("show");
 
         socket.emit("submitAnswer", { roomId, questionId: currentQuestionId, answer }, (err, result) => {
           if(err){
             console.error("Error submitting answer:", err);
-            answerToast.textContent = err.message || "Answer not accepted.";
+            answerToast.textContent = err.message || t("player.answer.submitError", "Answer not accepted.");
             answerToast.classList.add("show");
           }else{
             console.log("Answer submitted successfully:", result);
@@ -1109,7 +1125,7 @@
       wasInRoom = false;
       if (!joinQuizPanel.classList.contains("active")) {
         showPanel(joinQuizPanel);
-        setInlineError("Connection lost. Please check your internet and try rejoining.");
+        setInlineError(t("player.errors.connectionLostRetry", "Connection lost. Please check your internet and try rejoining."));
       }
     });
 
@@ -1134,7 +1150,9 @@
     });
 
     // Initial
-    setConnectionState("idle");
+    i18nReady.then(() => {
+      setConnectionState(socket.connected ? "ok" : "idle");
+    });
   </script>
 </body>
 </html>
