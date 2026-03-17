@@ -1,0 +1,135 @@
+{
+  "meta": {
+    "title": "Netflix Trivia Game Master"
+  },
+  "welcome": {
+    "slogan": "WORLD'S <span class=\"welcome-slogan-highlight\">BIGGEST</span> TRIVIA GAME"
+  },
+  "setup": {
+    "generalQuiz": {
+      "title": "Take the Netflix General Knowledge Quiz",
+      "description": "Test your general knowledge of the world and challenge yourself.",
+      "button": "Let's Go"
+    },
+    "customQuiz": {
+      "label": "Create your own custom quiz",
+      "button": "Customize"
+    }
+  },
+  "categories": {
+    "general": {
+      "label": "General",
+      "description": "Test your general knowledge of the world with a mix of questions from all categories."
+    },
+    "sports": {
+      "label": "Sports",
+      "description": "Test your knowledge of various sports, teams, and legendary athletes."
+    },
+    "entertainment": {
+      "label": "Entertainment",
+      "description": "Dive into the world of movies, music, and pop culture."
+    },
+    "history": {
+      "label": "History",
+      "description": "Explore historical events and figures from around the world."
+    },
+    "science": {
+      "label": "Science",
+      "description": "Discover scientific breakthroughs, famous scientists, and natural wonders."
+    },
+    "geography": {
+      "label": "Geography",
+      "description": "Test your knowledge of countries, capitals, landmarks, and world geography."
+    },
+    "decades": {
+      "label": "Decades",
+      "description": "Identify key moments from different decades in history."
+    },
+    "politics": {
+      "label": "Politics",
+      "description": "Learn about global leaders, policies, and historic political events."
+    },
+    "mythology": {
+      "label": "Mythology",
+      "description": "Unravel the stories of gods, legends, and ancient myths."
+    }
+  },
+  "modals": {
+    "common": {
+      "next": "Next",
+      "startQuiz": "Start Quiz",
+      "selectDifficulty": "Select Difficulty:",
+      "answerTimer": "Answer Timer:",
+      "closeCategorySetup": "Close category setup",
+      "closeCustomQuizSetup": "Close custom quiz setup",
+      "goToPreviousStep": "Go to previous step"
+    },
+    "category": {
+      "progressAria": "Category setup progress",
+      "numberOfRounds": "Number of Rounds:"
+    },
+    "customQuiz": {
+      "title": "Create Custom Quiz",
+      "description": "Select categories and the number of rounds for each.",
+      "progressAria": "Custom quiz setup progress",
+      "roundsPerCategory": "Select rounds per category:"
+    },
+    "noPlayers": {
+      "title": "No Players Yet",
+      "message": "You need at least one player to start the quiz.",
+      "button": "OK"
+    }
+  },
+  "difficulty": {
+    "easy": "Easy",
+    "medium": "Medium",
+    "hard": "Hard"
+  },
+  "timer": {
+    "on": "On",
+    "off": "Off",
+    "secs30": "30 secs",
+    "minute1": "1 minute",
+    "minutes2": "2 minutes"
+  },
+  "playerConnect": {
+    "titleHtml": "Player<br>Connect",
+    "description": "Open the Netflix Trivia phone app and enter your quiz code to join the quiz.",
+    "waitingPlayers": "Players will appear here as they join...",
+    "backToSetupAria": "Back to setup",
+    "startQuizButton": "START QUIZ",
+    "roomCodeAria": "Quiz code",
+    "generatingRoomCodeAria": "Generating quiz code",
+    "roomCodeReadyAria": "Quiz code {code}"
+  },
+  "roundStart": {
+    "title": "Round"
+  },
+  "endOfRound": {
+    "endOf": "End of",
+    "round": "Round",
+    "overall": "Overall"
+  },
+  "endOfQuiz": {
+    "title": "Game Over",
+    "restartButton": "Restart Quiz"
+  },
+  "common": {
+    "unknownCategory": "Unknown Category"
+  },
+  "alerts": {
+    "failedToCreateRoom": "Failed to create room. Please try again.",
+    "invalidCategorySelection": "Invalid category selection. Please try again.",
+    "selectAtLeastOneRound": "Please select at least one round from any category.",
+    "restartQuizError": "An error occurred. Please restart the quiz."
+  },
+  "images": {
+    "backgroundOverlay": "Background overlay",
+    "netflixLogo": "Netflix logo",
+    "triviaLogo": "Trivia logo",
+    "netflixTriviaLogo": "Netflix Trivia logo",
+    "secondPlace": "2nd place",
+    "firstPlace": "1st place",
+    "thirdPlace": "3rd place"
+  }
+}

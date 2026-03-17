@@ -10,50 +10,51 @@
   <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
   <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
   <script src="audio-manager.js"></script>
+  <script src="lang.js"></script>
 </head>
 <body>
   <!-- Welcome Screen -->
   <div id="welcomePanel" class="panel active">
     <!-- Overlay background light -->
-    <img src="imgs/light-bg.png" alt="Background Overlay" class="background-overlay">
+    <img src="imgs/light-bg.png" alt="Background Overlay" class="background-overlay" data-i18n-alt="images.backgroundOverlay">
   
     <!-- Netflix Logo -->
-    <img src="imgs/netflix-logo.png" alt="Netflix Logo" class="netflix-logo">
+    <img src="imgs/netflix-logo.png" alt="Netflix Logo" class="netflix-logo" data-i18n-alt="images.netflixLogo">
   
     <!-- Trivia Logo -->
-    <img src="imgs/trivia-logo.png" alt="Trivia Logo" class="trivia-logo">
-    <h2 class="welcome-slogan">WORLDS <span class="welcome-slogan-highlight">BIGGEST</span> TRIVIA GAME</h2>
+    <img src="imgs/trivia-logo.png" alt="Trivia Logo" class="trivia-logo" data-i18n-alt="images.triviaLogo">
+    <h2 class="welcome-slogan" data-i18n-html="welcome.slogan">WORLD'S <span class="welcome-slogan-highlight">BIGGEST</span> TRIVIA GAME</h2>
   </div>
   
 
   <!-- Setup Screen -->
   <div id="setupPanel" class="panel main-bg">
     <header>
-        <img src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia Logo">
+        <img src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia Logo" data-i18n-alt="images.netflixTriviaLogo">
     </header>
     <div class="container cat-container">
         <!-- Top Section (Banner) -->
         <div class="banner">
             <div class="big-box">
                 <div class="big-box-content">
-                    <h3 class="box-title">Take the Netflix General Knowlege Quiz</h3>
-                    <p>Test your general knowlege of the world and challenge yourself</p>
-                    <button id="generalQuizBtn">Lets Go</button>
+                    <h3 class="box-title" data-i18n="setup.generalQuiz.title">Take the Netflix General Knowledge Quiz</h3>
+                    <p data-i18n="setup.generalQuiz.description">Test your general knowledge of the world and challenge yourself.</p>
+                    <button id="generalQuizBtn" data-i18n="setup.generalQuiz.button">Let's Go</button>
                 </div>
                 <img class="big-box-graphic" src="imgs/brain-image.png" alt="" aria-hidden="true">
             </div>
-            <div class="small-box"><div>Create your own Custom Quiz</div><button class="small-box-button" id="customQuizBtn">Customise</button></div>
+            <div class="small-box"><div data-i18n="setup.customQuiz.label">Create your own custom quiz</div><button class="small-box-button" id="customQuizBtn" data-i18n="setup.customQuiz.button">Customize</button></div>
       </div>        
         <!-- Category Grid -->
         <div class="grid">
-            <div class="box" style="background-image: url('imgs/categories/sports.png');" data-category="Sports" data-description="Test your knowledge on various sports, teams, and legendary athletes."><span class="box-label">Sports</span></div>
-            <div class="box" style="background-image: url('imgs/categories/entertainment.png');" data-category="Entertainment" data-description="Dive into the world of movies, music, and pop culture."><span class="box-label">Entertainment</span></div>
-            <div class="box" style="background-image: url('imgs/categories/history.png');" data-category="History" data-description="Explore historical events and figures from around the world."><span class="box-label">History</span></div>
-            <div class="box" style="background-image: url('imgs/categories/science.png');" data-category="Science" data-description="Discover scientific breakthroughs, famous scientists, and natural wonders."><span class="box-label">Science</span></div>
-            <div class="box" style="background-image: url('imgs/categories/geography.png');" data-category="Geography" data-description="Test your knowledge of countries, capitals, landmarks, and world geography."><span class="box-label">Geography</span></div>
-            <div class="box" style="background-image: url('imgs/categories/decades.png');" data-category="Decades" data-description="Identify key moments from different decades in history."><span class="box-label">Decades</span></div>
-            <div class="box" style="background-image: url('imgs/categories/politics.png');" data-category="Politics" data-description="Learn about global leaders, policies, and historical political events."><span class="box-label">Politics</span></div>
-            <div class="box" style="background-image: url('imgs/categories/mythology.png');" data-category="Mythology" data-description="Unravel the stories of gods, legends, and ancient myths."><span class="box-label">Mythology</span></div>
+            <div class="box" style="background-image: url('imgs/categories/sports.png');" data-category="Sports" data-description="Test your knowledge of various sports, teams, and legendary athletes." data-i18n-data-description="categories.sports.description"><span class="box-label" data-i18n="categories.sports.label">Sports</span></div>
+            <div class="box" style="background-image: url('imgs/categories/entertainment.png');" data-category="Entertainment" data-description="Dive into the world of movies, music, and pop culture." data-i18n-data-description="categories.entertainment.description"><span class="box-label" data-i18n="categories.entertainment.label">Entertainment</span></div>
+            <div class="box" style="background-image: url('imgs/categories/history.png');" data-category="History" data-description="Explore historical events and figures from around the world." data-i18n-data-description="categories.history.description"><span class="box-label" data-i18n="categories.history.label">History</span></div>
+            <div class="box" style="background-image: url('imgs/categories/science.png');" data-category="Science" data-description="Discover scientific breakthroughs, famous scientists, and natural wonders." data-i18n-data-description="categories.science.description"><span class="box-label" data-i18n="categories.science.label">Science</span></div>
+            <div class="box" style="background-image: url('imgs/categories/geography.png');" data-category="Geography" data-description="Test your knowledge of countries, capitals, landmarks, and world geography." data-i18n-data-description="categories.geography.description"><span class="box-label" data-i18n="categories.geography.label">Geography</span></div>
+            <div class="box" style="background-image: url('imgs/categories/decades.png');" data-category="Decades" data-description="Identify key moments from different decades in history." data-i18n-data-description="categories.decades.description"><span class="box-label" data-i18n="categories.decades.label">Decades</span></div>
+            <div class="box" style="background-image: url('imgs/categories/politics.png');" data-category="Politics" data-description="Learn about global leaders, policies, and historic political events." data-i18n-data-description="categories.politics.description"><span class="box-label" data-i18n="categories.politics.label">Politics</span></div>
+            <div class="box" style="background-image: url('imgs/categories/mythology.png');" data-category="Mythology" data-description="Unravel the stories of gods, legends, and ancient myths." data-i18n-data-description="categories.mythology.description"><span class="box-label" data-i18n="categories.mythology.label">Mythology</span></div>
         </div>
     </div>
   </div>
@@ -64,7 +65,7 @@
             <div class="modal-inner custom-modal-inner">
                 <h2 class="modal-title"></h2>
                 <p class="modal-description"></p>
-                <div class="slide-counter" id="modalStepDots" aria-label="Category setup progress">
+                <div class="slide-counter" id="modalStepDots" aria-label="Category setup progress" data-i18n-aria-label="modals.category.progressAria">
                     <div class="dot active-dot"></div>
                     <div class="dot"></div>
                     <div class="dot"></div>
@@ -72,7 +73,7 @@
 
                 <div class="custom-step-stage" id="modalStepStage">
                     <section class="custom-step-panel is-active" data-step="0">
-                        <p class="difficulty-label custom-step-label">Number of Rounds:</p>
+                        <p class="difficulty-label custom-step-label" data-i18n="modals.category.numberOfRounds">Number of Rounds:</p>
                         <div class="round-display" id="roundDisplay" aria-live="polite">
                             <span class="round-display-number" id="roundDisplayNumber">1</span>
                         </div>
@@ -96,20 +97,20 @@
                     </section>
 
                     <section class="custom-step-panel" data-step="1" hidden>
-                        <p class="difficulty-label custom-step-label">Select Difficulty:</p>
+                        <p class="difficulty-label custom-step-label" data-i18n="modals.common.selectDifficulty">Select Difficulty:</p>
                         <div class="difficulty-options">
                             <div class="difficulty-card selected" data-value="1">
                                 <span class="difficulty-icon">
                                     <img class="difficulty-icon-img" src="imgs/netflix-logo.png" alt="" aria-hidden="true">
                                 </span>
-                                <span class="difficulty-name">Easy</span>
+                                <span class="difficulty-name" data-i18n="difficulty.easy">Easy</span>
                             </div>
                             <div class="difficulty-card" data-value="2">
                                 <span class="difficulty-icon">
                                     <img class="difficulty-icon-img" src="imgs/netflix-logo.png" alt="" aria-hidden="true">
                                     <img class="difficulty-icon-img" src="imgs/netflix-logo.png" alt="" aria-hidden="true">
                                 </span>
-                                <span class="difficulty-name">Medium</span>
+                                <span class="difficulty-name" data-i18n="difficulty.medium">Medium</span>
                             </div>
                             <div class="difficulty-card" data-value="3">
                                 <span class="difficulty-icon">
@@ -117,7 +118,7 @@
                                     <img class="difficulty-icon-img" src="imgs/netflix-logo.png" alt="" aria-hidden="true">
                                     <img class="difficulty-icon-img" src="imgs/netflix-logo.png" alt="" aria-hidden="true">
                                 </span>
-                                <span class="difficulty-name">Hard</span>
+                                <span class="difficulty-name" data-i18n="difficulty.hard">Hard</span>
                             </div>
                         </div>
                     </section>
@@ -128,15 +129,15 @@
                                 <span class="timer-toggle-track" aria-hidden="true">
                                     <span class="timer-toggle-thumb"></span>
                                 </span>
-                                <span class="timer-toggle-status">Off</span>
+                                <span class="timer-toggle-status" data-i18n="timer.off">Off</span>
                             </button>
                             <div class="timer-toggle-row">
-                                <p class="difficulty-label timer-label">Answer Timer:</p>
+                                <p class="difficulty-label timer-label" data-i18n="modals.common.answerTimer">Answer Timer:</p>
                             </div>
                             <div class="timer-options is-disabled" id="timerOptions">
-                                <button type="button" class="timer-option selected" data-seconds="30">30 secs</button>
-                                <button type="button" class="timer-option" data-seconds="60">1 minute</button>
-                                <button type="button" class="timer-option" data-seconds="120">2 minutes</button>
+                                <button type="button" class="timer-option selected" data-seconds="30" data-i18n="timer.secs30">30 secs</button>
+                                <button type="button" class="timer-option" data-seconds="60" data-i18n="timer.minute1">1 minute</button>
+                                <button type="button" class="timer-option" data-seconds="120" data-i18n="timer.minutes2">2 minutes</button>
                             </div>
                         </div>
                     </section>
@@ -144,7 +145,7 @@
 
                 <div class="custom-step-footer">
                     <div class="modal-buttons custom-modal-buttons" id="modalStepButtons">
-                        <button type="button" id="modalBackBtn" class="step-nav-btn step-nav-back is-first-step" aria-label="Close category setup">
+                        <button type="button" id="modalBackBtn" class="step-nav-btn step-nav-back is-first-step" aria-label="Close category setup" data-i18n-aria-label="modals.common.closeCategorySetup">
                             <svg class="step-nav-icon step-nav-icon-close" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                 <path d="M7 7.00006L17 17.0001M7 17.0001L17 7.00006" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
@@ -154,7 +155,7 @@
                                 </g>
                             </svg>
                         </button>
-                        <button type="button" id="confirmBtn">Next</button>
+                        <button type="button" id="confirmBtn" data-i18n="modals.common.next">Next</button>
                     </div>
                 </div>
             </div>
@@ -165,9 +166,9 @@
     <div class="modal" id="customModal">
         <div class="modal-content custom-modal-content" id="customModalContent">
             <div class="modal-inner custom-modal-inner">
-                <h2 class="modal-title">Create Custom Quiz</h2>
-                <p class="modal-description">Select categories and number of rounds for each</p>
-                <div class="slide-counter" id="customStepDots" aria-label="Custom quiz setup progress">
+                <h2 class="modal-title" data-i18n="modals.customQuiz.title">Create Custom Quiz</h2>
+                <p class="modal-description" data-i18n="modals.customQuiz.description">Select categories and the number of rounds for each.</p>
+                <div class="slide-counter" id="customStepDots" aria-label="Custom quiz setup progress" data-i18n-aria-label="modals.customQuiz.progressAria">
                     <div class="dot active-dot"></div>
                     <div class="dot"></div>
                     <div class="dot"></div>
@@ -175,10 +176,10 @@
 
                 <div class="custom-step-stage" id="customStepStage">
                     <section class="custom-step-panel is-active" data-step="0">
-                        <p class="difficulty-label custom-step-label">Select rounds per category:</p>
+                        <p class="difficulty-label custom-step-label" data-i18n="modals.customQuiz.roundsPerCategory">Select rounds per category:</p>
                         <div class="category-list">
                             <div class="category-row" data-category="Sports">
-                                <span class="category-name">Sports</span>
+                                <span class="category-name" data-i18n="categories.sports.label">Sports</span>
                                 <div class="round-stepper">
                                     <button type="button" class="stepper-btn stepper-minus" disabled>−</button>
                                     <span class="stepper-value">0</span>
@@ -186,7 +187,7 @@
                                 </div>
                             </div>
                             <div class="category-row" data-category="Entertainment">
-                                <span class="category-name">Entertainment</span>
+                                <span class="category-name" data-i18n="categories.entertainment.label">Entertainment</span>
                                 <div class="round-stepper">
                                     <button type="button" class="stepper-btn stepper-minus" disabled>−</button>
                                     <span class="stepper-value">0</span>
@@ -194,7 +195,7 @@
                                 </div>
                             </div>
                             <div class="category-row" data-category="History">
-                                <span class="category-name">History</span>
+                                <span class="category-name" data-i18n="categories.history.label">History</span>
                                 <div class="round-stepper">
                                     <button type="button" class="stepper-btn stepper-minus" disabled>−</button>
                                     <span class="stepper-value">0</span>
@@ -202,7 +203,7 @@
                                 </div>
                             </div>
                             <div class="category-row" data-category="Science">
-                                <span class="category-name">Science</span>
+                                <span class="category-name" data-i18n="categories.science.label">Science</span>
                                 <div class="round-stepper">
                                     <button type="button" class="stepper-btn stepper-minus" disabled>−</button>
                                     <span class="stepper-value">0</span>
@@ -210,7 +211,7 @@
                                 </div>
                             </div>
                             <div class="category-row" data-category="Geography">
-                                <span class="category-name">Geography</span>
+                                <span class="category-name" data-i18n="categories.geography.label">Geography</span>
                                 <div class="round-stepper">
                                     <button type="button" class="stepper-btn stepper-minus" disabled>−</button>
                                     <span class="stepper-value">0</span>
@@ -218,7 +219,7 @@
                                 </div>
                             </div>
                             <div class="category-row" data-category="Decades">
-                                <span class="category-name">Decades</span>
+                                <span class="category-name" data-i18n="categories.decades.label">Decades</span>
                                 <div class="round-stepper">
                                     <button type="button" class="stepper-btn stepper-minus" disabled>−</button>
                                     <span class="stepper-value">0</span>
@@ -226,7 +227,7 @@
                                 </div>
                             </div>
                             <div class="category-row" data-category="Politics">
-                                <span class="category-name">Politics</span>
+                                <span class="category-name" data-i18n="categories.politics.label">Politics</span>
                                 <div class="round-stepper">
                                     <button type="button" class="stepper-btn stepper-minus" disabled>−</button>
                                     <span class="stepper-value">0</span>
@@ -234,7 +235,7 @@
                                 </div>
                             </div>
                             <div class="category-row" data-category="Mythology">
-                                <span class="category-name">Mythology</span>
+                                <span class="category-name" data-i18n="categories.mythology.label">Mythology</span>
                                 <div class="round-stepper">
                                     <button type="button" class="stepper-btn stepper-minus" disabled>−</button>
                                     <span class="stepper-value">0</span>
@@ -245,20 +246,20 @@
                     </section>
 
                     <section class="custom-step-panel" data-step="1" hidden>
-                        <p class="difficulty-label custom-step-label">Select Difficulty:</p>
+                        <p class="difficulty-label custom-step-label" data-i18n="modals.common.selectDifficulty">Select Difficulty:</p>
                         <div class="difficulty-options" id="customDifficultyOptions">
                             <div class="difficulty-card selected" data-value="1">
                                 <span class="difficulty-icon">
                                     <img class="difficulty-icon-img" src="imgs/netflix-logo.png" alt="" aria-hidden="true">
                                 </span>
-                                <span class="difficulty-name">Easy</span>
+                                <span class="difficulty-name" data-i18n="difficulty.easy">Easy</span>
                             </div>
                             <div class="difficulty-card" data-value="2">
                                 <span class="difficulty-icon">
                                     <img class="difficulty-icon-img" src="imgs/netflix-logo.png" alt="" aria-hidden="true">
                                     <img class="difficulty-icon-img" src="imgs/netflix-logo.png" alt="" aria-hidden="true">
                                 </span>
-                                <span class="difficulty-name">Medium</span>
+                                <span class="difficulty-name" data-i18n="difficulty.medium">Medium</span>
                             </div>
                             <div class="difficulty-card" data-value="3">
                                 <span class="difficulty-icon">
@@ -266,7 +267,7 @@
                                     <img class="difficulty-icon-img" src="imgs/netflix-logo.png" alt="" aria-hidden="true">
                                     <img class="difficulty-icon-img" src="imgs/netflix-logo.png" alt="" aria-hidden="true">
                                 </span>
-                                <span class="difficulty-name">Hard</span>
+                                <span class="difficulty-name" data-i18n="difficulty.hard">Hard</span>
                             </div>
                         </div>
                     </section>
@@ -277,15 +278,15 @@
                                 <span class="timer-toggle-track" aria-hidden="true">
                                     <span class="timer-toggle-thumb"></span>
                                 </span>
-                                <span class="timer-toggle-status">Off</span>
+                                <span class="timer-toggle-status" data-i18n="timer.off">Off</span>
                             </button>
                             <div class="timer-toggle-row">
-                                <p class="difficulty-label timer-label">Answer Timer:</p>
+                                <p class="difficulty-label timer-label" data-i18n="modals.common.answerTimer">Answer Timer:</p>
                             </div>
                             <div class="timer-options is-disabled" id="customTimerOptions">
-                                <button type="button" class="timer-option selected" data-seconds="30">30 secs</button>
-                                <button type="button" class="timer-option" data-seconds="60">1 minute</button>
-                                <button type="button" class="timer-option" data-seconds="120">2 minutes</button>
+                                <button type="button" class="timer-option selected" data-seconds="30" data-i18n="timer.secs30">30 secs</button>
+                                <button type="button" class="timer-option" data-seconds="60" data-i18n="timer.minute1">1 minute</button>
+                                <button type="button" class="timer-option" data-seconds="120" data-i18n="timer.minutes2">2 minutes</button>
                             </div>
                         </div>
                     </section>
@@ -293,7 +294,7 @@
 
                 <div class="custom-step-footer">
                     <div class="modal-buttons custom-modal-buttons" id="customStepButtons">
-                        <button type="button" id="customBackBtn" class="step-nav-btn step-nav-back is-first-step" aria-label="Close custom quiz setup">
+                        <button type="button" id="customBackBtn" class="step-nav-btn step-nav-back is-first-step" aria-label="Close custom quiz setup" data-i18n-aria-label="modals.common.closeCustomQuizSetup">
                             <svg class="step-nav-icon step-nav-icon-close" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                 <path d="M7 7.00006L17 17.0001M7 17.0001L17 7.00006" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
@@ -303,7 +304,7 @@
                                 </g>
                             </svg>
                         </button>
-                        <button type="button" id="customConfirmBtn">Next</button>
+                        <button type="button" id="customConfirmBtn" data-i18n="modals.common.next">Next</button>
                     </div>
                 </div>
             </div>
@@ -313,30 +314,30 @@
   <!-- Player Connect Screen -->
   <div id="playerConnectPanel" class="panel main-bg">
     <header>
-        <img src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia Logo">
+        <img src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia Logo" data-i18n-alt="images.netflixTriviaLogo">
     </header>
     <div class="container">
         <div class="content-box content-box-outline content-box-equal">
-            <h1>Player<br>Connect</h1>
+            <h1 data-i18n-html="playerConnect.titleHtml">Player<br>Connect</h1>
             <img class="player-connect-qr" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https%3A%2F%2Fnetflix-trivia.onrender.com%2Fplayer.html">
-            <p class="contentPara">Open the Netflix Triva phone app and enter your quiz code to join the quiz</p>
+            <p class="contentPara" data-i18n="playerConnect.description">Open the Netflix Trivia phone app and enter your quiz code to join the quiz.</p>
             <h2 id="roomIdDisplay"></h2>
         </div>
         <div class="content-box content-box-equal">
             <div class="outerContainer">
                 <div class="badgeContainer badgeContainer-player-connect"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M144 0a80 80 0 1 1 0 160A80 80 0 1 1 144 0zM512 0a80 80 0 1 1 0 160A80 80 0 1 1 512 0zM0 298.7C0 239.8 47.8 192 106.7 192l42.7 0c15.9 0 31 3.5 44.6 9.7c-1.3 7.2-1.9 14.7-1.9 22.3c0 38.2 16.8 72.5 43.3 96c-.2 0-.4 0-.7 0L21.3 320C9.6 320 0 310.4 0 298.7zM405.3 320c-.2 0-.4 0-.7 0c26.6-23.5 43.3-57.8 43.3-96c0-7.6-.7-15-1.9-22.3c13.6-6.3 28.7-9.7 44.6-9.7l42.7 0C592.2 192 640 239.8 640 298.7c0 11.8-9.6 21.3-21.3 21.3l-213.3 0zM224 224a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zM128 485.3C128 411.7 187.7 352 261.3 352l117.3 0C452.3 352 512 411.7 512 485.3c0 14.7-11.9 26.7-26.7 26.7l-330.7 0c-14.7 0-26.7-11.9-26.7-26.7z"/></svg></div>
                 <div class="playertContainer">
-                    <p>Players will appear here as they join...</p>
+                    <p data-i18n="playerConnect.waitingPlayers">Players will appear here as they join...</p>
                     <ul id="playerList"></ul>
                 </div>
             </div>
             <div class="button-container player-connect-actions">
-                <button id="backToSetupButton" aria-label="Back to setup">
+                <button id="backToSetupButton" aria-label="Back to setup" data-i18n-aria-label="playerConnect.backToSetupAria">
                     <svg class="back-button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
                         <path d="M7 7.00006L17 17.0001M7 17.0001L17 7.00006" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </button>
-                <button id="startQuizButton">START QUIZ</button>
+                <button id="startQuizButton" data-i18n="playerConnect.startQuizButton">START QUIZ</button>
             </div>
         </div>
     </div>
@@ -345,12 +346,12 @@
   <!-- Round Start Panel -->
   <div id="roundStartPanel" class="panel main-bg">
     <header>
-        <img src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia Logo">
+        <img src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia Logo" data-i18n-alt="images.netflixTriviaLogo">
     </header>
     <div class="container">
         <div class="content-box content-box-outline round-start-box">
             <div class="content-box-inner">
-                <h1>Round</h1>
+                <h1 data-i18n="roundStart.title">Round</h1>
                 <h1 id="roundNumber">1</h1>
                 <p id="categoryName"></p>
             </div>
@@ -384,13 +385,13 @@
     <!-- End of Round Panel -->
     <div id="endOfRoundPanel" class="panel main-bg">
         <header>
-            <img src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia Logo">
+            <img src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia Logo" data-i18n-alt="images.netflixTriviaLogo">
         </header>
         <div class="container">
             <div class="content-box content-box-equal end-of-round-detail">
                 <div>
-                    <div class="end-of-round-text">End of</div>
-                    <div class="end-of-round-text end-of-round-round">Round</div>
+                    <div class="end-of-round-text" data-i18n="endOfRound.endOf">End of</div>
+                    <div class="end-of-round-text end-of-round-round" data-i18n="endOfRound.round">Round</div>
                     <div class="end-of-round-text" id="endRoundNumber">1</div>
                 </div>
             </div>
@@ -399,8 +400,8 @@
                     <!-- Column Headers -->
                     <div class="header">
                         <span class="name-header"></span> <!-- Empty space for alignment -->
-                        <span class="round-header">Round</span>
-                        <span class="overall-header">Overall</span>
+                        <span class="round-header" data-i18n="endOfRound.round">Round</span>
+                        <span class="overall-header" data-i18n="endOfRound.overall">Overall</span>
                     </div>
                     <div id="playerScores"></div>
                 </div>
@@ -411,11 +412,11 @@
     <!-- End of Quiz Panel -->
     <div id="endOfQuizPanel" class="panel main-bg">
         <header>
-            <img src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia Logo">
+            <img src="imgs/Netflix-Trivia-Logo.png" alt="Netflix Trivia Logo" data-i18n-alt="images.netflixTriviaLogo">
         </header>
         <div id="endQuizConfettiLayer" aria-hidden="true"></div>
         <div class="container">
-            <h1>Game Over</h1>
+            <h1 data-i18n="endOfQuiz.title">Game Over</h1>
             
             <div class="podium-stack">
                 <!-- 1st Place -->
@@ -430,13 +431,13 @@
                 <!-- Podium Images -->
                 <div class="podium-container">
                     <div class="podium-item">
-                        <img src="imgs/2ndPlace.png" alt="2nd Place">
+                        <img src="imgs/2ndPlace.png" alt="2nd Place" data-i18n-alt="images.secondPlace">
                     </div>
                     <div class="podium-item">
-                        <img src="imgs/1stPlace.png" alt="1st Place">
+                        <img src="imgs/1stPlace.png" alt="1st Place" data-i18n-alt="images.firstPlace">
                     </div>
                     <div class="podium-item">
-                        <img src="imgs/3rdPlace.png" alt="3rd Place">
+                        <img src="imgs/3rdPlace.png" alt="3rd Place" data-i18n-alt="images.thirdPlace">
                     </div>
                 </div>
             </div>
@@ -446,7 +447,7 @@
                 <!-- Runners up will be dynamically added here -->
             </div>
             
-            <button id="restartQuizButton">Restart Quiz</button>
+            <button id="restartQuizButton" data-i18n="endOfQuiz.restartButton">Restart Quiz</button>
         </div>  
     </div>
 
@@ -513,6 +514,23 @@
     });
 
     const socket = io({ transports: ["websocket"] });
+    const i18nReady = window.i18n
+      .init({ defaultLang: "en", supportedLangs: ["en", "de"] })
+      .then(() => {
+        window.i18n.apply();
+      });
+
+    function t(key, vars = {}) {
+      return window.i18n.t(key, vars);
+    }
+
+    function translateCategoryForDisplay(categoryValue) {
+      if (typeof categoryValue !== "string" || categoryValue.trim().length === 0) {
+        return t("common.unknownCategory");
+      }
+
+      return window.i18n.translateCategory(categoryValue.trim());
+    }
 
     // Helper function to format rank as ordinal (1st, 2nd, 3rd, etc.)
     function formatRank(rank) {
@@ -661,7 +679,7 @@
     function updateTimerControls(toggleButton, toggleStatus, optionButtons, enabled, seconds) {
       toggleButton.classList.toggle("is-enabled", enabled);
       toggleButton.setAttribute("aria-pressed", enabled ? "true" : "false");
-      toggleStatus.textContent = enabled ? "On" : "Off";
+      toggleStatus.textContent = enabled ? t("timer.on") : t("timer.off");
 
       const optionContainer = optionButtons[0]?.parentElement;
       if (optionContainer) {
@@ -1000,7 +1018,7 @@
       clearRoomIdAnimationTimers();
       roomIdDisplay.classList.remove("is-loading", "is-ready");
       renderRoomIdDigits(ROOM_ID_PLACEHOLDER);
-      roomIdDisplay.setAttribute("aria-label", "Quiz code");
+      roomIdDisplay.setAttribute("aria-label", t("playerConnect.roomCodeAria"));
     }
 
     function startRoomIdScramble() {
@@ -1010,7 +1028,7 @@
       renderRoomIdDigits(
         Array.from({ length: ROOM_ID_DIGIT_COUNT }, () => randomDigitChar()).join("")
       );
-      roomIdDisplay.setAttribute("aria-label", "Generating quiz code");
+      roomIdDisplay.setAttribute("aria-label", t("playerConnect.generatingRoomCodeAria"));
 
       roomIdDigitEls.forEach((digitEl, digitIndex) => {
         digitEl.classList.remove("is-locked");
@@ -1050,7 +1068,9 @@
         roomIdDisplay.classList.add("is-ready");
         roomIdDisplay.setAttribute(
           "aria-label",
-          `Quiz code ${finalDigits.slice(0, 3)} ${finalDigits.slice(3)}`
+          t("playerConnect.roomCodeReadyAria", {
+            code: `${finalDigits.slice(0, 3)} ${finalDigits.slice(3)}`
+          })
         );
       }, maxDelay + 60);
       roomIdRevealTimeoutIds.push(finishTimeoutId);
@@ -1270,30 +1290,32 @@
 
     // Welcome Screen: Next Button
     document.addEventListener("DOMContentLoaded", () => {
-        // Start setup-panel image loading right away while welcome is on screen.
-        preloadSetupPanelAssets();
+        i18nReady.then(() => {
+            // Start setup-panel image loading right away while welcome is on screen.
+            preloadSetupPanelAssets();
 
-        // Automatically redirect from Welcome Panel after the welcome delay.
-        setTimeout(async () => {
-            if (!welcomePanel.classList.contains("active")) {
-                return;
-            }
+            // Automatically redirect from Welcome Panel after the welcome delay.
+            setTimeout(async () => {
+                if (!welcomePanel.classList.contains("active")) {
+                    return;
+                }
 
-            await preloadSetupPanelAssets();
+                await preloadSetupPanelAssets();
 
-            if (welcomePanel.classList.contains("active")) {
-                transitionWelcomeToSetupPanel();
-            }
-        }, WELCOME_TO_SETUP_DELAY_MS);
+                if (welcomePanel.classList.contains("active")) {
+                    transitionWelcomeToSetupPanel();
+                }
+            }, WELCOME_TO_SETUP_DELAY_MS);
 
-        // Initialize the range slider with default value
-        updateRangeSlider(1);
-        preloadModalBackgroundImages();
+            // Initialize the range slider with default value
+            updateRangeSlider(1);
+            preloadModalBackgroundImages();
+            resetRoomIdDisplay();
+        });
     });
 
 
     let currentRoom; // Store the room object
-    resetRoomIdDisplay();
 
     function deleteRoomById(roomIdToDelete) {
         return new Promise((resolve) => {
@@ -1354,7 +1376,7 @@
                 setRoomCreateLoadingState(false);
                 resetRoomIdDisplay();
                 showPanel(setupPanel);
-                alert("Failed to create room. Please try again.");
+                alert(t("alerts.failedToCreateRoom"));
                 return;
             }
 
@@ -1423,8 +1445,8 @@
         const isLastStep = modalStepIndex === modalStepPanels.length - 1;
 
         modalBackBtn.classList.toggle('is-first-step', isFirstStep);
-        modalBackBtn.setAttribute('aria-label', isFirstStep ? 'Close category setup' : 'Go to previous step');
-        confirmBtn.textContent = isLastStep ? 'Start Quiz' : 'Next';
+        modalBackBtn.setAttribute('aria-label', isFirstStep ? t("modals.common.closeCategorySetup") : t("modals.common.goToPreviousStep"));
+        confirmBtn.textContent = isLastStep ? t("modals.common.startQuiz") : t("modals.common.next");
 
         modalDotItems.forEach((dot, index) => {
             const isActive = index === modalStepIndex;
@@ -1480,7 +1502,7 @@
     // Open modal with selected category
     function openModal(category, description, hasImage = true) {
         selectedCategory = category;
-        modalTitle.textContent = category;
+        modalTitle.textContent = translateCategoryForDisplay(category);
         modalDescription.textContent = description;
         
         // Set the category image as background (or clear it)
@@ -1520,7 +1542,7 @@
         if (audioManager) {
             audioManager.playSoundFX("buttonClick");
         }
-        openModal('General', 'Test your general knowledge of the world with a mix of questions from all categories.', false);
+        openModal('General', t("categories.general.description"), false);
         modalContent.style.setProperty("--modal-bg-image", "url('imgs/netflix-logo-bg.png')");
     });
 
@@ -1614,7 +1636,7 @@
 
         if (!categoryName || categoryName.trim().length === 0) {
             console.error("Invalid category selected:", selectedCategory);
-            alert("Invalid category selection. Please try again.");
+            alert(t("alerts.invalidCategorySelection"));
             return;
         }
 
@@ -1680,8 +1702,8 @@
         const isLastStep = customStepIndex === customStepPanels.length - 1;
 
         customBackBtn.classList.toggle('is-first-step', isFirstStep);
-        customBackBtn.setAttribute('aria-label', isFirstStep ? 'Close custom quiz setup' : 'Go to previous step');
-        customConfirmBtn.textContent = isLastStep ? 'Start Quiz' : 'Next';
+        customBackBtn.setAttribute('aria-label', isFirstStep ? t("modals.common.closeCustomQuizSetup") : t("modals.common.goToPreviousStep"));
+        customConfirmBtn.textContent = isLastStep ? t("modals.common.startQuiz") : t("modals.common.next");
 
         customDotItems.forEach((dot, index) => {
             const isActive = index === customStepIndex;
@@ -1882,7 +1904,7 @@
 
         // Validate at least one round selected
         if (rounds.length === 0) {
-            alert('Please select at least one round from any category.');
+            alert(t("alerts.selectAtLeastOneRound"));
             renderCustomStep(0);
             return;
         }
@@ -1955,7 +1977,9 @@
         // Display the round number and category name
         const currentRound = currentRoom.currentProgress.currentRound;
         roundNumber.textContent = currentRoundNumber; // Start with round 1
-        categoryName.textContent = currentRound?.subcategoryName || currentRound?.categoryName || "Unknown Category";
+        categoryName.textContent = translateCategoryForDisplay(
+            currentRound?.subcategoryName || currentRound?.categoryName
+        );
         animateRoundCategoryName();
 
         // Keep the round start panel visible before showing questions
@@ -2005,9 +2029,9 @@
         modal.innerHTML = `
             <div class="modal-content no-players-modal-content">
                 <div class="modal-inner">
-                    <h2>No Players Yet</h2>
-                    <p>You need at least one player to start the quiz.</p>
-                    <button id="closeNoPlayersModal">OK</button>
+                    <h2>${t("modals.noPlayers.title")}</h2>
+                    <p>${t("modals.noPlayers.message")}</p>
+                    <button id="closeNoPlayersModal">${t("modals.noPlayers.button")}</button>
                 </div>
             </div>
         `;
@@ -2262,7 +2286,7 @@
          // Ensure currentRoom is defined before proceeding
          if (!currentRoom || !currentRoom.rounds) {
             console.error("Error: currentRoom is not properly set up.");
-            alert("An error occurred. Please restart the quiz.");
+            alert(t("alerts.restartQuizError"));
             return;
         }
 
@@ -2294,8 +2318,9 @@
               currentRoom?.currentProgress?.currentRound ||
               currentRoom?.rounds?.[currentRoundNumber - 1];
             roundNumber.textContent = currentRoundNumber;
-            categoryName.textContent =
-              currentRound?.subcategoryName || currentRound?.categoryName || "Unknown Category";
+            categoryName.textContent = translateCategoryForDisplay(
+              currentRound?.subcategoryName || currentRound?.categoryName
+            );
 
             // Show the round start panel for the next round
             showPanel(roundStartPanel);

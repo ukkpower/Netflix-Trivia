@@ -43,6 +43,62 @@ Create a `.env` file if you want to override the default port:
 PORT=8080
 ```
 
+## Game Master Internationalization
+The Game Master UI in [public/game-master.html](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/game-master.html) supports dependency-free translations loaded in the browser.
+
+### How It Works
+- Locale selection is driven by the `lang` query parameter.
+- English is the default fallback locale.
+- Locale files live in [public/lang/](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang/).
+- [public/lang.js](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang.js) loads the requested JSON file, falls back to English if needed, and applies translations to the page.
+
+Examples:
+
+- `http://localhost:8080/game-master.html`
+- `http://localhost:8080/game-master.html?lang=en`
+- `http://localhost:8080/game-master.html?lang=de`
+
+### Files
+- [public/lang.js](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang.js) - Browser-side i18n loader and helper API
+- [public/lang/en.json](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang/en.json) - Source/default locale
+- [public/lang/de.json](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang/de.json) - German locale
+
+### Markup and Script Conventions
+- Use `data-i18n` for plain text nodes.
+- Use `data-i18n-html` only when translated markup is required.
+- Use `data-i18n-aria-label`, `data-i18n-alt`, and `data-i18n-data-description` for translated attributes.
+- For runtime-generated text in JavaScript, use `window.i18n.t("some.key")`.
+- For known fixed category names returned from the backend, use `window.i18n.translateCategory(value)` for display only.
+- Keep internal category identifiers such as `data-category="Sports"` in English. These are part of the game logic and should not be localized.
+
+### `window.i18n` API
+[public/lang.js](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang.js) exposes:
+
+- `init({ defaultLang, supportedLangs })`
+- `t(key, vars = {})`
+- `apply(root = document)`
+- `translateCategory(value)`
+- `getLocale()`
+
+### Adding a New Language
+1. Copy [public/lang/en.json](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang/en.json) to a new file such as `public/lang/fr.json`.
+2. Translate the values but keep the JSON structure and keys identical to English.
+3. Add the new locale code to the `supportedLangs` list in [public/game-master.html](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/game-master.html).
+4. Load the page with the new query param, for example `game-master.html?lang=fr`.
+5. Click through the Game Master flow and verify:
+   - welcome/setup copy
+   - category modal copy
+   - custom quiz modal copy
+   - timer labels and toggle state
+   - room-code ARIA labels
+   - alert/modal messages
+   - round/category labels for known categories
+
+### Important Scope Rule
+- Only the Game Master UI is translated right now.
+- Questions, answers, and other backend-provided trivia content are not translated.
+- Unknown backend category/subcategory names are shown as-is unless they match a known fixed category handled by `translateCategory()`.
+
 ## Audio Manager
 The frontend includes an `AudioManager` class in `public/audio-manager.js` for music playback, music crossfades, and one-shot sound effects.
 

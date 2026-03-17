@@ -1,0 +1,135 @@
+{
+  "meta": {
+    "title": "Netflix Trivia Spielleitung"
+  },
+  "welcome": {
+    "slogan": "DAS <span class=\"welcome-slogan-highlight\">GRÖSSTE</span> TRIVIA-SPIEL DER WELT"
+  },
+  "setup": {
+    "generalQuiz": {
+      "title": "Spiele das allgemeine Netflix-Wissensquiz",
+      "description": "Teste dein Allgemeinwissen über die Welt und fordere dich selbst heraus.",
+      "button": "Los geht's"
+    },
+    "customQuiz": {
+      "label": "Erstelle dein eigenes Quiz",
+      "button": "Anpassen"
+    }
+  },
+  "categories": {
+    "general": {
+      "label": "Allgemein",
+      "description": "Teste dein Allgemeinwissen mit einer Mischung aus Fragen aus allen Kategorien."
+    },
+    "sports": {
+      "label": "Sport",
+      "description": "Teste dein Wissen über verschiedene Sportarten, Teams und legendäre Athletinnen und Athleten."
+    },
+    "entertainment": {
+      "label": "Unterhaltung",
+      "description": "Tauche ein in die Welt von Filmen, Musik und Popkultur."
+    },
+    "history": {
+      "label": "Geschichte",
+      "description": "Entdecke historische Ereignisse und Persönlichkeiten aus aller Welt."
+    },
+    "science": {
+      "label": "Wissenschaft",
+      "description": "Entdecke wissenschaftliche Durchbrüche, berühmte Forschende und Naturwunder."
+    },
+    "geography": {
+      "label": "Geografie",
+      "description": "Teste dein Wissen über Länder, Hauptstädte, Sehenswürdigkeiten und Weltgeografie."
+    },
+    "decades": {
+      "label": "Jahrzehnte",
+      "description": "Erkenne wichtige Momente aus verschiedenen Jahrzehnten der Geschichte."
+    },
+    "politics": {
+      "label": "Politik",
+      "description": "Lerne mehr über globale Führungspersönlichkeiten, politische Konzepte und historische Ereignisse."
+    },
+    "mythology": {
+      "label": "Mythologie",
+      "description": "Lüfte die Geschichten von Göttern, Legenden und antiken Mythen."
+    }
+  },
+  "modals": {
+    "common": {
+      "next": "Weiter",
+      "startQuiz": "Quiz starten",
+      "selectDifficulty": "Schwierigkeit wählen:",
+      "answerTimer": "Antwort-Timer:",
+      "closeCategorySetup": "Kategorie-Einstellungen schließen",
+      "closeCustomQuizSetup": "Benutzerdefiniertes Quiz schließen",
+      "goToPreviousStep": "Zum vorherigen Schritt"
+    },
+    "category": {
+      "progressAria": "Fortschritt der Kategorie-Einrichtung",
+      "numberOfRounds": "Anzahl der Runden:"
+    },
+    "customQuiz": {
+      "title": "Eigenes Quiz erstellen",
+      "description": "Wähle Kategorien und die Anzahl der Runden pro Kategorie.",
+      "progressAria": "Fortschritt des benutzerdefinierten Quiz",
+      "roundsPerCategory": "Runden pro Kategorie wählen:"
+    },
+    "noPlayers": {
+      "title": "Noch keine Spielenden",
+      "message": "Du brauchst mindestens eine Person, um das Quiz zu starten.",
+      "button": "OK"
+    }
+  },
+  "difficulty": {
+    "easy": "Leicht",
+    "medium": "Mittel",
+    "hard": "Schwer"
+  },
+  "timer": {
+    "on": "An",
+    "off": "Aus",
+    "secs30": "30 Sek.",
+    "minute1": "1 Minute",
+    "minutes2": "2 Minuten"
+  },
+  "playerConnect": {
+    "titleHtml": "Spieler<br>verbinden",
+    "description": "Öffne die Netflix Trivia App auf dem Handy und gib deinen Quizcode ein, um dem Quiz beizutreten.",
+    "waitingPlayers": "Spielende erscheinen hier, sobald sie beitreten...",
+    "backToSetupAria": "Zurück zur Einrichtung",
+    "startQuizButton": "QUIZ STARTEN",
+    "roomCodeAria": "Quizcode",
+    "generatingRoomCodeAria": "Quizcode wird erstellt",
+    "roomCodeReadyAria": "Quizcode {code}"
+  },
+  "roundStart": {
+    "title": "Runde"
+  },
+  "endOfRound": {
+    "endOf": "Ende von",
+    "round": "Runde",
+    "overall": "Gesamt"
+  },
+  "endOfQuiz": {
+    "title": "Spiel beendet",
+    "restartButton": "Quiz neu starten"
+  },
+  "common": {
+    "unknownCategory": "Unbekannte Kategorie"
+  },
+  "alerts": {
+    "failedToCreateRoom": "Raum konnte nicht erstellt werden. Bitte versuche es erneut.",
+    "invalidCategorySelection": "Ungültige Kategorieauswahl. Bitte versuche es erneut.",
+    "selectAtLeastOneRound": "Bitte wähle mindestens eine Runde aus einer Kategorie aus.",
+    "restartQuizError": "Es ist ein Fehler aufgetreten. Bitte starte das Quiz neu."
+  },
+  "images": {
+    "backgroundOverlay": "Hintergrund-Overlay",
+    "netflixLogo": "Netflix-Logo",
+    "triviaLogo": "Trivia-Logo",
+    "netflixTriviaLogo": "Netflix Trivia-Logo",
+    "secondPlace": "2. Platz",
+    "firstPlace": "1. Platz",
+    "thirdPlace": "3. Platz"
+  }
+}
