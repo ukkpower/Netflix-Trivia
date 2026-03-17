@@ -60,17 +60,21 @@ class AudioManager {
      * @param {number} volume - Volume level (0-100), defaults to 100
      * @returns {Promise} Resolves when music is loaded
      */
-    async loadMusic(name, file, volume = 100) {
+    async loadMusic(name, file, volume = 100, config = {}) {
+        const options = this._normalizeMusicConfig(config);
+        const loop = options.loop ?? this.musicLoop;
+
         return new Promise((resolve, reject) => {
             const audio = new Audio(this.baseSoundPath + file);
-            audio.loop = this.musicLoop;
+            audio.loop = Boolean(loop);
             audio.volume = 0; // Start at 0, will be set when playing
             
             audio.addEventListener('canplaythrough', () => {
                 this.musicTracks.set(name, {
                     audio: audio,
                     volume: Math.max(0, Math.min(100, volume)),
-                    file: file
+                    file: file,
+                    loop: Boolean(loop)
                 });
                 resolve();
             }, { once: true });
@@ -129,6 +133,21 @@ class AudioManager {
         return str.replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => {
             return index === 0 ? word.toLowerCase() : word.toUpperCase();
         }).replace(/\s+/g, '');
+    }
+
+    /**
+     * Normalize optional music config. Accepts a boolean loop flag for backward compatibility.
+     */
+    _normalizeMusicConfig(config = {}) {
+        if (typeof config === "boolean") {
+            return { loop: config };
+        }
+
+        if (config && typeof config === "object") {
+            return config;
+        }
+
+        return {};
     }
 
     /**
@@ -311,16 +330,19 @@ class AudioManager {
      * Play a pre-loaded music track with fade transition
      * @param {string} name - Name of pre-loaded music track
      */
-    async playMusic(name) {
+    async playMusic(name, config = {}) {
         if (!this.musicTracks.has(name)) {
             console.error(`Music track "${name}" not found. Make sure to load it first with loadMusic().`);
             return;
         }
         
         const track = this.musicTracks.get(name);
+        const options = this._normalizeMusicConfig(config);
+        const loop = options.loop ?? track.loop ?? this.musicLoop;
         
         // If same track is already playing, do nothing
         if (this.currentMusicName === name && this.currentMusic && !this.currentMusic.paused) {
+            this.currentMusic.loop = Boolean(loop);
             return;
         }
 
@@ -340,7 +362,7 @@ class AudioManager {
 
         // Create new Audio instance from the pre-loaded track
         const newAudio = new Audio(track.audio.src);
-        newAudio.loop = this.musicLoop;
+        newAudio.loop = Boolean(loop);
         this._registerMusicAudio(newAudio, track.volume, 0);
 
         // Calculate target volume
@@ -384,8 +406,8 @@ class AudioManager {
      * Alias for playMusic - swaps to a new music track
      * @param {string} name - Name of pre-loaded music track
      */
-    async swapMusic(name) {
-        await this.playMusic(name);
+    async swapMusic(name, config = {}) {
+        await this.playMusic(name, config);
     }
     
     /**

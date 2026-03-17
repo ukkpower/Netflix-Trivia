@@ -488,6 +488,20 @@
         console.error("Failed to load button no sound:", error);
       }
 
+      try {
+        await audioManager.loadMusic(QUESTION_COUNTDOWN_TRACK, "countdown_clip.mp3", 75);
+        console.log("Question countdown music loaded");
+      } catch (error) {
+        console.error("Failed to load question countdown music:", error);
+      }
+
+      try {
+        await audioManager.loadMusic(QUESTION_END_TRACK, "question_end.mp3", 80);
+        console.log("Question end music loaded");
+      } catch (error) {
+        console.error("Failed to load question end music:", error);
+      }
+
       // Example: Load additional sound effects (uncomment and adjust file names as needed)
       // await audioManager.loadSoundFX("correctAnswer", "correct.wav", 100);
 
@@ -602,6 +616,8 @@
     const ROUND_START_PANEL_DURATION_MS = 5000;
     const END_OF_ROUND_PLAYER_STAGGER_MS = 350;
     const END_OF_ROUND_NEXT_PANEL_DELAY_MS = 6000;
+    const QUESTION_COUNTDOWN_TRACK = "questionCountdown";
+    const QUESTION_END_TRACK = "questionEnd";
     let endQuizConfettiTimeoutId = null;
     let endQuizConfettiCleanupId = null;
     let endOfRoundTransitionTimeoutId = null;
@@ -720,6 +736,34 @@
       questionRevealScheduled = false;
     }
 
+    function playQuestionCountdownMusic() {
+      if (!audioManager) {
+        return;
+      }
+
+      audioManager.playMusic(QUESTION_COUNTDOWN_TRACK, { loop: true }).catch((error) => {
+        console.error("Failed to play question countdown music:", error);
+      });
+    }
+
+    function playQuestionEndMusic() {
+      if (!audioManager) {
+        return;
+      }
+
+      audioManager.swapMusic(QUESTION_END_TRACK, { loop: false }).catch((error) => {
+        console.error("Failed to play question end music:", error);
+      });
+    }
+
+    function stopQuestionMusic() {
+      if (!audioManager) {
+        return;
+      }
+
+      audioManager.stopMusic();
+    }
+
     function isAnswerTimerEnabled(room) {
       return Boolean(room?.settings?.answerTimerEnabled);
     }
@@ -795,10 +839,12 @@
         currentQuestionClosed = true;
 
         if (response?.reason === "all_answered" && !response?.alreadyClosed) {
+          playQuestionEndMusic();
           revealCorrectAnswerAndQueueNext();
           return;
         }
 
+        stopQuestionMusic();
         maybeResolveClosedQuestion();
       });
     }
@@ -1943,6 +1989,7 @@
             audioManager.playSoundFX("buttonNo");
         }
 
+        stopQuestionMusic();
         const roomIdToDelete = currentRoom?.roomId || roomId;
         roomCreateRequestToken++;
         deleteRoomById(roomIdToDelete);
@@ -2038,6 +2085,7 @@
             answerOptions.appendChild(div);
         });
 
+        playQuestionCountdownMusic();
         startQuestionTimer(room, questionIndex);
     }
 
@@ -2129,6 +2177,7 @@
     function displayEndOfRound(room) {
         resetQuestionResolutionState();
         clearEndOfRoundTimers();
+        stopQuestionMusic();
 
         //For testing, log room object
         console.log("Room object:", room);
@@ -2301,6 +2350,7 @@
     // Function to display the end of quiz panel
     function displayEndOfQuiz() {
         resetQuestionResolutionState();
+        stopQuestionMusic();
 
         // Emit end of game event to the server and get updated room object
         socket.emit("quiz:endOfGame", { roomId: roomId }, (err, updatedRoom) => {
@@ -2359,6 +2409,7 @@
 
     // Restart Quiz Button: Restart the quiz
     restartQuizButton.addEventListener("click", () => {
+    stopQuestionMusic();
     // Reset the round number
     currentRoundNumber = 1;
 
@@ -2404,6 +2455,7 @@
     // Restart Quiz Button: Reset everything and go back to the Setup Panel
     restartQuizButton.addEventListener("click", () => {
         console.log("Restarting quiz...");
+        stopQuestionMusic();
 
         // Reset game-related variables
         currentRoundNumber = 1;  // Reset round count

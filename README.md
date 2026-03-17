@@ -67,12 +67,14 @@ The manager exposes a `settings` object:
   With `0`, the new track starts immediately while the previous track fades out.
 
 ### Music Functions
-- `await audioManager.loadMusic(name, file, volume = 100)`
+- `await audioManager.loadMusic(name, file, volume = 100, config = {})`
   Preloads a music track and stores it under `name`.
-- `await audioManager.playMusic(name)`
+  Optional `config.loop` sets that track's default loop behavior.
+- `await audioManager.playMusic(name, config = {})`
   Plays a preloaded track. If another music track is already playing, the manager crossfades from the old track to the new one.
-- `await audioManager.swapMusic(name)`
-  Alias for `playMusic(name)`.
+  Optional `config.loop` overrides loop behavior for that playback request.
+- `await audioManager.swapMusic(name, config = {})`
+  Alias for `playMusic(name, config)`.
 - `audioManager.stopMusic()`
   Stops all active music immediately and cancels any in-progress crossfade.
 - `audioManager.muteMusic()`
@@ -84,6 +86,7 @@ The manager exposes a `settings` object:
   Current implementation note: this value is stored, but active track output is still based on each track's own loaded volume plus master mute/master volume behavior.
 - `audioManager.setMusicLoop(loop)`
   Enables or disables looping for current and future music instances.
+  This is the global default when no per-track or per-playback `loop` override is supplied.
 
 ### Sound Effect Functions
 - `await audioManager.loadSoundFX(name, file, volume = 100)`
@@ -125,11 +128,11 @@ await audioManager.loadMusic("menuTheme", "menu_loop.mp3", 70);
 await audioManager.loadMusic("gameTheme", "game_loop.mp3", 70);
 await audioManager.loadSoundFX("buttonClick", "buttonClick.mp3", 80);
 
-await audioManager.playMusic("menuTheme");
+await audioManager.playMusic("menuTheme", { loop: true });
 audioManager.playSoundFX("buttonClick");
 
 // Crossfade to the next track
-await audioManager.swapMusic("gameTheme");
+await audioManager.swapMusic("gameTheme", { loop: false });
 ```
 
 ## Project Structure
