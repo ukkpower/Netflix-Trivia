@@ -64,10 +64,18 @@
             <div class="modal-inner custom-modal-inner">
                 <h2 class="modal-title"></h2>
                 <p class="modal-description"></p>
+                <div class="slide-counter" id="modalStepDots" aria-label="Category setup progress">
+                    <div class="dot active-dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
 
                 <div class="custom-step-stage" id="modalStepStage">
                     <section class="custom-step-panel is-active" data-step="0">
                         <p class="difficulty-label custom-step-label">Number of Rounds:</p>
+                        <div class="round-display" id="roundDisplay" aria-live="polite">
+                            <span class="round-display-number" id="roundDisplayNumber">1</span>
+                        </div>
                         <div class="range-container">
                             <div class="range">
                                 <input type="range" id="roundSlider" min="1" max="10" step="1" value="1">
@@ -116,14 +124,14 @@
 
                     <section class="custom-step-panel" data-step="2" hidden>
                         <div class="timer-settings" id="timerSettings">
+                            <button type="button" class="timer-toggle" id="timerToggleBtn" aria-pressed="false">
+                                <span class="timer-toggle-track" aria-hidden="true">
+                                    <span class="timer-toggle-thumb"></span>
+                                </span>
+                                <span class="timer-toggle-status">Off</span>
+                            </button>
                             <div class="timer-toggle-row">
                                 <p class="difficulty-label timer-label">Answer Timer:</p>
-                                <button type="button" class="timer-toggle" id="timerToggleBtn" aria-pressed="false">
-                                    <span class="timer-toggle-track" aria-hidden="true">
-                                        <span class="timer-toggle-thumb"></span>
-                                    </span>
-                                    <span class="timer-toggle-status">Off</span>
-                                </button>
                             </div>
                             <div class="timer-options is-disabled" id="timerOptions">
                                 <button type="button" class="timer-option selected" data-seconds="30">30 secs</button>
@@ -148,11 +156,6 @@
                         </button>
                         <button type="button" id="confirmBtn">Next</button>
                     </div>
-                    <div class="slide-counter" id="modalStepDots" aria-label="Category setup progress">
-                        <div class="dot active-dot"></div>
-                        <div class="dot"></div>
-                        <div class="dot"></div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -164,6 +167,11 @@
             <div class="modal-inner custom-modal-inner">
                 <h2 class="modal-title">Create Custom Quiz</h2>
                 <p class="modal-description">Select categories and number of rounds for each</p>
+                <div class="slide-counter" id="customStepDots" aria-label="Custom quiz setup progress">
+                    <div class="dot active-dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
 
                 <div class="custom-step-stage" id="customStepStage">
                     <section class="custom-step-panel is-active" data-step="0">
@@ -265,14 +273,14 @@
 
                     <section class="custom-step-panel" data-step="2" hidden>
                         <div class="timer-settings" id="customTimerSettings">
+                            <button type="button" class="timer-toggle" id="customTimerToggleBtn" aria-pressed="false">
+                                <span class="timer-toggle-track" aria-hidden="true">
+                                    <span class="timer-toggle-thumb"></span>
+                                </span>
+                                <span class="timer-toggle-status">Off</span>
+                            </button>
                             <div class="timer-toggle-row">
                                 <p class="difficulty-label timer-label">Answer Timer:</p>
-                                <button type="button" class="timer-toggle" id="customTimerToggleBtn" aria-pressed="false">
-                                    <span class="timer-toggle-track" aria-hidden="true">
-                                        <span class="timer-toggle-thumb"></span>
-                                    </span>
-                                    <span class="timer-toggle-status">Off</span>
-                                </button>
                             </div>
                             <div class="timer-options is-disabled" id="customTimerOptions">
                                 <button type="button" class="timer-option selected" data-seconds="30">30 secs</button>
@@ -296,11 +304,6 @@
                             </svg>
                         </button>
                         <button type="button" id="customConfirmBtn">Next</button>
-                    </div>
-                    <div class="slide-counter" id="customStepDots" aria-label="Custom quiz setup progress">
-                        <div class="dot active-dot"></div>
-                        <div class="dot"></div>
-                        <div class="dot"></div>
                     </div>
                 </div>
             </div>
@@ -567,6 +570,7 @@
     const roundSlider = document.getElementById('roundSlider');
     const rangeLabels = document.getElementById('rangeLabels');
     const rangeLabelItems = rangeLabels.querySelectorAll('li');
+    const roundDisplayNumber = document.getElementById('roundDisplayNumber');
     const customTimerSettings = document.getElementById("customTimerSettings");
     const customTimerToggleBtn = document.getElementById("customTimerToggleBtn");
     const customTimerToggleStatus = customTimerToggleBtn.querySelector(".timer-toggle-status");
@@ -1318,8 +1322,20 @@
 
     // Update range slider UI
     function updateRangeSlider(value) {
+        const previousValue = selectedRounds;
         selectedRounds = value;
         roundSlider.value = value;
+
+        if (previousValue !== value) {
+            roundDisplayNumber.classList.remove('pop-in');
+            roundDisplayNumber.classList.add('pop-out');
+            setTimeout(() => {
+                roundDisplayNumber.textContent = value;
+                roundDisplayNumber.classList.remove('pop-out');
+                void roundDisplayNumber.offsetWidth;
+                roundDisplayNumber.classList.add('pop-in');
+            }, 150);
+        }
         
         // Update labels
         rangeLabelItems.forEach((label, index) => {
@@ -1366,10 +1382,13 @@
 
         modalDotItems.forEach((dot, index) => {
             const isActive = index === modalStepIndex;
-            dot.classList.toggle('active-dot', isActive);
-            if (isActive) {
+            if (isActive && !dot.classList.contains('active-dot')) {
+                dot.classList.remove('active-dot');
+                void dot.offsetWidth;
+                dot.classList.add('active-dot');
                 dot.setAttribute('aria-current', 'step');
-            } else {
+            } else if (!isActive) {
+                dot.classList.remove('active-dot');
                 dot.removeAttribute('aria-current');
             }
         });
@@ -1390,9 +1409,7 @@
         });
 
         modalStepButtons.classList.remove('is-entering');
-        modalStepDots.classList.remove('is-entering');
         modalStepButtons.classList.toggle('is-pre-enter', animate);
-        modalStepDots.classList.toggle('is-pre-enter', animate);
 
         updateModalStepControls();
 
@@ -1408,11 +1425,6 @@
             modalStepButtons.classList.remove('is-pre-enter');
             restartStepEntranceAnimation(modalStepButtons);
         }, 180));
-
-        modalStepAnimationTimeoutIds.push(setTimeout(() => {
-            modalStepDots.classList.remove('is-pre-enter');
-            restartStepEntranceAnimation(modalStepDots);
-        }, 300));
 
         modalStepAnimationTimeoutIds.push(setTimeout(() => {
             modalStepTransitioning = false;
@@ -1627,10 +1639,13 @@
 
         customDotItems.forEach((dot, index) => {
             const isActive = index === customStepIndex;
-            dot.classList.toggle('active-dot', isActive);
-            if (isActive) {
+            if (isActive && !dot.classList.contains('active-dot')) {
+                dot.classList.remove('active-dot');
+                void dot.offsetWidth;
+                dot.classList.add('active-dot');
                 dot.setAttribute('aria-current', 'step');
-            } else {
+            } else if (!isActive) {
+                dot.classList.remove('active-dot');
                 dot.removeAttribute('aria-current');
             }
         });
@@ -1651,9 +1666,7 @@
         });
 
         customStepButtons.classList.remove('is-entering');
-        customStepDots.classList.remove('is-entering');
         customStepButtons.classList.toggle('is-pre-enter', animate);
-        customStepDots.classList.toggle('is-pre-enter', animate);
 
         updateCustomStepControls();
 
@@ -1669,11 +1682,6 @@
             customStepButtons.classList.remove('is-pre-enter');
             restartStepEntranceAnimation(customStepButtons);
         }, 180));
-
-        customStepAnimationTimeoutIds.push(setTimeout(() => {
-            customStepDots.classList.remove('is-pre-enter');
-            restartStepEntranceAnimation(customStepDots);
-        }, 300));
 
         customStepAnimationTimeoutIds.push(setTimeout(() => {
             customStepTransitioning = false;
