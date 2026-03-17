@@ -1,0 +1,103 @@
+{
+  "meta": {
+    "title": "Netflix Trivia Night • Pelaaja"
+  },
+  "player": {
+    "appAria": "Netflix Trivia Night -pelaajaohjain",
+    "panels": {
+      "splash": "Aloitusnäyttö",
+      "welcome": "Tervetulonäyttö",
+      "join": "Liittymisnäyttö",
+      "waiting": "Odotusnäyttö",
+      "answer": "Vastausnäyttö",
+      "endOfRound": "Kierroksen lopun näyttö",
+      "endOfGame": "Pelin lopun näyttö"
+    },
+    "splash": {
+      "brandAria": "Netflix Trivia Night",
+      "netflixAlt": "Netflix",
+      "titleAlt": "Trivia Night",
+      "hint": "Jatka napauttamalla"
+    },
+    "welcome": {
+      "kicker": "PELAAJAN OHJAIN",
+      "title": "Valmis pelaamaan",
+      "chip": "Valmis",
+      "headline": "Käytä puhelintasi ohjaimena.",
+      "description": "Liity huoneeseen televisiossa ja lukitse vastauksesi napauttamalla A/B/C/D.",
+      "button": "Liity peliin"
+    },
+    "join": {
+      "kicker": "LIITY",
+      "title": "Syötä tietosi",
+      "connectionConnecting": "Yhdistetään…",
+      "connectionConnected": "Yhdistetty",
+      "connectionDisconnected": "Yhteys katkaistu",
+      "headline": "Syötä tietosi",
+      "description": "Nimesi näkyy television pistetaululla. Visakoodi näkyy juontajan näytöllä.",
+      "nameLabel": "Nimi",
+      "nameHint": "esim. Keith",
+      "namePlaceholder": "Nimesi",
+      "quizCodeLabel": "Visakoodi",
+      "quizCodeHint": "4–8 merkkiä",
+      "quizCodePlaceholder": "ABCD",
+      "button": "Liity",
+      "footerHint": "Vinkki: pidä tämä sivu auki pelin ajan."
+    },
+    "waiting": {
+      "kicker": "YHDISTETTY",
+      "title": "Odotetaan juontajaa",
+      "chip": "Huoneessa",
+      "headline": "Olet mukana.",
+      "description": "Odotetaan, että juontaja aloittaa ensimmäisen kierroksen.",
+      "cardHint": "Kun kierros alkaa, vastauspainikkeesi ilmestyvät tänne automaattisesti."
+    },
+    "answer": {
+      "kicker": "SUORA",
+      "title": "Napauta A / B / C / D",
+      "chip": "Napauta kerran",
+      "questionLabel": "Kysymys",
+      "questionSub": "Valitse A, B, C tai D",
+      "toastDefault": "Vastaus lähetetty. Onnea matkaan.",
+      "buttonsAria": "Vastauspainikkeet",
+      "tapHint": "Ensimmäinen napautus lukitsee vastauksesi.",
+      "submitError": "Vastausta ei hyväksytty."
+    },
+    "endOfRound": {
+      "kicker": "KIERROS PÄÄTTYNYT",
+      "title": "Tilastosi",
+      "chip": "Pisteet",
+      "headline": "Hyvin meni.",
+      "description": "Tässä on etenemisesi tähän asti. Seuraava kierros alkaa televisiossa.",
+      "roundScoreLabel": "Kierroksen pisteet",
+      "roundScoreSub": "pistettä tällä kierroksella",
+      "totalLabel": "Yhteensä",
+      "totalSub": "kokonaispisteet",
+      "positionLabel": "Sijoitus",
+      "positionSub": "nykyinen sijoitus",
+      "waitingHint": "Odotetaan seuraavaa kierrosta…"
+    },
+    "endOfGame": {
+      "kicker": "LOPPU",
+      "title": "Peli päättyi",
+      "chip": "Valmis",
+      "headline": "Kiitos pelaamisesta.",
+      "description": "Haluatko uuden kierroksen? Palaa alkuun ja liity uudella huonekoodilla.",
+      "finalScoreLabel": "Lopulliset pisteet",
+      "finalScoreSub": "kokonaispisteet",
+      "finishLabel": "Sijoitus",
+      "finishSub": "sija",
+      "button": "Palaa alkuun"
+    },
+    "errors": {
+      "enterNameAndCode": "Anna nimesi ja televisiossa näkyvä visakoodi.",
+      "couldNotJoin": "Liittyminen ei onnistunut: {message}",
+      "unknownError": "Tuntematon virhe",
+      "rejoinRoom": "Yhteys katkesi. Liity huoneeseen uudelleen.",
+      "connectionLostRetry": "Yhteys katkesi. Tarkista internetyhteytesi ja yritä liittyä uudelleen."
+    }
+  },
+  "images": {
+    "netflixTriviaLogo": "Netflix Trivia -logo"
+  }
+}

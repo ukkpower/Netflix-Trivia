@@ -742,7 +742,7 @@
   <script>
     // Configure socket with explicit reconnection settings
     const i18nReady = window.i18n
-      .init({ defaultLang: "en", supportedLangs: ["en", "de"] })
+      .init({ defaultLang: "en", supportedLangs: ["en", "de", "fi"] })
       .then(() => {
         window.i18n.apply();
       });
@@ -763,7 +763,7 @@
     // Helper function to format rank as ordinal (1st, 2nd, 3rd, etc.)
     function formatRank(rank) {
       if (!rank) return "—";
-      if (window.i18n.getLocale() === "de") {
+      if (["de", "fi"].includes(window.i18n.getLocale())) {
         return `${rank}.`;
       }
       const lastDigit = rank % 10;

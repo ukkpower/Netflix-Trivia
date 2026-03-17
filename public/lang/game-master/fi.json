@@ -1,0 +1,135 @@
+{
+  "meta": {
+    "title": "Netflix Trivia Pelinvetäjä"
+  },
+  "welcome": {
+    "slogan": "MAAILMAN <span class=\"welcome-slogan-highlight\">SUURIN</span> TIETOVISA"
+  },
+  "setup": {
+    "generalQuiz": {
+      "title": "Osallistu Netflixin yleistietovisaan",
+      "description": "Testaa yleistietoasi maailmasta ja haasta itsesi.",
+      "button": "Aloitetaan"
+    },
+    "customQuiz": {
+      "label": "Luo oma mukautettu tietovisa",
+      "button": "Mukauta"
+    }
+  },
+  "categories": {
+    "general": {
+      "label": "Yleinen",
+      "description": "Testaa yleistietoasi eri kategorioiden kysymyksillä."
+    },
+    "sports": {
+      "label": "Urheilu",
+      "description": "Testaa tietämystäsi eri urheilulajeista, joukkueista ja legendaarisista urheilijoista."
+    },
+    "entertainment": {
+      "label": "Viihde",
+      "description": "Sukella elokuvien, musiikin ja popkulttuurin maailmaan."
+    },
+    "history": {
+      "label": "Historia",
+      "description": "Tutki historiallisia tapahtumia ja henkilöhahmoja ympäri maailmaa."
+    },
+    "science": {
+      "label": "Tiede",
+      "description": "Löydä tieteellisiä läpimurtoja, kuuluisia tutkijoita ja luonnonihmeitä."
+    },
+    "geography": {
+      "label": "Maantiede",
+      "description": "Testaa tietämystäsi maista, pääkaupungeista, maamerkeistä ja maailman maantieteestä."
+    },
+    "decades": {
+      "label": "Vuosikymmenet",
+      "description": "Tunnista historian eri vuosikymmenien keskeisiä hetkiä."
+    },
+    "politics": {
+      "label": "Politiikka",
+      "description": "Tutustu maailman johtajiin, politiikkaan ja merkittäviin poliittisiin tapahtumiin."
+    },
+    "mythology": {
+      "label": "Mytologia",
+      "description": "Selvitä jumalien, legendojen ja muinaisten myyttien tarinoita."
+    }
+  },
+  "modals": {
+    "common": {
+      "next": "Seuraava",
+      "startQuiz": "Aloita tietovisa",
+      "selectDifficulty": "Valitse vaikeustaso:",
+      "answerTimer": "Vastausaika:",
+      "closeCategorySetup": "Sulje kategorian asetukset",
+      "closeCustomQuizSetup": "Sulje mukautetun tietovisan asetukset",
+      "goToPreviousStep": "Palaa edelliseen vaiheeseen"
+    },
+    "category": {
+      "progressAria": "Kategorian asetusten eteneminen",
+      "numberOfRounds": "Kierrosten määrä:"
+    },
+    "customQuiz": {
+      "title": "Luo mukautettu tietovisa",
+      "description": "Valitse kategoriat ja kierrosten määrä kullekin.",
+      "progressAria": "Mukautetun tietovisan asetusten eteneminen",
+      "roundsPerCategory": "Valitse kierrosten määrä per kategoria:"
+    },
+    "noPlayers": {
+      "title": "Ei vielä pelaajia",
+      "message": "Tarvitset vähintään yhden pelaajan aloittaaksesi tietovisan.",
+      "button": "OK"
+    }
+  },
+  "difficulty": {
+    "easy": "Helppo",
+    "medium": "Keskitaso",
+    "hard": "Vaikea"
+  },
+  "timer": {
+    "on": "Päällä",
+    "off": "Pois",
+    "secs30": "30 s",
+    "minute1": "1 minuutti",
+    "minutes2": "2 minuuttia"
+  },
+  "playerConnect": {
+    "titleHtml": "Pelaajien<br>yhdistäminen",
+    "description": "Avaa Netflix Trivia -puhelinsovellus ja syötä visakoodisi liittyäksesi tietovisaan.",
+    "waitingPlayers": "Pelaajat näkyvät täällä liittyessään...",
+    "backToSetupAria": "Takaisin asetuksiin",
+    "startQuizButton": "ALOITA TIETOVISA",
+    "roomCodeAria": "Visakoodi",
+    "generatingRoomCodeAria": "Luodaan visakoodia",
+    "roomCodeReadyAria": "Visakoodi {code}"
+  },
+  "roundStart": {
+    "title": "Kierros"
+  },
+  "endOfRound": {
+    "endOf": "Loppu",
+    "round": "Kierros",
+    "overall": "Yhteensä"
+  },
+  "endOfQuiz": {
+    "title": "Peli päättyi",
+    "restartButton": "Käynnistä tietovisa uudelleen"
+  },
+  "common": {
+    "unknownCategory": "Tuntematon kategoria"
+  },
+  "alerts": {
+    "failedToCreateRoom": "Huoneen luominen ei onnistunut. Yritä uudelleen.",
+    "invalidCategorySelection": "Virheellinen kategoriavalinta. Yritä uudelleen.",
+    "selectAtLeastOneRound": "Valitse vähintään yksi kierros jostakin kategoriasta.",
+    "restartQuizError": "Tapahtui virhe. Käynnistä tietovisa uudelleen."
+  },
+  "images": {
+    "backgroundOverlay": "Taustan peitekuva",
+    "netflixLogo": "Netflix-logo",
+    "triviaLogo": "Trivia-logo",
+    "netflixTriviaLogo": "Netflix Trivia -logo",
+    "secondPlace": "2. sija",
+    "firstPlace": "1. sija",
+    "thirdPlace": "3. sija"
+  }
+}

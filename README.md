@@ -44,11 +44,12 @@ PORT=8080
 ```
 
 ## Game Master Internationalization
-The Game Master UI in [public/game-master.html](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/game-master.html) supports dependency-free translations loaded in the browser.
+The Game Master UI in [public/game-master.html](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/game-master.html) and the Player UI in [public/player.html](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/player.html) support dependency-free translations loaded in the browser.
 
 ### How It Works
 - Locale selection is driven by the `lang` query parameter.
 - English is the default fallback locale.
+- Current supported languages: English (`en`), German (`de`), and Finnish (`fi`).
 - Game Master locale files live in [public/lang/game-master/](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang/game-master/).
 - Game Master uses its own loader at [public/lang/game-master/lang.js](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang/game-master/lang.js).
 - Player uses a separate loader and separate locale files in [public/lang/player/](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang/player/).
@@ -58,14 +59,21 @@ Examples:
 - `http://localhost:8080/game-master.html`
 - `http://localhost:8080/game-master.html?lang=en`
 - `http://localhost:8080/game-master.html?lang=de`
+- `http://localhost:8080/game-master.html?lang=fi`
+- `http://localhost:8080/player.html`
+- `http://localhost:8080/player.html?lang=en`
+- `http://localhost:8080/player.html?lang=de`
+- `http://localhost:8080/player.html?lang=fi`
 
 ### Files
 - [public/lang/game-master/lang.js](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang/game-master/lang.js) - Game Master browser-side i18n loader
 - [public/lang/game-master/en.json](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang/game-master/en.json) - Game Master source/default locale
 - [public/lang/game-master/de.json](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang/game-master/de.json) - Game Master German locale
+- [public/lang/game-master/fi.json](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang/game-master/fi.json) - Game Master Finnish locale
 - [public/lang/player/lang.js](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang/player/lang.js) - Player browser-side i18n loader
 - [public/lang/player/en.json](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang/player/en.json) - Player source/default locale
 - [public/lang/player/de.json](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang/player/de.json) - Player German locale
+- [public/lang/player/fi.json](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/lang/player/fi.json) - Player Finnish locale
 
 ### Markup and Script Conventions
 - Use `data-i18n` for plain text nodes.
@@ -115,7 +123,7 @@ Both page-specific loaders expose the same API:
 - The two pages follow the same translation standards, but keep separate loaders and JSON files so their release and packaging paths stay decoupled.
 
 ### Important Scope Rule
-- Only the Game Master UI is translated right now.
+- Both the Game Master UI and the Player UI are translated right now.
 - Questions, answers, and other backend-provided trivia content are not translated.
 - Unknown backend category/subcategory names are shown as-is unless they match a known fixed category handled by `translateCategory()`.
 
