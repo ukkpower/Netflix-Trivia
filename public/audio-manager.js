@@ -1,6 +1,6 @@
 /**
  * AudioManager - Handles background music and sound effects
- * Supports fade transitions for music and independent sound effect playback
+ * Supports crossfaded music transitions and independent sound effect playback
  */
 class AudioManager {
     constructor(baseSoundPath = "") {
@@ -26,11 +26,14 @@ class AudioManager {
         // Settings
         this.settings = {
             fadeOutDuration: 1000, // milliseconds
-            fadeInDelay: 500 // milliseconds
+            fadeInDelay: 0 // milliseconds before the incoming track joins the crossfade
         };
         
-        // Fade interval tracking
-        this.fadeInterval = null;
+        // Music transition tracking
+        this.musicFadeIntervals = new Map();
+        this.musicAudioState = new Map();
+        this.musicStartTimeout = null;
+        this.musicTransitionToken = 0;
     }
     
     /**
@@ -127,71 +130,180 @@ class AudioManager {
             return index === 0 ? word.toLowerCase() : word.toUpperCase();
         }).replace(/\s+/g, '');
     }
+
+    /**
+     * Track a music audio instance so its volume can be updated during crossfades
+     */
+    _registerMusicAudio(audio, trackVolume, fadeMultiplier = 1) {
+        this.musicAudioState.set(audio, {
+            trackVolume: Math.max(0, Math.min(100, trackVolume)),
+            fadeMultiplier: Math.max(0, Math.min(1, fadeMultiplier))
+        });
+        this._applyMusicAudioVolume(audio);
+    }
+
+    /**
+     * Apply the effective volume to a tracked music audio instance
+     */
+    _applyMusicAudioVolume(audio) {
+        const state = this.musicAudioState.get(audio);
+        if (!state) return;
+
+        const effectiveVolume = this._getEffectiveVolume(state.trackVolume);
+        const targetVolume = this.musicMuted ? 0 : effectiveVolume;
+        audio.volume = targetVolume * state.fadeMultiplier;
+    }
+
+    /**
+     * Update all active music audio instances
+     */
+    _updateAllMusicVolumes() {
+        for (const audio of this.musicAudioState.keys()) {
+            this._applyMusicAudioVolume(audio);
+        }
+    }
+
+    /**
+     * Clear an active fade interval for a specific audio instance
+     */
+    _clearMusicFade(audio) {
+        const fadeInterval = this.musicFadeIntervals.get(audio);
+        if (fadeInterval) {
+            clearInterval(fadeInterval);
+            this.musicFadeIntervals.delete(audio);
+        }
+    }
+
+    /**
+     * Get the current fade multiplier for a tracked music instance
+     */
+    _getMusicFadeMultiplier(audio) {
+        return this.musicAudioState.get(audio)?.fadeMultiplier ?? 0;
+    }
+
+    /**
+     * Stop a music audio instance and remove all tracking for it
+     */
+    _stopAndCleanupMusicAudio(audio) {
+        if (!audio) return;
+
+        this._clearMusicFade(audio);
+        audio.pause();
+        audio.currentTime = 0;
+        this.musicAudioState.delete(audio);
+
+        if (this.currentMusic === audio) {
+            this.currentMusic = null;
+            this.currentMusicName = null;
+        }
+    }
+
+    /**
+     * Stop any non-current music instances left over from an interrupted crossfade
+     */
+    _stopInactiveMusicAudios() {
+        for (const audio of Array.from(this.musicAudioState.keys())) {
+            if (audio !== this.currentMusic) {
+                this._stopAndCleanupMusicAudio(audio);
+            }
+        }
+    }
+
+    /**
+     * Fade a tracked music instance between two multipliers
+     */
+    _fadeMusicAudio(audio, startMultiplier, endMultiplier, duration, onComplete = null) {
+        const state = this.musicAudioState.get(audio);
+        if (!state) return Promise.resolve();
+
+        this._clearMusicFade(audio);
+
+        const clampedStart = Math.max(0, Math.min(1, startMultiplier));
+        const clampedEnd = Math.max(0, Math.min(1, endMultiplier));
+        const fadeDuration = Math.max(0, duration);
+
+        state.fadeMultiplier = clampedStart;
+        this._applyMusicAudioVolume(audio);
+
+        if (fadeDuration === 0) {
+            state.fadeMultiplier = clampedEnd;
+            this._applyMusicAudioVolume(audio);
+            if (onComplete) onComplete();
+            return Promise.resolve();
+        }
+
+        return new Promise((resolve) => {
+            const startTime = Date.now();
+
+            const fadeInterval = setInterval(() => {
+                const currentState = this.musicAudioState.get(audio);
+                if (!currentState) {
+                    this.musicFadeIntervals.delete(audio);
+                    clearInterval(fadeInterval);
+                    resolve();
+                    return;
+                }
+
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / fadeDuration, 1);
+
+                currentState.fadeMultiplier = clampedStart + ((clampedEnd - clampedStart) * progress);
+                this._applyMusicAudioVolume(audio);
+
+                if (progress >= 1) {
+                    this.musicFadeIntervals.delete(audio);
+                    clearInterval(fadeInterval);
+                    if (onComplete) onComplete();
+                    resolve();
+                }
+            }, 16); // ~60fps updates
+
+            this.musicFadeIntervals.set(audio, fadeInterval);
+        });
+    }
     
     /**
      * Fade out current music
      */
-    _fadeOutMusic() {
-        if (!this.currentMusic) return Promise.resolve();
-        
-        return new Promise((resolve) => {
-            const startVolume = this.currentMusic.volume;
-            const startTime = Date.now();
-            const duration = this.settings.fadeOutDuration;
-            
-            // Clear any existing fade interval
-            if (this.fadeInterval) {
-                clearInterval(this.fadeInterval);
-            }
-            
-            this.fadeInterval = setInterval(() => {
-                const elapsed = Date.now() - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                
-                if (progress >= 1) {
-                    clearInterval(this.fadeInterval);
-                    this.fadeInterval = null;
-                    this.currentMusic.pause();
-                    this.currentMusic.currentTime = 0;
-                    this.currentMusic = null;
-                    this.currentMusicName = null;
-                    resolve();
-                } else {
-                    const newVolume = startVolume * (1 - progress);
-                    this.currentMusic.volume = newVolume;
+    _fadeOutMusic(audio = this.currentMusic) {
+        if (!audio || !this.musicAudioState.has(audio)) return Promise.resolve();
+
+        return this._fadeMusicAudio(
+            audio,
+            this._getMusicFadeMultiplier(audio),
+            0,
+            this.settings.fadeOutDuration,
+            () => {
+                if (this.currentMusic !== audio) {
+                    this._stopAndCleanupMusicAudio(audio);
                 }
-            }, 16); // ~60fps updates
-        });
+            }
+        );
     }
     
     /**
      * Fade in music
      */
     _fadeInMusic(audio, targetVolume) {
+        const state = this.musicAudioState.get(audio);
+        if (!state) return Promise.resolve();
+
+        const effectiveTargetVolume = Math.max(0, Math.min(1, targetVolume));
+        const effectiveVolume = this._getEffectiveVolume(state.trackVolume);
+        const targetMultiplier = effectiveVolume === 0 ? 0 : Math.min(effectiveTargetVolume / effectiveVolume, 1);
+
         return new Promise((resolve) => {
-            const startTime = Date.now();
-            const duration = this.settings.fadeOutDuration; // Use same duration for fade in
-            const startVolume = 0;
-            
-            audio.volume = startVolume;
-            audio.play().catch(err => {
+            audio.play().then(() => {
+                this._fadeMusicAudio(
+                    audio,
+                    this._getMusicFadeMultiplier(audio),
+                    targetMultiplier,
+                    this.settings.fadeOutDuration
+                ).then(resolve);
+            }).catch(err => {
                 console.error("Error playing music:", err);
                 resolve();
             });
-            
-            const fadeInterval = setInterval(() => {
-                const elapsed = Date.now() - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                
-                if (progress >= 1) {
-                    clearInterval(fadeInterval);
-                    audio.volume = targetVolume;
-                    resolve();
-                } else {
-                    const newVolume = startVolume + (targetVolume - startVolume) * progress;
-                    audio.volume = newVolume;
-                }
-            }, 16); // ~60fps updates
         });
     }
     
@@ -211,27 +323,61 @@ class AudioManager {
         if (this.currentMusicName === name && this.currentMusic && !this.currentMusic.paused) {
             return;
         }
-        
-        // Fade out current music
-        await this._fadeOutMusic();
-        
-        // Wait for fade in delay
-        await new Promise(resolve => setTimeout(resolve, this.settings.fadeInDelay));
-        
+
+        const outgoingMusic = this.currentMusic;
+        const transitionToken = ++this.musicTransitionToken;
+
+        if (this.musicStartTimeout) {
+            clearTimeout(this.musicStartTimeout);
+            this.musicStartTimeout = null;
+        }
+
+        this._stopInactiveMusicAudios();
+
+        if (outgoingMusic) {
+            this._clearMusicFade(outgoingMusic);
+        }
+
         // Create new Audio instance from the pre-loaded track
         const newAudio = new Audio(track.audio.src);
         newAudio.loop = this.musicLoop;
-        
+        this._registerMusicAudio(newAudio, track.volume, 0);
+
         // Calculate target volume
         const effectiveVolume = this._getEffectiveVolume(track.volume);
         const targetVolume = this.musicMuted ? 0 : effectiveVolume;
-        
+
         // Set current music
         this.currentMusic = newAudio;
         this.currentMusicName = name;
-        
-        // Fade in new music
-        await this._fadeInMusic(newAudio, targetVolume);
+
+        const fadeOutPromise = outgoingMusic
+            ? this._fadeOutMusic(outgoingMusic)
+            : Promise.resolve();
+
+        const fadeInPromise = new Promise((resolve) => {
+            const startFadeIn = async () => {
+                this.musicStartTimeout = null;
+
+                if (transitionToken !== this.musicTransitionToken) {
+                    this._stopAndCleanupMusicAudio(newAudio);
+                    resolve();
+                    return;
+                }
+
+                await this._fadeInMusic(newAudio, targetVolume);
+                resolve();
+            };
+
+            const fadeInDelay = Math.max(0, this.settings.fadeInDelay);
+            if (fadeInDelay > 0) {
+                this.musicStartTimeout = setTimeout(startFadeIn, fadeInDelay);
+            } else {
+                startFadeIn();
+            }
+        });
+
+        await Promise.all([fadeOutPromise, fadeInPromise]);
     }
     
     /**
@@ -246,16 +392,15 @@ class AudioManager {
      * Stop current music immediately
      */
     stopMusic() {
-        if (this.fadeInterval) {
-            clearInterval(this.fadeInterval);
-            this.fadeInterval = null;
+        this.musicTransitionToken += 1;
+
+        if (this.musicStartTimeout) {
+            clearTimeout(this.musicStartTimeout);
+            this.musicStartTimeout = null;
         }
-        
-        if (this.currentMusic) {
-            this.currentMusic.pause();
-            this.currentMusic.currentTime = 0;
-            this.currentMusic = null;
-            this.currentMusicName = null;
+
+        for (const audio of Array.from(this.musicAudioState.keys())) {
+            this._stopAndCleanupMusicAudio(audio);
         }
     }
     
@@ -264,20 +409,12 @@ class AudioManager {
      */
     muteMusic() {
         this.musicMuted = true;
-        if (this.currentMusic) {
-            this.currentMusic.volume = 0;
-        }
+        this._updateAllMusicVolumes();
     }
     
     unmuteMusic() {
         this.musicMuted = false;
-        if (this.currentMusic && this.currentMusicName) {
-            const track = this.musicTracks.get(this.currentMusicName);
-            if (track) {
-                const effectiveVolume = this._getEffectiveVolume(track.volume);
-                this.currentMusic.volume = effectiveVolume;
-            }
-        }
+        this._updateAllMusicVolumes();
     }
     
     /**
@@ -286,13 +423,7 @@ class AudioManager {
      */
     setMusicVolume(volume) {
         this.musicVolume = Math.max(0, Math.min(100, volume));
-        if (this.currentMusic && this.currentMusicName) {
-            const track = this.musicTracks.get(this.currentMusicName);
-            if (track) {
-                const effectiveVolume = this._getEffectiveVolume(track.volume);
-                this.currentMusic.volume = this.musicMuted ? 0 : effectiveVolume;
-            }
-        }
+        this._updateAllMusicVolumes();
     }
     
     /**
@@ -301,8 +432,8 @@ class AudioManager {
      */
     setMusicLoop(loop) {
         this.musicLoop = loop;
-        if (this.currentMusic) {
-            this.currentMusic.loop = loop;
+        for (const audio of this.musicAudioState.keys()) {
+            audio.loop = loop;
         }
     }
     
@@ -356,15 +487,7 @@ class AudioManager {
      */
     setMasterVolume(volume) {
         this.masterVolume = Math.max(0, Math.min(100, volume));
-        
-        // Update currently playing music volume
-        if (this.currentMusic && this.currentMusicName) {
-            const track = this.musicTracks.get(this.currentMusicName);
-            if (track) {
-                const effectiveVolume = this._getEffectiveVolume(track.volume);
-                this.currentMusic.volume = this.musicMuted ? 0 : effectiveVolume;
-            }
-        }
+        this._updateAllMusicVolumes();
     }
     
     /**
@@ -372,9 +495,7 @@ class AudioManager {
      */
     muteAll() {
         this.masterMuted = true;
-        if (this.currentMusic) {
-            this.currentMusic.volume = 0;
-        }
+        this._updateAllMusicVolumes();
     }
     
     /**
@@ -382,13 +503,6 @@ class AudioManager {
      */
     unmuteAll() {
         this.masterMuted = false;
-        if (this.currentMusic && this.currentMusicName) {
-            const track = this.musicTracks.get(this.currentMusicName);
-            if (track) {
-                const effectiveVolume = this._getEffectiveVolume(track.volume);
-                this.currentMusic.volume = this.musicMuted ? 0 : effectiveVolume;
-            }
-        }
+        this._updateAllMusicVolumes();
     }
 }
-
