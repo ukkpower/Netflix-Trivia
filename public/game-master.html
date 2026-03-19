@@ -55,6 +55,8 @@
             <div class="box" style="background-image: url('imgs/categories/decades.png');" data-category="Decades" data-description="Identify key moments from different decades in history." data-i18n-data-description="categories.decades.description"><span class="box-label" data-i18n="categories.decades.label">Decades</span></div>
             <div class="box" style="background-image: url('imgs/categories/politics.png');" data-category="Politics" data-description="Learn about global leaders, policies, and historic political events." data-i18n-data-description="categories.politics.description"><span class="box-label" data-i18n="categories.politics.label">Politics</span></div>
             <div class="box" style="background-image: url('imgs/categories/mythology.png');" data-category="Mythology" data-description="Unravel the stories of gods, legends, and ancient myths." data-i18n-data-description="categories.mythology.description"><span class="box-label" data-i18n="categories.mythology.label">Mythology</span></div>
+            <label class="cat-scroll scroll-left"></label>
+            <label class="cat-scroll scroll-right"></label>
         </div>
     </div>
   </div>
@@ -582,6 +584,8 @@
     let playerJoinIndex = 0;
     const startQuizButton = document.getElementById("startQuizButton");
     const backToSetupButton = document.getElementById("backToSetupButton");
+    const categoryGrid = setupPanel.querySelector(".grid");
+    const categoryScrollControls = categoryGrid?.querySelectorAll(".cat-scroll") ?? [];
     const questionsPanel = document.getElementById("questionsPanel");
     const questionDisplay = document.getElementById("questionDisplay");
     const questionTimer = document.getElementById("questionTimer");
@@ -673,6 +677,42 @@
     let questionRevealScheduled = false;
     let setupPanelAssetsPreloadPromise = null;
     let hasCompletedWelcomeToSetupTransition = false;
+    let scrollRightPositionFrameId = null;
+
+    function syncScrollRightPosition() {
+      if (!categoryGrid || categoryScrollControls.length === 0 || !setupPanel.classList.contains("active")) {
+        return;
+      }
+
+      const gridRect = categoryGrid.getBoundingClientRect();
+      if (gridRect.height === 0) {
+        return;
+      }
+
+      const gridMidpoint = `${gridRect.top + gridRect.height / 2}px`;
+      categoryScrollControls.forEach((control) => {
+        control.style.top = gridMidpoint;
+      });
+    }
+
+    function queueScrollRightPositionSync() {
+      if (scrollRightPositionFrameId !== null) {
+        cancelAnimationFrame(scrollRightPositionFrameId);
+      }
+
+      scrollRightPositionFrameId = requestAnimationFrame(() => {
+        scrollRightPositionFrameId = null;
+        syncScrollRightPosition();
+      });
+    }
+
+    if (typeof ResizeObserver === "function" && categoryGrid) {
+      new ResizeObserver(() => {
+        queueScrollRightPositionSync();
+      }).observe(categoryGrid);
+    }
+
+    window.addEventListener("resize", queueScrollRightPositionSync);
 
     function clearEndQuizConfetti() {
       if (endQuizConfettiTimeoutId) {
@@ -1249,6 +1289,7 @@
       hasCompletedWelcomeToSetupTransition = true;
       document.body.classList.add("welcome-to-setup-transition");
       setupPanel.classList.add("active");
+      queueScrollRightPositionSync();
       welcomePanel.classList.add("welcome-panel-fade-out");
 
       let didFinish = false;
@@ -1299,6 +1340,9 @@
     function showPanel(panel) {
       document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
       panel.classList.add("active");
+      if (panel === setupPanel) {
+        queueScrollRightPositionSync();
+      }
       if (panel !== endOfQuizPanel) {
         clearEndQuizConfetti();
       }
@@ -1333,6 +1377,7 @@
             updateRangeSlider(1);
             preloadModalBackgroundImages();
             resetRoomIdDisplay();
+            queueScrollRightPositionSync();
         });
     });
 
