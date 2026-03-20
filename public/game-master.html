@@ -47,14 +47,22 @@
       </div>        
         <!-- Category Grid -->
         <div class="grid">
-            <div class="box" style="background-image: url('imgs/categories/sports.png');" data-category="Sports" data-description="Test your knowledge of various sports, teams, and legendary athletes." data-i18n-data-description="categories.sports.description"><span class="box-label" data-i18n="categories.sports.label">Sports</span></div>
-            <div class="box" style="background-image: url('imgs/categories/entertainment.png');" data-category="Entertainment" data-description="Dive into the world of movies, music, and pop culture." data-i18n-data-description="categories.entertainment.description"><span class="box-label" data-i18n="categories.entertainment.label">Entertainment</span></div>
-            <div class="box" style="background-image: url('imgs/categories/history.png');" data-category="History" data-description="Explore historical events and figures from around the world." data-i18n-data-description="categories.history.description"><span class="box-label" data-i18n="categories.history.label">History</span></div>
-            <div class="box" style="background-image: url('imgs/categories/science.png');" data-category="Science" data-description="Discover scientific breakthroughs, famous scientists, and natural wonders." data-i18n-data-description="categories.science.description"><span class="box-label" data-i18n="categories.science.label">Science</span></div>
-            <div class="box" style="background-image: url('imgs/categories/geography.png');" data-category="Geography" data-description="Test your knowledge of countries, capitals, landmarks, and world geography." data-i18n-data-description="categories.geography.description"><span class="box-label" data-i18n="categories.geography.label">Geography</span></div>
-            <div class="box" style="background-image: url('imgs/categories/decades.png');" data-category="Decades" data-description="Identify key moments from different decades in history." data-i18n-data-description="categories.decades.description"><span class="box-label" data-i18n="categories.decades.label">Decades</span></div>
-            <div class="box" style="background-image: url('imgs/categories/politics.png');" data-category="Politics" data-description="Learn about global leaders, policies, and historic political events." data-i18n-data-description="categories.politics.description"><span class="box-label" data-i18n="categories.politics.label">Politics</span></div>
-            <div class="box" style="background-image: url('imgs/categories/mythology.png');" data-category="Mythology" data-description="Unravel the stories of gods, legends, and ancient myths." data-i18n-data-description="categories.mythology.description"><span class="box-label" data-i18n="categories.mythology.label">Mythology</span></div>
+            <div class="grid-viewport">
+                <div class="grid-track">
+                    <div class="box" style="background-image: url('imgs/categories/sports.png');" data-category="Sports" data-image="imgs/categories/sports.png" data-description="Test your knowledge of various sports, teams, and legendary athletes." data-i18n-data-description="categories.sports.description"><span class="box-label" data-i18n="categories.sports.label">Sports</span></div>
+                    <div class="box" style="background-image: url('imgs/categories/entertainment.png');" data-category="Entertainment" data-image="imgs/categories/entertainment.png" data-description="Dive into the world of movies, music, and pop culture." data-i18n-data-description="categories.entertainment.description"><span class="box-label" data-i18n="categories.entertainment.label">Entertainment</span></div>
+                    <div class="box" style="background-image: url('imgs/categories/history.png');" data-category="History" data-image="imgs/categories/history.png" data-description="Explore historical events and figures from around the world." data-i18n-data-description="categories.history.description"><span class="box-label" data-i18n="categories.history.label">History</span></div>
+                    <div class="box" style="background-image: url('imgs/categories/science.png');" data-category="Science" data-image="imgs/categories/science.png" data-description="Discover scientific breakthroughs, famous scientists, and natural wonders." data-i18n-data-description="categories.science.description"><span class="box-label" data-i18n="categories.science.label">Science</span></div>
+                    <div class="box" style="background-image: url('imgs/categories/geography.png');" data-category="Geography" data-image="imgs/categories/geography.png" data-description="Test your knowledge of countries, capitals, landmarks, and world geography." data-i18n-data-description="categories.geography.description"><span class="box-label" data-i18n="categories.geography.label">Geography</span></div>
+                    <div class="box" style="background-image: url('imgs/categories/decades.png');" data-category="Decades" data-image="imgs/categories/decades.png" data-description="Identify key moments from different decades in history." data-i18n-data-description="categories.decades.description"><span class="box-label" data-i18n="categories.decades.label">Decades</span></div>
+                    <div class="box" style="background-image: url('imgs/categories/politics.png');" data-category="Politics" data-image="imgs/categories/politics.png" data-description="Learn about global leaders, policies, and historic political events." data-i18n-data-description="categories.politics.description"><span class="box-label" data-i18n="categories.politics.label">Politics</span></div>
+                    <div class="box" style="background-image: url('imgs/categories/mythology.png');" data-category="Mythology" data-image="imgs/categories/mythology.png" data-description="Unravel the stories of gods, legends, and ancient myths." data-i18n-data-description="categories.mythology.description"><span class="box-label" data-i18n="categories.mythology.label">Mythology</span></div>
+                    <div class="box" style="background-image: url('imgs/categories/geography.png');" data-category="Kids" data-image="imgs/categories/geography.png" data-description="Temporary category for carousel testing with family-friendly trivia."><span class="box-label">Kids</span></div>
+                    <div class="box" style="background-image: url('imgs/categories/science.png');" data-category="Technoloy" data-image="imgs/categories/science.png" data-description="Temporary category for carousel testing with technology-themed trivia."><span class="box-label">Technoloy</span></div>
+                    <div class="box" style="background-image: url('imgs/categories/entertainment.png');" data-category="Stranger Things" data-image="imgs/categories/entertainment.png" data-description="Temporary category for carousel testing with Stranger Things trivia."><span class="box-label">Stranger Things</span></div>
+                    <div class="box" style="background-image: url('imgs/categories/history.png');" data-category="Gues Who" data-image="imgs/categories/history.png" data-description="Temporary category for carousel testing with guess-who style trivia."><span class="box-label">Gues Who</span></div>
+                </div>
+            </div>
             <label class="cat-scroll scroll-left"></label>
             <label class="cat-scroll scroll-right"></label>
         </div>
@@ -585,7 +593,11 @@
     const startQuizButton = document.getElementById("startQuizButton");
     const backToSetupButton = document.getElementById("backToSetupButton");
     const categoryGrid = setupPanel.querySelector(".grid");
+    const categoryGridViewport = categoryGrid?.querySelector(".grid-viewport");
+    const categoryGridTrack = categoryGrid?.querySelector(".grid-track");
     const categoryScrollControls = categoryGrid?.querySelectorAll(".cat-scroll") ?? [];
+    const categoryScrollLeftButton = categoryGrid?.querySelector(".scroll-left");
+    const categoryScrollRightButton = categoryGrid?.querySelector(".scroll-right");
     const questionsPanel = document.getElementById("questionsPanel");
     const questionDisplay = document.getElementById("questionDisplay");
     const questionTimer = document.getElementById("questionTimer");
@@ -662,6 +674,8 @@
     const QUESTION_END_TRACK = "questionEnd";
     const PLAYER_APP_BASE_URL = "https://netflix-trivia.onrender.com/player.html";
     const PLAYER_QR_SIZE = "150x150";
+    const CATEGORY_GRID_VISIBLE_COLUMNS = 4;
+    const CATEGORY_GRID_ROWS = 2;
     let endQuizConfettiTimeoutId = null;
     let endQuizConfettiCleanupId = null;
     let endOfRoundTransitionTimeoutId = null;
@@ -678,6 +692,7 @@
     let setupPanelAssetsPreloadPromise = null;
     let hasCompletedWelcomeToSetupTransition = false;
     let scrollRightPositionFrameId = null;
+    let categoryGridScrollIndex = 0;
 
     function syncScrollRightPosition() {
       if (!categoryGrid || categoryScrollControls.length === 0 || !setupPanel.classList.contains("active")) {
@@ -706,13 +721,103 @@
       });
     }
 
+    function getCategoryGridBoxWidth() {
+      const firstBox = categoryGridTrack?.querySelector(".box");
+      if (!firstBox) {
+        return 0;
+      }
+
+      return firstBox.getBoundingClientRect().width;
+    }
+
+    function getCategoryGridGap() {
+      if (!categoryGridTrack) {
+        return 0;
+      }
+
+      const computedTrackStyle = window.getComputedStyle(categoryGridTrack);
+      return parseFloat(computedTrackStyle.columnGap || computedTrackStyle.gap || "0") || 0;
+    }
+
+    function getCategoryGridColumnCount() {
+      if (!categoryGridTrack) {
+        return 0;
+      }
+
+      const boxCount = categoryGridTrack.querySelectorAll(".box").length;
+      return Math.ceil(boxCount / CATEGORY_GRID_ROWS);
+    }
+
+    function getCategoryGridMaxScrollIndex() {
+      return Math.max(0, getCategoryGridColumnCount() - CATEGORY_GRID_VISIBLE_COLUMNS);
+    }
+
+    function updateCategoryGridScrollControlState() {
+      const maxScrollIndex = getCategoryGridMaxScrollIndex();
+      const isAtStart = categoryGridScrollIndex <= 0;
+      const isAtEnd = categoryGridScrollIndex >= maxScrollIndex;
+
+      if (categoryScrollLeftButton) {
+        categoryScrollLeftButton.classList.toggle("is-disabled", isAtStart);
+        categoryScrollLeftButton.setAttribute("aria-disabled", isAtStart ? "true" : "false");
+      }
+
+      if (categoryScrollRightButton) {
+        categoryScrollRightButton.classList.toggle("is-disabled", isAtEnd);
+        categoryScrollRightButton.setAttribute("aria-disabled", isAtEnd ? "true" : "false");
+      }
+    }
+
+    function updateCategoryGridPosition({ immediate = false } = {}) {
+      if (!categoryGridTrack || !categoryGridViewport || !setupPanel.classList.contains("active")) {
+        return;
+      }
+
+      const maxScrollIndex = getCategoryGridMaxScrollIndex();
+      categoryGridScrollIndex = Math.min(categoryGridScrollIndex, maxScrollIndex);
+
+      const boxWidth = getCategoryGridBoxWidth();
+      const gap = getCategoryGridGap();
+      const offset = (boxWidth + gap) * categoryGridScrollIndex;
+
+      categoryGridTrack.style.transition = immediate ? "none" : "transform 0.3s ease-in-out";
+      categoryGridTrack.style.transform = `translateX(${-offset}px)`;
+
+      requestAnimationFrame(() => {
+        if (categoryGridTrack) {
+          categoryGridTrack.style.transition = "transform 0.3s ease-in-out";
+        }
+      });
+
+      updateCategoryGridScrollControlState();
+    }
+
+    function moveCategoryGrid(direction) {
+      const maxScrollIndex = getCategoryGridMaxScrollIndex();
+      const nextScrollIndex = Math.min(
+        maxScrollIndex,
+        Math.max(0, categoryGridScrollIndex + direction)
+      );
+
+      if (nextScrollIndex === categoryGridScrollIndex) {
+        return;
+      }
+
+      categoryGridScrollIndex = nextScrollIndex;
+      updateCategoryGridPosition();
+    }
+
     if (typeof ResizeObserver === "function" && categoryGrid) {
       new ResizeObserver(() => {
         queueScrollRightPositionSync();
+        updateCategoryGridPosition({ immediate: true });
       }).observe(categoryGrid);
     }
 
-    window.addEventListener("resize", queueScrollRightPositionSync);
+    window.addEventListener("resize", () => {
+      queueScrollRightPositionSync();
+      updateCategoryGridPosition({ immediate: true });
+    });
 
     function clearEndQuizConfetti() {
       if (endQuizConfettiTimeoutId) {
@@ -1320,8 +1425,11 @@
     function preloadModalBackgroundImages() {
       const urls = new Set(["imgs/netflix-logo-bg.png"]);
       document.querySelectorAll(".grid .box").forEach((box) => {
+        const imagePath = box.getAttribute("data-image");
         const category = box.getAttribute("data-category");
-        if (category) {
+        if (imagePath) {
+          urls.add(imagePath);
+        } else if (category) {
           urls.add(`imgs/categories/${category.toLowerCase()}.png`);
         }
       });
@@ -1342,6 +1450,7 @@
       panel.classList.add("active");
       if (panel === setupPanel) {
         queueScrollRightPositionSync();
+        updateCategoryGridPosition({ immediate: true });
       }
       if (panel !== endOfQuizPanel) {
         clearEndQuizConfetti();
@@ -1567,15 +1676,15 @@
     }
 
     // Open modal with selected category
-    function openModal(category, description, hasImage = true) {
+    function openModal(category, description, hasImage = true, imagePath = null) {
         selectedCategory = category;
         modalTitle.textContent = translateCategoryForDisplay(category);
         modalDescription.textContent = description;
         
         // Set the category image as background (or clear it)
         if (hasImage) {
-            const imageName = category.toLowerCase();
-            modalContent.style.setProperty("--modal-bg-image", `url('imgs/categories/${imageName}.png')`);
+            const modalImagePath = imagePath || `imgs/categories/${category.toLowerCase()}.png`;
+            modalContent.style.setProperty("--modal-bg-image", `url('${modalImagePath}')`);
         } else {
             modalContent.style.setProperty("--modal-bg-image", "none");
         }
@@ -1622,8 +1731,23 @@
             }
             const category = box.getAttribute('data-category');
             const description = box.getAttribute('data-description');
-            openModal(category, description);
+            const imagePath = box.getAttribute('data-image');
+            openModal(category, description, true, imagePath);
         });
+    });
+
+    categoryScrollLeftButton?.addEventListener("click", () => {
+        if (audioManager) {
+            audioManager.playSoundFX("buttonClick");
+        }
+        moveCategoryGrid(-1);
+    });
+
+    categoryScrollRightButton?.addEventListener("click", () => {
+        if (audioManager) {
+            audioManager.playSoundFX("buttonClick");
+        }
+        moveCategoryGrid(1);
     });
 
     // Handle difficulty card selection
