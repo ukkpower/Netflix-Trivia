@@ -800,11 +800,12 @@
       );
 
       if (nextScrollIndex === categoryGridScrollIndex) {
-        return;
+        return false;
       }
 
       categoryGridScrollIndex = nextScrollIndex;
       updateCategoryGridPosition();
+      return true;
     }
 
     if (typeof ResizeObserver === "function" && categoryGrid) {
@@ -1737,17 +1738,15 @@
     });
 
     categoryScrollLeftButton?.addEventListener("click", () => {
-        if (audioManager) {
+        if (moveCategoryGrid(-1) && audioManager) {
             audioManager.playSoundFX("buttonClick");
         }
-        moveCategoryGrid(-1);
     });
 
     categoryScrollRightButton?.addEventListener("click", () => {
-        if (audioManager) {
+        if (moveCategoryGrid(1) && audioManager) {
             audioManager.playSoundFX("buttonClick");
         }
-        moveCategoryGrid(1);
     });
 
     // Handle difficulty card selection
