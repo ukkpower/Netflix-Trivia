@@ -52,6 +52,14 @@
     "mythology": {
       "label": "Mythologie",
       "description": "Lüfte die Geschichten von Göttern, Legenden und antiken Mythen."
+    },
+    "kids": {
+      "label": "Kinder",
+      "description": "Familienfreundliche Trivia mit Zeichentrick-Abenteuern, bunten Figuren und spielerischem Spaß."
+    },
+    "strangerThings": {
+      "label": "Stranger Things",
+      "description": "Reise nach Hawkins für Fragen zum Upside Down, unvergesslichen Figuren und ikonischen Momenten der Serie."
     }
   },
   "modals": {

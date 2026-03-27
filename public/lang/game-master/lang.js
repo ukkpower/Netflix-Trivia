@@ -9,7 +9,9 @@
     Geography: "geography",
     Decades: "decades",
     Politics: "politics",
-    Mythology: "mythology"
+    Mythology: "mythology",
+    Kids: "kids",
+    "Stranger Things": "strangerThings"
   };
   const loaderScriptUrl = document.currentScript?.src
     ? new URL(document.currentScript.src, window.location.href)

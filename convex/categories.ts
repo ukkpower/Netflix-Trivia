@@ -179,6 +179,36 @@ const SEED: SeedCategory[] = [
       { name: "People & Places", order: 9, enabled: true },
       { name: "Guess the Place", order: 10, enabled: true }
     ]
+  },
+  {
+    name: "Kids",
+    order: 9,
+    enabled: true,
+    image: "imgs/categories/kids.png",
+    description: "Family-friendly trivia featuring animated favorites, adventure stories, and playful characters.",
+    subcategories: [
+      { name: "Animated Movies", order: 1, enabled: true },
+      { name: "Cartoon Characters", order: 2, enabled: true },
+      { name: "Fairy Tales", order: 3, enabled: true },
+      { name: "Disney & Pixar", order: 4, enabled: true },
+      { name: "Kids TV Shows", order: 5, enabled: true },
+      { name: "Animals & Nature", order: 6, enabled: true }
+    ]
+  },
+  {
+    name: "Stranger Things",
+    order: 10,
+    enabled: true,
+    image: "imgs/categories/stranger-things.png",
+    description: "Questions from Hawkins, the Upside Down, and the characters of Stranger Things.",
+    subcategories: [
+      { name: "Characters", order: 1, enabled: true },
+      { name: "Hawkins", order: 2, enabled: true },
+      { name: "The Upside Down", order: 3, enabled: true },
+      { name: "Monsters & Villains", order: 4, enabled: true },
+      { name: "Episodes & Plot", order: 5, enabled: true },
+      { name: "Cast & Behind the Scenes", order: 6, enabled: true }
+    ]
   }
 ];
 

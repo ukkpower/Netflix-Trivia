@@ -52,6 +52,14 @@
     "mythology": {
       "label": "Mythology",
       "description": "Unravel the stories of gods, legends, and ancient myths."
+    },
+    "kids": {
+      "label": "Kids",
+      "description": "Enjoy family-friendly trivia packed with animated adventures, colorful characters, and playful fun."
+    },
+    "strangerThings": {
+      "label": "Stranger Things",
+      "description": "Head to Hawkins for trivia about the Upside Down, unforgettable characters, and iconic moments from the series."
     }
   },
   "modals": {

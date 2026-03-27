@@ -52,6 +52,14 @@
     "mythology": {
       "label": "Mytologia",
       "description": "Selvitä jumalien, legendojen ja muinaisten myyttien tarinoita."
+    },
+    "kids": {
+      "label": "Lapset",
+      "description": "Perheystavällinen tietovisa täynnä animaatioseikkailuja, värikkäitä hahmoja ja leikkisää iloa."
+    },
+    "strangerThings": {
+      "label": "Stranger Things",
+      "description": "Matkaa Hawkinsiin vastaamaan kysymyksiin Upside Downista, unohtumattomista hahmoista ja sarjan ikonisista hetkistä."
     }
   },
   "modals": {
