@@ -468,8 +468,6 @@ const generateRound = async (currentRoundIndex, rounds, mode, questionsPerRound,
         throw new Error(`Invalid answerIndex for question: ${questionData._id}`);
       }
 
-      shuffleArray(options);
-
       formattedQuestions[index + 1] = {
         question: questionData.question,
         correct_answer: correctAnswer,

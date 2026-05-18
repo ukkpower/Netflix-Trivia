@@ -49,6 +49,8 @@
         <div class="grid">
             <div class="grid-viewport">
                 <div class="grid-track">
+                    <div class="box" style="background-image: url('imgs/categories/bridgerton.png');" data-category="Bridgerton" data-image="imgs/categories/bridgerton.png" data-description="Step into Regency-era London with trivia about the Bridgerton families, romances, scandals, and society." data-i18n-data-description="categories.bridgerton.description"><span class="box-label" data-i18n="categories.bridgerton.label">Bridgerton</span></div>
+                    <div class="box" style="background-image: url('imgs/categories/stranger-things.png');" data-category="Stranger Things" data-image="imgs/categories/stranger-things.png" data-description="Head to Hawkins for trivia about the Upside Down, unforgettable characters, and iconic moments from the series." data-i18n-data-description="categories.strangerThings.description"><span class="box-label" data-i18n="categories.strangerThings.label">Stranger Things</span></div>
                     <div class="box" style="background-image: url('imgs/categories/sports.png');" data-category="Sports" data-image="imgs/categories/sports.png" data-description="Test your knowledge of various sports, teams, and legendary athletes." data-i18n-data-description="categories.sports.description"><span class="box-label" data-i18n="categories.sports.label">Sports</span></div>
                     <div class="box" style="background-image: url('imgs/categories/entertainment.png');" data-category="Entertainment" data-image="imgs/categories/entertainment.png" data-description="Dive into the world of movies, music, and pop culture." data-i18n-data-description="categories.entertainment.description"><span class="box-label" data-i18n="categories.entertainment.label">Entertainment</span></div>
                     <div class="box" style="background-image: url('imgs/categories/history.png');" data-category="History" data-image="imgs/categories/history.png" data-description="Explore historical events and figures from around the world." data-i18n-data-description="categories.history.description"><span class="box-label" data-i18n="categories.history.label">History</span></div>
@@ -58,7 +60,6 @@
                     <div class="box" style="background-image: url('imgs/categories/politics.png');" data-category="Politics" data-image="imgs/categories/politics.png" data-description="Learn about global leaders, policies, and historic political events." data-i18n-data-description="categories.politics.description"><span class="box-label" data-i18n="categories.politics.label">Politics</span></div>
                     <div class="box" style="background-image: url('imgs/categories/mythology.png');" data-category="Mythology" data-image="imgs/categories/mythology.png" data-description="Unravel the stories of gods, legends, and ancient myths." data-i18n-data-description="categories.mythology.description"><span class="box-label" data-i18n="categories.mythology.label">Mythology</span></div>
                     <div class="box" style="background-image: url('imgs/categories/kids.png');" data-category="Kids" data-image="imgs/categories/kids.png" data-description="Enjoy family-friendly trivia packed with animated adventures, colorful characters, and playful fun." data-i18n-data-description="categories.kids.description"><span class="box-label" data-i18n="categories.kids.label">Kids</span></div>
-                    <div class="box" style="background-image: url('imgs/categories/stranger-things.png');" data-category="Stranger Things" data-image="imgs/categories/stranger-things.png" data-description="Head to Hawkins for trivia about the Upside Down, unforgettable characters, and iconic moments from the series." data-i18n-data-description="categories.strangerThings.description"><span class="box-label" data-i18n="categories.strangerThings.label">Stranger Things</span></div>
                 </div>
             </div>
             <label class="cat-scroll scroll-left"></label>
@@ -186,6 +187,22 @@
                     <section class="custom-step-panel is-active" data-step="0">
                         <p class="difficulty-label custom-step-label" data-i18n="modals.customQuiz.roundsPerCategory">Select rounds per category:</p>
                         <div class="category-list">
+                            <div class="category-row" data-category="Bridgerton">
+                                <span class="category-name" data-i18n="categories.bridgerton.label">Bridgerton</span>
+                                <div class="round-stepper">
+                                    <button type="button" class="stepper-btn stepper-minus" disabled>−</button>
+                                    <span class="stepper-value">0</span>
+                                    <button type="button" class="stepper-btn stepper-plus">+</button>
+                                </div>
+                            </div>
+                            <div class="category-row" data-category="Stranger Things">
+                                <span class="category-name" data-i18n="categories.strangerThings.label">Stranger Things</span>
+                                <div class="round-stepper">
+                                    <button type="button" class="stepper-btn stepper-minus" disabled>−</button>
+                                    <span class="stepper-value">0</span>
+                                    <button type="button" class="stepper-btn stepper-plus">+</button>
+                                </div>
+                            </div>
                             <div class="category-row" data-category="Sports">
                                 <span class="category-name" data-i18n="categories.sports.label">Sports</span>
                                 <div class="round-stepper">
@@ -252,14 +269,6 @@
                             </div>
                             <div class="category-row" data-category="Kids">
                                 <span class="category-name" data-i18n="categories.kids.label">Kids</span>
-                                <div class="round-stepper">
-                                    <button type="button" class="stepper-btn stepper-minus" disabled>−</button>
-                                    <span class="stepper-value">0</span>
-                                    <button type="button" class="stepper-btn stepper-plus">+</button>
-                                </div>
-                            </div>
-                            <div class="category-row" data-category="Stranger Things">
-                                <span class="category-name" data-i18n="categories.strangerThings.label">Stranger Things</span>
                                 <div class="round-stepper">
                                     <button type="button" class="stepper-btn stepper-minus" disabled>−</button>
                                     <span class="stepper-value">0</span>
@@ -514,7 +523,12 @@
       }
 
       try {
-        await audioManager.loadMusic(QUESTION_COUNTDOWN_TRACK, "countdown_clip.mp3", 75);
+        await audioManager.loadMusic(QUESTION_COUNTDOWN_TRACK, "countdown_clip.mp3", 75, {
+          loop: true,
+          // Trim the MP3 priming/remainder frames so the loop lands on valid audio.
+          trimStart: 576 / 44100,
+          trimEnd: 1127 / 44100
+        });
         console.log("Question countdown music loaded");
       } catch (error) {
         console.error("Failed to load question countdown music:", error);
@@ -686,6 +700,8 @@
     const END_OF_ROUND_NEXT_PANEL_DELAY_MS = 6000;
     const QUESTION_COUNTDOWN_TRACK = "questionCountdown";
     const QUESTION_END_TRACK = "questionEnd";
+    const QUESTION_SPEECH_BASE_PATH = "/audio/questions/speech";
+    const QUESTION_SPEECH_DUCK_MULTIPLIER = 0.5;
     const PLAYER_APP_BASE_URL = "https://netflix-trivia.onrender.com/player.html";
     const PLAYER_QR_SIZE = "150x150";
     const CATEGORY_GRID_VISIBLE_COLUMNS = 4;
@@ -931,9 +947,56 @@
     function resetQuestionResolutionState() {
       clearQuestionTimer();
       clearQuestionAdvanceTimeout();
+      stopQuestionSpeech();
       questionCloseInFlight = false;
       currentQuestionClosed = false;
       questionRevealScheduled = false;
+    }
+
+    function getQuestionSpeechUrl(questionData) {
+      const explicitUrl =
+        typeof questionData?.speechUrl === "string" ? questionData.speechUrl.trim() : "";
+
+      if (explicitUrl) {
+        if (/^(?:[a-z]+:)?\/\//i.test(explicitUrl) || explicitUrl.startsWith("/") || explicitUrl.startsWith("data:") || explicitUrl.startsWith("blob:")) {
+          return explicitUrl;
+        }
+
+        if (explicitUrl.startsWith("audio/")) {
+          return `/${explicitUrl}`;
+        }
+
+        return explicitUrl;
+      }
+
+      const questionId = typeof questionData?.id === "string" ? questionData.id.trim() : "";
+      return questionId ? `${QUESTION_SPEECH_BASE_PATH}/${encodeURIComponent(questionId)}.wav` : null;
+    }
+
+    function playQuestionSpeech(questionData) {
+      if (!audioManager) {
+        return;
+      }
+
+      const speechUrl = getQuestionSpeechUrl(questionData);
+      if (!speechUrl) {
+        return;
+      }
+
+      audioManager.playSpeech(speechUrl, {
+        duckMusic: true,
+        duckMultiplier: QUESTION_SPEECH_DUCK_MULTIPLIER
+      }).catch((error) => {
+        console.error("Failed to play question speech:", error);
+      });
+    }
+
+    function stopQuestionSpeech() {
+      if (!audioManager) {
+        return;
+      }
+
+      audioManager.stopSpeech();
     }
 
     function playQuestionCountdownMusic() {
@@ -951,6 +1014,7 @@
         return;
       }
 
+      audioManager.stopSpeech();
       audioManager.swapMusic(QUESTION_END_TRACK, { loop: false }).catch((error) => {
         console.error("Failed to play question end music:", error);
       });
@@ -961,6 +1025,7 @@
         return;
       }
 
+      audioManager.stopSpeech();
       audioManager.stopMusic();
     }
 
@@ -1019,6 +1084,7 @@
 
       questionCloseInFlight = true;
       clearQuestionTimer();
+      stopQuestionSpeech();
 
       socket.emit("quiz:closeQuestion", {
         roomId,
@@ -2314,6 +2380,7 @@
         });
 
         playQuestionCountdownMusic();
+        playQuestionSpeech(questionData);
         startQuestionTimer(room, questionIndex);
     }
 

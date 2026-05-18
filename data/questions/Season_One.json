@@ -1,0 +1,169 @@
+[
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_One",
+    "difficulty": "easy",
+    "general": true,
+    "question": "Which boy goes missing at the start of Season One?",
+    "options": ["Mike", "Lucas", "Will", "Dustin"],
+    "answerIndex": 2,
+    "explanation": "Will Byers disappears in the first episode, setting the story in motion.",
+    "tags": ["season 1", "plot"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_One",
+    "difficulty": "easy",
+    "general": true,
+    "question": "What is the name of the mysterious girl with powers?",
+    "options": ["Max", "Eleven", "Nancy", "Robin"],
+    "answerIndex": 1,
+    "explanation": "Eleven, often called 'El', has telekinetic and psychic abilities.",
+    "tags": ["season 1", "characters"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_One",
+    "difficulty": "easy",
+    "general": true,
+    "question": "What creature abducts Will?",
+    "options": ["Mind Flayer", "Demogorgon", "Vecna", "Shadow Monster"],
+    "answerIndex": 1,
+    "explanation": "The Demogorgon is the main monster in Season One.",
+    "tags": ["season 1", "creatures"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_One",
+    "difficulty": "easy",
+    "general": true,
+    "question": "Which town is the series set in?",
+    "options": ["Springfield", "Hawkins", "Sunnydale", "Riverdale"],
+    "answerIndex": 1,
+    "explanation": "The story takes place in Hawkins, Indiana.",
+    "tags": ["season 1", "setting"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_One",
+    "difficulty": "easy",
+    "general": true,
+    "question": "Who is Will’s mother?",
+    "options": ["Karen Wheeler", "Joyce Byers", "Susan Hargrove", "Claudia Henderson"],
+    "answerIndex": 1,
+    "explanation": "Joyce Byers is Will’s determined mother.",
+    "tags": ["season 1", "characters"]
+  },
+
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_One",
+    "difficulty": "medium",
+    "general": true,
+    "question": "How does Joyce communicate with Will in the Upside Down?",
+    "options": ["Walkie-talkie", "Lights and alphabet wall", "Telephone", "Television"],
+    "answerIndex": 1,
+    "explanation": "Joyce uses Christmas lights and an alphabet wall to communicate with Will.",
+    "tags": ["season 1", "plot"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_One",
+    "difficulty": "medium",
+    "general": true,
+    "question": "What is the name of the alternate dimension?",
+    "options": ["The Void", "The Upside Down", "The Shadow Realm", "The Other Side"],
+    "answerIndex": 1,
+    "explanation": "The alternate dimension is known as the Upside Down.",
+    "tags": ["season 1", "lore"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_One",
+    "difficulty": "medium",
+    "general": true,
+    "question": "Who is Nancy Wheeler’s boyfriend at the start of the season?",
+    "options": ["Steve", "Jonathan", "Billy", "Eddie"],
+    "answerIndex": 0,
+    "explanation": "Nancy is dating Steve Harrington early in Season One.",
+    "tags": ["season 1", "characters"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_One",
+    "difficulty": "medium",
+    "general": true,
+    "question": "What happens to Barb?",
+    "options": ["She runs away", "She is taken by the Demogorgon", "She moves away", "She is arrested"],
+    "answerIndex": 1,
+    "explanation": "Barb is taken into the Upside Down by the Demogorgon.",
+    "tags": ["season 1", "plot"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_One",
+    "difficulty": "medium",
+    "general": false,
+    "question": "What nickname do the boys give Eleven?",
+    "options": ["El", "Elle", "One", "E"],
+    "answerIndex": 0,
+    "explanation": "They shorten her name to 'El'.",
+    "tags": ["season 1", "characters"]
+  },
+
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_One",
+    "difficulty": "hard",
+    "general": false,
+    "question": "What is the name of the lab in Hawkins?",
+    "options": ["Hawkins Research Lab", "Hawkins National Lab", "Hawkins Laboratory", "Indiana Science Lab"],
+    "answerIndex": 1,
+    "explanation": "It is officially called Hawkins National Laboratory.",
+    "tags": ["season 1", "lore"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_One",
+    "difficulty": "hard",
+    "general": false,
+    "question": "Who is Eleven trying to escape from?",
+    "options": ["Police", "Her parents", "Scientists at Hawkins Lab", "The military"],
+    "answerIndex": 2,
+    "explanation": "Eleven escapes from the scientists at Hawkins Lab.",
+    "tags": ["season 1", "plot"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_One",
+    "difficulty": "hard",
+    "general": false,
+    "question": "What does Will cough up after returning home?",
+    "options": ["Blood", "A slug-like creature", "Dust", "Water"],
+    "answerIndex": 1,
+    "explanation": "Will coughs up a slug-like creature, hinting at continued connection to the Upside Down.",
+    "tags": ["season 1", "ending"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_One",
+    "difficulty": "hard",
+    "general": false,
+    "question": "What game are the boys playing in the opening scene?",
+    "options": ["Monopoly", "Dungeons & Dragons", "Chess", "Risk"],
+    "answerIndex": 1,
+    "explanation": "The boys are playing Dungeons & Dragons when the story begins.",
+    "tags": ["season 1", "opening"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_One",
+    "difficulty": "hard",
+    "general": false,
+    "question": "What happens to Eleven at the end of Season One?",
+    "options": ["She escapes town", "She disappears after defeating the Demogorgon", "She is captured again", "She moves in with Joyce"],
+    "answerIndex": 1,
+    "explanation": "Eleven sacrifices herself to defeat the Demogorgon and disappears.",
+    "tags": ["season 1", "ending"]
+  }
+]

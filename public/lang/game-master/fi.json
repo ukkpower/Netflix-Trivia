@@ -21,6 +21,10 @@
       "label": "Yleinen",
       "description": "Testaa yleistietoasi eri kategorioiden kysymyksillä."
     },
+    "bridgerton": {
+      "label": "Bridgerton",
+      "description": "Astu Regency-ajan Lontooseen vastaamaan kysymyksiin Bridgertonin perheistä, romansseista, skandaaleista ja seurapiireistä."
+    },
     "sports": {
       "label": "Urheilu",
       "description": "Testaa tietämystäsi eri urheilulajeista, joukkueista ja legendaarisista urheilijoista."

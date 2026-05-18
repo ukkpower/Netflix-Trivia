@@ -1,0 +1,169 @@
+[
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Two",
+    "difficulty": "easy",
+    "general": true,
+    "question": "What nickname is given to Will due to his connection with the Upside Down?",
+    "options": ["The Chosen One", "Zombie Boy", "Shadow Kid", "Ghost Boy"],
+    "answerIndex": 1,
+    "explanation": "The boys call Will 'Zombie Boy' after his strange behavior.",
+    "tags": ["season 2", "characters"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Two",
+    "difficulty": "easy",
+    "general": true,
+    "question": "What is the name of the new girl who joins the group?",
+    "options": ["Robin", "Max", "Nancy", "Erica"],
+    "answerIndex": 1,
+    "explanation": "Max Mayfield is introduced in Season Two.",
+    "tags": ["season 2", "characters"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Two",
+    "difficulty": "easy",
+    "general": true,
+    "question": "Who is Max’s aggressive older brother?",
+    "options": ["Steve", "Billy", "Jonathan", "Tommy"],
+    "answerIndex": 1,
+    "explanation": "Billy Hargrove is Max’s older stepbrother.",
+    "tags": ["season 2", "characters"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Two",
+    "difficulty": "easy",
+    "general": true,
+    "question": "What is the large shadow creature called?",
+    "options": ["Demogorgon", "Vecna", "Mind Flayer", "Beast"],
+    "answerIndex": 2,
+    "explanation": "The Mind Flayer is the main antagonist in Season Two.",
+    "tags": ["season 2", "creatures"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Two",
+    "difficulty": "easy",
+    "general": true,
+    "question": "Who adopts Eleven and becomes her guardian?",
+    "options": ["Joyce", "Hopper", "Mike", "Steve"],
+    "answerIndex": 1,
+    "explanation": "Chief Jim Hopper becomes Eleven’s guardian.",
+    "tags": ["season 2", "characters"]
+  },
+
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Two",
+    "difficulty": "medium",
+    "general": true,
+    "question": "What do the kids call the baby Demogorgon Dustin finds?",
+    "options": ["Dart", "Slugger", "Shadow", "Spike"],
+    "answerIndex": 0,
+    "explanation": "Dustin names the creature Dart.",
+    "tags": ["season 2", "plot"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Two",
+    "difficulty": "medium",
+    "general": true,
+    "question": "What tunnels spread beneath Hawkins?",
+    "options": ["Mine shafts", "The Upside Down tunnels", "Secret lab tunnels", "Military bunkers"],
+    "answerIndex": 1,
+    "explanation": "The Upside Down spreads through vine-like tunnels under Hawkins.",
+    "tags": ["season 2", "lore"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Two",
+    "difficulty": "medium",
+    "general": true,
+    "question": "Which character becomes a babysitter figure to the kids?",
+    "options": ["Jonathan", "Steve", "Billy", "Hopper"],
+    "answerIndex": 1,
+    "explanation": "Steve becomes a fan-favourite babysitter to the group.",
+    "tags": ["season 2", "characters"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Two",
+    "difficulty": "medium",
+    "general": true,
+    "question": "Where does Eleven go to discover more about her past?",
+    "options": ["Chicago", "New York", "Boston", "Detroit"],
+    "answerIndex": 0,
+    "explanation": "Eleven travels to Chicago and meets Kali.",
+    "tags": ["season 2", "plot"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Two",
+    "difficulty": "medium",
+    "general": false,
+    "question": "What is Kali’s number?",
+    "options": ["007", "008", "009", "010"],
+    "answerIndex": 1,
+    "explanation": "Kali is known as Eight (008).",
+    "tags": ["season 2", "lore"]
+  },
+
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Two",
+    "difficulty": "hard",
+    "general": false,
+    "question": "What happens to Bob Newby?",
+    "options": ["He escapes Hawkins", "He is arrested", "He is killed by Demodogs", "He moves away"],
+    "answerIndex": 2,
+    "explanation": "Bob dies heroically while escaping the lab.",
+    "tags": ["season 2", "plot"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Two",
+    "difficulty": "hard",
+    "general": false,
+    "question": "What do the kids call the creatures that grow from Dart?",
+    "options": ["Demobats", "Demodogs", "Shadow Beasts", "Flayers"],
+    "answerIndex": 1,
+    "explanation": "They refer to them as Demodogs.",
+    "tags": ["season 2", "creatures"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Two",
+    "difficulty": "hard",
+    "general": false,
+    "question": "How do they weaken the Mind Flayer’s control over Will?",
+    "options": ["Water", "Cold", "Heat", "Light"],
+    "answerIndex": 2,
+    "explanation": "They use heat to force the Mind Flayer out of Will.",
+    "tags": ["season 2", "plot"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Two",
+    "difficulty": "hard",
+    "general": false,
+    "question": "What does Eleven close at the end of the season?",
+    "options": ["The lab", "The tunnels", "The gate to the Upside Down", "The portal room"],
+    "answerIndex": 2,
+    "explanation": "Eleven closes the gate to the Upside Down.",
+    "tags": ["season 2", "ending"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Two",
+    "difficulty": "hard",
+    "general": false,
+    "question": "What event takes place at the end of Season Two?",
+    "options": ["School play", "Snow Ball dance", "Town festival", "Halloween party"],
+    "answerIndex": 1,
+    "explanation": "The season ends with the Snow Ball dance.",
+    "tags": ["season 2", "ending"]
+  }
+]

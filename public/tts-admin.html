@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gemini TTS Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tts-admin.css">
+</head>
+<body class="tts-admin-body">
+  <div class="tts-admin-shell">
+    <header class="tts-admin-hero">
+      <p class="tts-admin-kicker">Private Admin Tool</p>
+      <h1>Gemini TTS Question Voice Lab</h1>
+      <p class="tts-admin-intro">
+        Experiment with narration settings, generate preview audio, and save each run into the local audio test folder.
+      </p>
+    </header>
+
+    <main class="tts-admin-layout">
+      <section class="tts-panel tts-form-panel">
+        <form id="ttsForm" class="tts-form">
+          <div class="tts-field-grid">
+            <label class="tts-field">
+              <span>Voice</span>
+              <select id="voiceName" name="voiceName"></select>
+            </label>
+
+            <label class="tts-field tts-field-wide">
+              <span>Audio Profile</span>
+              <textarea id="audioProfile" name="audioProfile" rows="4" placeholder="A sharp, polished host with controlled energy and a premium quiz-show feel."></textarea>
+            </label>
+
+            <label class="tts-field">
+              <span>Style</span>
+              <input id="style" name="style" type="text" placeholder="Confident, cinematic, polished">
+            </label>
+
+            <label class="tts-field">
+              <span>Pace</span>
+              <input id="pace" name="pace" type="text" placeholder="Measured with slight emphasis on key clues">
+            </label>
+
+            <label class="tts-field">
+              <span>Accent</span>
+              <input id="accent" name="accent" type="text" placeholder="Neutral international English">
+            </label>
+
+            <label class="tts-field tts-field-wide">
+              <span>The Scene</span>
+              <textarea id="scene" name="scene" rows="4" placeholder="A sleek stage intro before a high-energy trivia question lands."></textarea>
+            </label>
+
+            <label class="tts-field tts-field-wide">
+              <span>Sample Context</span>
+              <textarea id="sampleContext" name="sampleContext" rows="4" placeholder="These lines are read before contestants answer a Netflix trivia question on a live event stage."></textarea>
+            </label>
+
+            <label class="tts-field tts-field-wide">
+              <span>Transcript</span>
+              <textarea id="transcript" name="transcript" rows="8" required placeholder="Which Netflix series follows the Bridgerton family through romance, scandal, and Regency-era London society?"></textarea>
+            </label>
+          </div>
+
+          <div class="tts-actions">
+            <button id="runButton" type="submit">Run</button>
+            <button id="playButton" type="button" disabled>Play</button>
+          </div>
+        </form>
+      </section>
+
+      <aside class="tts-panel tts-results-panel">
+        <div class="tts-result-card">
+          <h2>Latest Result</h2>
+          <p id="statusMessage" class="tts-status tts-status-idle">Ready to generate.</p>
+
+          <dl class="tts-meta">
+            <div>
+              <dt>Saved File</dt>
+              <dd id="savedFile">Not generated yet</dd>
+            </div>
+            <div>
+              <dt>Voice</dt>
+              <dd id="selectedVoice">Charon</dd>
+            </div>
+            <div>
+              <dt>Audio URL</dt>
+              <dd><a id="audioLink" href="#" target="_blank" rel="noreferrer">Unavailable</a></dd>
+            </div>
+          </dl>
+
+          <audio id="audioPlayer" preload="none" controls class="tts-audio-player"></audio>
+        </div>
+
+        <div class="tts-result-card">
+          <h2>Prompt Preview</h2>
+          <pre id="promptPreview" class="tts-prompt-preview">### TRANSCRIPT
+
+Your generated prompt will appear here.</pre>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script type="module" src="tts-admin.js"></script>
+</body>
+</html>

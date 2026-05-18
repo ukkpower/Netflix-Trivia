@@ -2,6 +2,7 @@
   const FALLBACK_LANG = "en";
   const CATEGORY_KEY_MAP = {
     General: "general",
+    Bridgerton: "bridgerton",
     Sports: "sports",
     Entertainment: "entertainment",
     History: "history",

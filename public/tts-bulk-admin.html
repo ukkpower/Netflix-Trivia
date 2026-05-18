@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gemini TTS Bulk Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tts-bulk-admin.css">
+</head>
+<body class="tts-bulk-body">
+  <div class="tts-bulk-shell">
+    <header class="tts-bulk-hero">
+      <p class="tts-bulk-kicker">Private Admin Tool</p>
+      <h1>Bulk Question Audio Generator</h1>
+      <p class="tts-bulk-intro">
+        Run direct or Gemini Batch TTS jobs across the question bank with category and difficulty filters. The transcript is fixed to:
+        <span class="tts-bulk-transcript-rule">[question]? ... Is it A: [answer a], B: [answer b], C: [answer c], or D: [answer d]?</span>
+      </p>
+    </header>
+
+    <main class="tts-bulk-layout">
+      <section class="tts-bulk-panel tts-bulk-form-panel">
+        <form id="bulkForm" class="tts-bulk-form">
+          <div class="tts-bulk-grid">
+            <label class="tts-bulk-field">
+              <span>Mode</span>
+              <select id="mode" name="mode">
+                <option value="direct">Direct</option>
+                <option value="batch">Batch</option>
+              </select>
+            </label>
+
+            <label class="tts-bulk-field">
+              <span>Profile Name</span>
+              <input id="profileName" name="profileName" type="text" required value="v1-charon">
+            </label>
+
+            <label class="tts-bulk-field">
+              <span>Voice</span>
+              <select id="voiceName" name="voiceName"></select>
+            </label>
+
+            <label class="tts-bulk-field">
+              <span>Scope</span>
+              <select id="scope" name="scope">
+                <option value="all">All Questions</option>
+                <option value="category">Category + Difficulty</option>
+              </select>
+            </label>
+
+            <label class="tts-bulk-field">
+              <span>Category</span>
+              <select id="categorySlug" name="categorySlug" disabled></select>
+            </label>
+
+            <label class="tts-bulk-field">
+              <span>Difficulty</span>
+              <select id="difficulty" name="difficulty" disabled>
+                <option value="">Select difficulty</option>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+              </select>
+            </label>
+
+            <label class="tts-bulk-field">
+              <span>Limit</span>
+              <input id="limit" name="limit" type="number" min="1" placeholder="Optional">
+            </label>
+
+            <label class="tts-bulk-field tts-bulk-field-checkbox">
+              <input id="onlyMissingAudio" name="onlyMissingAudio" type="checkbox" checked>
+              <span>Only missing audio</span>
+            </label>
+
+            <label class="tts-bulk-field tts-bulk-field-wide">
+              <span>Audio Profile</span>
+              <textarea id="audioProfile" name="audioProfile" rows="3" placeholder="Polished premium quiz-show host with strong clarity and calm authority."></textarea>
+            </label>
+
+            <label class="tts-bulk-field">
+              <span>Style</span>
+              <input id="style" name="style" type="text" placeholder="Confident and cinematic">
+            </label>
+
+            <label class="tts-bulk-field">
+              <span>Pace</span>
+              <input id="pace" name="pace" type="text" placeholder="Measured with clear option separation">
+            </label>
+
+            <label class="tts-bulk-field">
+              <span>Accent</span>
+              <input id="accent" name="accent" type="text" placeholder="Neutral international English">
+            </label>
+
+            <label class="tts-bulk-field tts-bulk-field-wide">
+              <span>The Scene</span>
+              <textarea id="scene" name="scene" rows="3" placeholder="A live trivia event with contestants hearing each question once before answering."></textarea>
+            </label>
+
+            <label class="tts-bulk-field tts-bulk-field-wide">
+              <span>Sample Context</span>
+              <textarea id="sampleContext" name="sampleContext" rows="3" placeholder="The host must read the question clearly, then slow slightly across the answer choices."></textarea>
+            </label>
+          </div>
+
+          <div class="tts-bulk-actions">
+            <button id="previewButton" type="button">Preview Match</button>
+            <button id="runButton" type="submit">Run Bulk Job</button>
+          </div>
+        </form>
+      </section>
+
+      <aside class="tts-bulk-panel tts-bulk-sidebar">
+        <section class="tts-bulk-card">
+          <h2>Preview</h2>
+          <p id="previewStatus" class="tts-bulk-status tts-bulk-status-idle">Choose filters and preview the matching question set.</p>
+          <div class="tts-bulk-preview-meta">
+            <div>
+              <span class="tts-bulk-meta-label">Matched Questions</span>
+              <strong id="previewCount">0</strong>
+            </div>
+            <div>
+              <span class="tts-bulk-meta-label">Selection</span>
+              <strong id="previewSelection">Not loaded</strong>
+            </div>
+          </div>
+          <div id="previewSample" class="tts-bulk-sample-list"></div>
+        </section>
+
+        <section class="tts-bulk-card">
+          <h2>Recent Jobs</h2>
+          <div id="recentJobs" class="tts-bulk-job-list"></div>
+        </section>
+      </aside>
+    </main>
+
+    <section class="tts-bulk-panel tts-bulk-results-panel">
+      <div class="tts-bulk-results-header">
+        <div>
+          <h2>Job Status</h2>
+          <p id="jobHeadline" class="tts-bulk-results-subtitle">No job selected.</p>
+        </div>
+      </div>
+
+      <div class="tts-bulk-job-metrics">
+        <div><span>Total</span><strong id="metricTotal">0</strong></div>
+        <div><span>Processed</span><strong id="metricProcessed">0</strong></div>
+        <div><span>Success</span><strong id="metricSuccess">0</strong></div>
+        <div><span>Failed</span><strong id="metricFailed">0</strong></div>
+      </div>
+
+      <div class="tts-bulk-results-grid">
+        <section class="tts-bulk-card">
+          <h3>Matching Items</h3>
+          <div id="jobItems" class="tts-bulk-item-list"></div>
+        </section>
+
+        <section class="tts-bulk-card">
+          <h3>Errors</h3>
+          <div id="jobErrors" class="tts-bulk-error-list"></div>
+        </section>
+      </div>
+    </section>
+  </div>
+
+  <script type="module" src="tts-bulk-admin.js"></script>
+</body>
+</html>

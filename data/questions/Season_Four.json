@@ -1,0 +1,169 @@
+[
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Four",
+    "difficulty": "easy",
+    "general": true,
+    "question": "What is the name of the main villain introduced in Season Four?",
+    "options": ["Mind Flayer", "Demogorgon", "Vecna", "Shadow Beast"],
+    "answerIndex": 2,
+    "explanation": "Vecna is the main antagonist of Season Four.",
+    "tags": ["season 4", "villain"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Four",
+    "difficulty": "easy",
+    "general": true,
+    "question": "Where is Eleven living at the start of Season Four?",
+    "options": ["Hawkins", "Chicago", "California", "New York"],
+    "answerIndex": 2,
+    "explanation": "Eleven is living in California with the Byers family.",
+    "tags": ["season 4", "plot"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Four",
+    "difficulty": "easy",
+    "general": true,
+    "question": "Which character is falsely accused of murder?",
+    "options": ["Steve", "Eddie", "Jonathan", "Lucas"],
+    "answerIndex": 1,
+    "explanation": "Eddie Munson is accused after Chrissy’s death.",
+    "tags": ["season 4", "characters"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Four",
+    "difficulty": "easy",
+    "general": true,
+    "question": "What club does Eddie lead?",
+    "options": ["Science Club", "Drama Club", "Hellfire Club", "Chess Club"],
+    "answerIndex": 2,
+    "explanation": "Eddie leads the Hellfire Club, a D&D group.",
+    "tags": ["season 4", "characters"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Four",
+    "difficulty": "easy",
+    "general": true,
+    "question": "Which character is targeted by Vecna and listens to music to escape?",
+    "options": ["Nancy", "Max", "Robin", "Eleven"],
+    "answerIndex": 1,
+    "explanation": "Max uses music to escape Vecna’s control.",
+    "tags": ["season 4", "plot"]
+  },
+
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Four",
+    "difficulty": "medium",
+    "general": true,
+    "question": "What song helps Max escape Vecna?",
+    "options": ["Running Up That Hill", "Africa", "Take On Me", "Dreams"],
+    "answerIndex": 0,
+    "explanation": "Kate Bush’s 'Running Up That Hill' saves Max.",
+    "tags": ["season 4", "moments"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Four",
+    "difficulty": "medium",
+    "general": true,
+    "question": "Where is Hopper imprisoned?",
+    "options": ["China", "Russia", "Germany", "Alaska"],
+    "answerIndex": 1,
+    "explanation": "Hopper is held in a Russian prison.",
+    "tags": ["season 4", "plot"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Four",
+    "difficulty": "medium",
+    "general": true,
+    "question": "What ability does Vecna use on his victims?",
+    "options": ["Mind control", "Time travel", "Telekinesis and visions", "Invisibility"],
+    "answerIndex": 2,
+    "explanation": "Vecna invades minds and uses telekinetic powers.",
+    "tags": ["season 4", "villain"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Four",
+    "difficulty": "medium",
+    "general": true,
+    "question": "What is revealed about Vecna’s true identity?",
+    "options": ["He is a Demogorgon", "He is Eleven’s father", "He is One from Hawkins Lab", "He is a soldier"],
+    "answerIndex": 2,
+    "explanation": "Vecna is revealed to be One (Henry Creel).",
+    "tags": ["season 4", "twist"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Four",
+    "difficulty": "medium",
+    "general": false,
+    "question": "Which character helps translate Russian for Hopper’s rescue?",
+    "options": ["Robin", "Murray", "Steve", "Jonathan"],
+    "answerIndex": 1,
+    "explanation": "Murray plays a key role in communication and rescue.",
+    "tags": ["season 4", "characters"]
+  },
+
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Four",
+    "difficulty": "hard",
+    "general": false,
+    "question": "What is the name of the facility where Eleven regains her powers?",
+    "options": ["Project Lab", "The Nina Project", "Hawkins Base", "MK Ultra"],
+    "answerIndex": 1,
+    "explanation": "The Nina Project helps Eleven regain her abilities.",
+    "tags": ["season 4", "plot"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Four",
+    "difficulty": "hard",
+    "general": false,
+    "question": "Which character plays guitar in the Upside Down to distract the creatures?",
+    "options": ["Steve", "Eddie", "Jonathan", "Argyle"],
+    "answerIndex": 1,
+    "explanation": "Eddie plays 'Master of Puppets' in a heroic scene.",
+    "tags": ["season 4", "moments"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Four",
+    "difficulty": "hard",
+    "general": false,
+    "question": "What happens to Max at the end of the season?",
+    "options": ["She dies permanently", "She is unharmed", "She falls into a coma", "She disappears"],
+    "answerIndex": 2,
+    "explanation": "Max survives but is left in a coma.",
+    "tags": ["season 4", "ending"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Four",
+    "difficulty": "hard",
+    "general": false,
+    "question": "How many victims does Vecna need to open the gates fully?",
+    "options": ["Three", "Four", "Five", "Six"],
+    "answerIndex": 1,
+    "explanation": "Vecna needs four victims to open the gates.",
+    "tags": ["season 4", "lore"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Four",
+    "difficulty": "hard",
+    "general": false,
+    "question": "What major event happens to Hawkins at the end of the season?",
+    "options": ["It is evacuated", "It is destroyed by fire", "It splits open with gates to the Upside Down", "It is quarantined"],
+    "answerIndex": 2,
+    "explanation": "Hawkins is torn open as gates to the Upside Down merge.",
+    "tags": ["season 4", "ending"]
+  }
+]

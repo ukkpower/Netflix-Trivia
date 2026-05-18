@@ -20,6 +20,55 @@ function assertAnswerIndex(answerIndex: number) {
   }
 }
 
+function normalizeOptions(options: string[]): string[] {
+  assertFourOptions(options);
+  return options.map((option) => option.trim());
+}
+
+function shuffleStoredOptions(options: string[], answerIndex: number): { options: string[]; answerIndex: number } {
+  const decoratedOptions = options.map((value, index) => ({
+    value,
+    originalIndex: index
+  }));
+
+  for (let index = decoratedOptions.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [decoratedOptions[index], decoratedOptions[swapIndex]] = [decoratedOptions[swapIndex], decoratedOptions[index]];
+  }
+
+  return {
+    options: decoratedOptions.map((item) => item.value),
+    answerIndex: decoratedOptions.findIndex((item) => item.originalIndex === answerIndex)
+  };
+}
+
+function haveSameOptionSet(left: string[], right: string[]): boolean {
+  if (left.length !== right.length) {
+    return false;
+  }
+
+  const counts = new Map<string, number>();
+
+  for (const value of left) {
+    counts.set(value, (counts.get(value) ?? 0) + 1);
+  }
+
+  for (const value of right) {
+    const nextCount = (counts.get(value) ?? 0) - 1;
+    if (nextCount < 0) {
+      return false;
+    }
+
+    if (nextCount === 0) {
+      counts.delete(value);
+    } else {
+      counts.set(value, nextCount);
+    }
+  }
+
+  return counts.size === 0;
+}
+
 function normalizeOptionalString(value?: string): string | undefined {
   if (typeof value !== "string") {
     return undefined;
@@ -66,8 +115,9 @@ export const create = mutation({
     enabled: v.optional(v.boolean())
   },
   handler: async (ctx, args) => {
-    assertFourOptions(args.options);
+    const normalizedOptions = normalizeOptions(args.options);
     assertAnswerIndex(args.answerIndex);
+    const storedQuestion = shuffleStoredOptions(normalizedOptions, args.answerIndex);
 
     const category = await ctx.db.get(args.categoryId);
     if (!category) {
@@ -94,8 +144,8 @@ export const create = mutation({
       difficulty: args.difficulty,
       general: args.general,
       question: questionText,
-      options: args.options.map((o) => o.trim()),
-      answerIndex: args.answerIndex,
+      options: storedQuestion.options,
+      answerIndex: storedQuestion.answerIndex,
       imageName: normalizeOptionalString(args.imageName),
       explanation: args.explanation?.trim(),
       tags: args.tags?.map((t) => t.trim()).filter((t) => t.length > 0),
@@ -149,8 +199,9 @@ export const bulkCreate = mutation({
     const subcategoryCache = new Map<string, any>();
 
     for (const item of args.items) {
-      assertFourOptions(item.options);
+      const normalizedOptions = normalizeOptions(item.options);
       assertAnswerIndex(item.answerIndex);
+      const storedQuestion = shuffleStoredOptions(normalizedOptions, item.answerIndex);
 
       const category = await ctx.db.get(item.categoryId);
       if (!category) {
@@ -176,8 +227,8 @@ export const bulkCreate = mutation({
         difficulty: item.difficulty,
         general: item.general,
         question: item.question.trim(),
-        options: item.options.map((o) => o.trim()),
-        answerIndex: item.answerIndex,
+        options: storedQuestion.options,
+        answerIndex: storedQuestion.answerIndex,
         imageName: normalizeOptionalString(item.imageName),
         explanation: item.explanation?.trim(),
         tags: item.tags?.map((t) => t.trim()).filter((t) => t.length > 0),
@@ -299,6 +350,75 @@ export const listByFilter = query({
 });
 
 /**
+ * Admin query: list questions for bulk audio generation.
+ * Supports all questions or category-scoped runs with optional difficulty filtering.
+ */
+export const listForAudioAdmin = query({
+  args: {
+    categoryId: v.optional(v.id("categories")),
+    difficulty: v.optional(Difficulty),
+    enabledOnly: v.optional(v.boolean()),
+    onlyMissingAudio: v.optional(v.boolean()),
+    limit: v.optional(v.number())
+  },
+  handler: async (ctx, args) => {
+    const limit: number = Math.min(Math.max(args.limit ?? 5000, 1), 10000);
+    const enabledOnly = args.enabledOnly ?? true;
+    const onlyMissingAudio = args.onlyMissingAudio ?? true;
+
+    const baseRows = args.categoryId
+      ? await ctx.db
+          .query("questions")
+          .withIndex("by_category", (q: any) => q.eq("categoryId", args.categoryId))
+          .collect()
+      : await ctx.db.query("questions").collect();
+
+    let rows = baseRows;
+
+    if (enabledOnly) {
+      rows = rows.filter((row: any) => row.enabled !== false);
+    }
+
+    if (args.difficulty) {
+      rows = rows.filter((row: any) => row.difficulty === args.difficulty);
+    }
+
+    if (onlyMissingAudio) {
+      rows = rows.filter((row: any) => row.media?.type !== "audio" || !row.media?.url);
+    }
+
+    return rows.slice(0, limit);
+  }
+});
+
+/**
+ * Admin mutation: patch the question with an audio media URL after generation.
+ */
+export const setAudioMedia = mutation({
+  args: {
+    questionId: v.id("questions"),
+    url: v.string(),
+    credit: v.optional(v.string())
+  },
+  handler: async (ctx, args) => {
+    const existing = await ctx.db.get(args.questionId);
+    if (!existing) {
+      throw new Error("questionId not found");
+    }
+
+    await ctx.db.patch(args.questionId, {
+      media: {
+        type: "audio",
+        url: args.url,
+        credit: normalizeOptionalString(args.credit)
+      }
+    });
+
+    return { ok: true };
+  }
+});
+
+/**
  * Optional: disable/enable a question (admin).
  */
 export const setEnabled = mutation({
@@ -313,5 +433,64 @@ export const setEnabled = mutation({
     }
     await ctx.db.patch(args.questionId, { enabled: args.enabled });
     return { ok: true };
+  }
+});
+
+/**
+ * Rewrite stored answer order for existing questions while preserving the
+ * underlying correct answer text.
+ */
+export const bulkReorderOptions = mutation({
+  args: {
+    items: v.array(
+      v.object({
+        questionId: v.id("questions"),
+        options: v.array(v.string()),
+        answerIndex: v.number()
+      })
+    )
+  },
+  handler: async (ctx, args) => {
+    let updatedCount = 0;
+
+    for (const item of args.items) {
+      const normalizedOptions = normalizeOptions(item.options);
+      assertAnswerIndex(item.answerIndex);
+
+      const existing = await ctx.db.get(item.questionId);
+      if (!existing) {
+        throw new Error(`questionId not found: ${item.questionId}`);
+      }
+
+      assertFourOptions(existing.options);
+      assertAnswerIndex(existing.answerIndex);
+
+      if (!haveSameOptionSet(existing.options, normalizedOptions)) {
+        throw new Error(`options must contain the same values for question: ${item.questionId}`);
+      }
+
+      const currentCorrectAnswer = existing.options[existing.answerIndex];
+      const nextCorrectAnswer = normalizedOptions[item.answerIndex];
+      if (currentCorrectAnswer !== nextCorrectAnswer) {
+        throw new Error(`answerIndex does not point to the same correct answer for question: ${item.questionId}`);
+      }
+
+      const optionsChanged = existing.options.some((value, index) => value !== normalizedOptions[index]);
+      const answerChanged = existing.answerIndex !== item.answerIndex;
+
+      if (!optionsChanged && !answerChanged) {
+        continue;
+      }
+
+      await ctx.db.patch(item.questionId, {
+        options: normalizedOptions,
+        answerIndex: item.answerIndex
+      });
+      updatedCount += 1;
+    }
+
+    return {
+      updatedCount
+    };
   }
 });

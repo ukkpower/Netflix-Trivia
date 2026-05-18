@@ -1,0 +1,169 @@
+[
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Three",
+    "difficulty": "easy",
+    "general": true,
+    "question": "What new shopping mall becomes a central location in Season Three?",
+    "options": ["Hawkins Plaza", "Starcourt Mall", "Indiana Mall", "Hawkins Center"],
+    "answerIndex": 1,
+    "explanation": "Starcourt Mall is the major new setting in Season Three.",
+    "tags": ["season 3", "locations"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Three",
+    "difficulty": "easy",
+    "general": true,
+    "question": "Who starts working at the ice cream shop Scoops Ahoy?",
+    "options": ["Steve and Dustin", "Steve and Robin", "Jonathan and Nancy", "Lucas and Max"],
+    "answerIndex": 1,
+    "explanation": "Steve and Robin work together at Scoops Ahoy.",
+    "tags": ["season 3", "characters"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Three",
+    "difficulty": "easy",
+    "general": true,
+    "question": "Who is Eleven’s boyfriend in Season Three?",
+    "options": ["Lucas", "Dustin", "Mike", "Will"],
+    "answerIndex": 2,
+    "explanation": "Eleven and Mike are in a relationship during Season Three.",
+    "tags": ["season 3", "characters"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Three",
+    "difficulty": "easy",
+    "general": true,
+    "question": "Which character becomes possessed by the Mind Flayer?",
+    "options": ["Steve", "Billy", "Jonathan", "Dustin"],
+    "answerIndex": 1,
+    "explanation": "Billy Hargrove becomes the Mind Flayer’s host.",
+    "tags": ["season 3", "plot"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Three",
+    "difficulty": "easy",
+    "general": true,
+    "question": "What is the name of Dustin’s girlfriend he talks about?",
+    "options": ["Suzie", "Robin", "Max", "Nancy"],
+    "answerIndex": 0,
+    "explanation": "Dustin often talks about his girlfriend Suzie.",
+    "tags": ["season 3", "characters"]
+  },
+
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Three",
+    "difficulty": "medium",
+    "general": true,
+    "question": "What code do Steve and Robin try to decipher?",
+    "options": ["Russian transmission", "Government code", "Secret letter", "Lab message"],
+    "answerIndex": 0,
+    "explanation": "They decode a secret Russian message.",
+    "tags": ["season 3", "plot"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Three",
+    "difficulty": "medium",
+    "general": true,
+    "question": "Where is the secret Russian base located?",
+    "options": ["Under the school", "Under Starcourt Mall", "In the forest", "At Hawkins Lab"],
+    "answerIndex": 1,
+    "explanation": "The base is hidden beneath Starcourt Mall.",
+    "tags": ["season 3", "plot"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Three",
+    "difficulty": "medium",
+    "general": true,
+    "question": "Which character works with Nancy at the newspaper?",
+    "options": ["Steve", "Jonathan", "Hopper", "Billy"],
+    "answerIndex": 1,
+    "explanation": "Jonathan works alongside Nancy at the Hawkins Post.",
+    "tags": ["season 3", "characters"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Three",
+    "difficulty": "medium",
+    "general": true,
+    "question": "What song do Dustin and Suzie sing together?",
+    "options": ["Take On Me", "NeverEnding Story", "Africa", "Every Breath You Take"],
+    "answerIndex": 1,
+    "explanation": "They sing 'The NeverEnding Story' theme.",
+    "tags": ["season 3", "moments"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Three",
+    "difficulty": "medium",
+    "general": false,
+    "question": "What nickname is given to the possessed townspeople?",
+    "options": ["The Taken", "The Flayed", "The Controlled", "The Infected"],
+    "answerIndex": 1,
+    "explanation": "They are referred to as 'The Flayed'.",
+    "tags": ["season 3", "lore"]
+  },
+
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Three",
+    "difficulty": "hard",
+    "general": false,
+    "question": "What happens to Hopper at the end of the season?",
+    "options": ["He escapes Hawkins", "He is captured", "He appears to die in the explosion", "He moves away"],
+    "answerIndex": 2,
+    "explanation": "Hopper appears to die when the machine explodes.",
+    "tags": ["season 3", "ending"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Three",
+    "difficulty": "hard",
+    "general": false,
+    "question": "What weakens the Mind Flayer’s physical form?",
+    "options": ["Cold", "Fireworks", "Water", "Electricity"],
+    "answerIndex": 1,
+    "explanation": "The group uses fireworks to damage the Mind Flayer.",
+    "tags": ["season 3", "plot"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Three",
+    "difficulty": "hard",
+    "general": false,
+    "question": "Which character sacrifices himself to save Eleven and the others?",
+    "options": ["Steve", "Billy", "Jonathan", "Lucas"],
+    "answerIndex": 1,
+    "explanation": "Billy sacrifices himself to stop the Mind Flayer.",
+    "tags": ["season 3", "plot"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Three",
+    "difficulty": "hard",
+    "general": false,
+    "question": "What happens to Eleven’s powers by the end of the season?",
+    "options": ["They grow stronger", "She loses them", "They become unstable", "She controls them perfectly"],
+    "answerIndex": 1,
+    "explanation": "Eleven loses her powers after the battle.",
+    "tags": ["season 3", "ending"]
+  },
+  {
+    "category": "Stranger_Things",
+    "subcategory": "Season_Three",
+    "difficulty": "hard",
+    "general": false,
+    "question": "Where do the Byers family move after leaving Hawkins?",
+    "options": ["California", "Chicago", "New York", "Florida"],
+    "answerIndex": 0,
+    "explanation": "The Byers family move to California at the end of the season.",
+    "tags": ["season 3", "ending"]
+  }
+]

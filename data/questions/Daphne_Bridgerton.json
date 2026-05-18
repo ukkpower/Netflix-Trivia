@@ -1,0 +1,169 @@
+[
+  {
+    "category": "Bridgerton",
+    "subcategory": "Daphne_Bridgerton",
+    "difficulty": "easy",
+    "general": true,
+    "question": "Which number child is Daphne in the Bridgerton family?",
+    "options": ["First", "Second", "Third", "Fourth"],
+    "answerIndex": 1,
+    "explanation": "Daphne is the fourth child and eldest daughter of the Bridgerton family.",
+    "tags": ["daphne", "family"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Daphne_Bridgerton",
+    "difficulty": "easy",
+    "general": true,
+    "question": "Who is Daphne’s main love interest in Season One?",
+    "options": ["Anthony Bridgerton", "Simon Basset", "Colin Bridgerton", "Prince Friedrich"],
+    "answerIndex": 1,
+    "explanation": "Daphne’s central romance is with Simon Basset, the Duke of Hastings.",
+    "tags": ["daphne", "romance"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Daphne_Bridgerton",
+    "difficulty": "easy",
+    "general": true,
+    "question": "What title does Daphne gain after marriage?",
+    "options": ["Duchess", "Countess", "Baroness", "Viscountess"],
+    "answerIndex": 0,
+    "explanation": "Daphne becomes the Duchess of Hastings after marrying Simon.",
+    "tags": ["daphne", "titles"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Daphne_Bridgerton",
+    "difficulty": "easy",
+    "general": true,
+    "question": "Which queen names Daphne the 'diamond of the season'?",
+    "options": ["Queen Victoria", "Queen Charlotte", "Queen Anne", "Queen Mary"],
+    "answerIndex": 1,
+    "explanation": "Queen Charlotte selects Daphne as the diamond.",
+    "tags": ["daphne", "society"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Daphne_Bridgerton",
+    "difficulty": "easy",
+    "general": true,
+    "question": "Which sibling is most protective of Daphne?",
+    "options": ["Colin", "Benedict", "Anthony", "Gregory"],
+    "answerIndex": 2,
+    "explanation": "Anthony, as head of the family, is very protective of Daphne.",
+    "tags": ["daphne", "family"]
+  },
+
+  {
+    "category": "Bridgerton",
+    "subcategory": "Daphne_Bridgerton",
+    "difficulty": "medium",
+    "general": true,
+    "question": "What arrangement do Daphne and Simon initially pretend to have?",
+    "options": ["Secret marriage", "Fake engagement", "Fake courtship", "Business deal"],
+    "answerIndex": 2,
+    "explanation": "They pretend to court each other to improve their social standing.",
+    "tags": ["daphne", "plot"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Daphne_Bridgerton",
+    "difficulty": "medium",
+    "general": true,
+    "question": "Which prince briefly courts Daphne?",
+    "options": ["Prince Friedrich", "Prince Albert", "Prince Leopold", "Prince Henry"],
+    "answerIndex": 0,
+    "explanation": "Prince Friedrich is a serious suitor for Daphne.",
+    "tags": ["daphne", "romance"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Daphne_Bridgerton",
+    "difficulty": "medium",
+    "general": true,
+    "question": "Who helps guide Daphne socially during the season?",
+    "options": ["Lady Featherington", "Lady Danbury", "Queen Charlotte", "Eloise"],
+    "answerIndex": 1,
+    "explanation": "Lady Danbury supports and mentors Daphne.",
+    "tags": ["daphne", "characters"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Daphne_Bridgerton",
+    "difficulty": "medium",
+    "general": true,
+    "question": "Where does Daphne live after marrying Simon?",
+    "options": ["Bridgerton House", "Clyvedon", "Danbury House", "Featherington House"],
+    "answerIndex": 1,
+    "explanation": "Daphne moves to Clyvedon, Simon’s estate.",
+    "tags": ["daphne", "locations"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Daphne_Bridgerton",
+    "difficulty": "medium",
+    "general": false,
+    "question": "What misunderstanding creates conflict between Daphne and Simon?",
+    "options": ["Money issues", "Family feud", "Children and inheritance", "Social status"],
+    "answerIndex": 2,
+    "explanation": "Simon’s vow not to have children causes major tension.",
+    "tags": ["daphne", "conflict"]
+  },
+
+  {
+    "category": "Bridgerton",
+    "subcategory": "Daphne_Bridgerton",
+    "difficulty": "hard",
+    "general": false,
+    "question": "Which undesirable suitor is initially forced upon Daphne?",
+    "options": ["Lord Debling", "Nigel Berbrooke", "Lord Cowper", "Sir Phillip"],
+    "answerIndex": 1,
+    "explanation": "Nigel Berbrooke is presented as a poor match for Daphne.",
+    "tags": ["daphne", "plot"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Daphne_Bridgerton",
+    "difficulty": "hard",
+    "general": false,
+    "question": "What does Daphne discover about Simon’s inability to have children?",
+    "options": ["He is infertile", "He is lying", "He refuses by choice", "He is cursed"],
+    "answerIndex": 2,
+    "explanation": "Simon chooses not to have children due to his vow.",
+    "tags": ["daphne", "twist"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Daphne_Bridgerton",
+    "difficulty": "hard",
+    "general": false,
+    "question": "Who is Daphne’s closest confidant among her siblings?",
+    "options": ["Eloise", "Colin", "Gregory", "Hyacinth"],
+    "answerIndex": 0,
+    "explanation": "Eloise is often Daphne’s closest sibling confidant.",
+    "tags": ["daphne", "family"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Daphne_Bridgerton",
+    "difficulty": "hard",
+    "general": false,
+    "question": "How does Daphne ultimately resolve her conflict with Simon?",
+    "options": ["She leaves him", "They separate", "They reconcile and choose family together", "She returns home"],
+    "answerIndex": 2,
+    "explanation": "They reconcile and decide to build a family together.",
+    "tags": ["daphne", "ending"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Daphne_Bridgerton",
+    "difficulty": "hard",
+    "general": false,
+    "question": "What role does Daphne play in later seasons?",
+    "options": ["Queen advisor", "Matchmaker and advisor", "Political figure", "Writer"],
+    "answerIndex": 1,
+    "explanation": "Daphne often acts as a guide and advisor to her siblings.",
+    "tags": ["daphne", "later seasons"]
+  }
+]

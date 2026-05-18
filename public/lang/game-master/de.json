@@ -21,6 +21,10 @@
       "label": "Allgemein",
       "description": "Teste dein Allgemeinwissen mit einer Mischung aus Fragen aus allen Kategorien."
     },
+    "bridgerton": {
+      "label": "Bridgerton",
+      "description": "Tauche ins London der Regency-Zeit ein mit Fragen zu den Bridgerton-Familien, Romanzen, Skandalen und der feinen Gesellschaft."
+    },
     "sports": {
       "label": "Sport",
       "description": "Teste dein Wissen über verschiedene Sportarten, Teams und legendäre Athletinnen und Athleten."

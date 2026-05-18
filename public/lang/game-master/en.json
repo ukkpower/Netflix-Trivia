@@ -21,6 +21,10 @@
       "label": "General",
       "description": "Test your general knowledge of the world with a mix of questions from all categories."
     },
+    "bridgerton": {
+      "label": "Bridgerton",
+      "description": "Step into Regency-era London with trivia about the Bridgerton families, romances, scandals, and society."
+    },
     "sports": {
       "label": "Sports",
       "description": "Test your knowledge of various sports, teams, and legendary athletes."

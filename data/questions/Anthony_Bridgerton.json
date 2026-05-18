@@ -1,0 +1,169 @@
+[
+  {
+    "category": "Bridgerton",
+    "subcategory": "Anthony_Bridgerton",
+    "difficulty": "easy",
+    "general": true,
+    "question": "What title does Anthony Bridgerton hold?",
+    "options": ["Duke", "Viscount", "Earl", "Baron"],
+    "answerIndex": 1,
+    "explanation": "Anthony is the Viscount Bridgerton, head of the family.",
+    "tags": ["anthony", "titles"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Anthony_Bridgerton",
+    "difficulty": "easy",
+    "general": true,
+    "question": "Which sibling is Anthony to Daphne?",
+    "options": ["Younger brother", "Older brother", "Cousin", "Twin"],
+    "answerIndex": 1,
+    "explanation": "Anthony is Daphne’s older brother.",
+    "tags": ["anthony", "family"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Anthony_Bridgerton",
+    "difficulty": "easy",
+    "general": true,
+    "question": "Who becomes Anthony’s wife in Season Two?",
+    "options": ["Edwina Sharma", "Kate Sharma", "Penelope Featherington", "Marina Thompson"],
+    "answerIndex": 1,
+    "explanation": "Anthony marries Kate Sharma.",
+    "tags": ["anthony", "romance"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Anthony_Bridgerton",
+    "difficulty": "easy",
+    "general": true,
+    "question": "What is Anthony’s main personality trait early in the series?",
+    "options": ["Carefree", "Reckless", "Overprotective", "Shy"],
+    "answerIndex": 2,
+    "explanation": "Anthony is very protective, especially of Daphne.",
+    "tags": ["anthony", "character"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Anthony_Bridgerton",
+    "difficulty": "easy",
+    "general": true,
+    "question": "Who is Anthony’s best friend?",
+    "options": ["Simon Basset", "Colin Bridgerton", "Lord Featherington", "Prince Friedrich"],
+    "answerIndex": 0,
+    "explanation": "Simon Basset is Anthony’s close friend.",
+    "tags": ["anthony", "relationships"]
+  },
+
+  {
+    "category": "Bridgerton",
+    "subcategory": "Anthony_Bridgerton",
+    "difficulty": "medium",
+    "general": true,
+    "question": "Why does Anthony initially avoid marrying for love?",
+    "options": ["He dislikes romance", "He fears dying young like his father", "He is already promised", "He prefers independence"],
+    "answerIndex": 1,
+    "explanation": "Anthony fears emotional pain after losing his father young.",
+    "tags": ["anthony", "motivation"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Anthony_Bridgerton",
+    "difficulty": "medium",
+    "general": true,
+    "question": "Which woman does Anthony first pursue in Season Two?",
+    "options": ["Kate Sharma", "Edwina Sharma", "Daphne Bridgerton", "Lady Danbury"],
+    "answerIndex": 1,
+    "explanation": "Anthony initially courts Edwina Sharma.",
+    "tags": ["anthony", "plot"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Anthony_Bridgerton",
+    "difficulty": "medium",
+    "general": true,
+    "question": "What shared interest brings Anthony and Kate closer?",
+    "options": ["Music", "Art", "Horse riding", "Politics"],
+    "answerIndex": 2,
+    "explanation": "They bond during horseback riding scenes.",
+    "tags": ["anthony", "romance"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Anthony_Bridgerton",
+    "difficulty": "medium",
+    "general": true,
+    "question": "Who is Anthony’s mother?",
+    "options": ["Lady Danbury", "Violet Bridgerton", "Queen Charlotte", "Lady Featherington"],
+    "answerIndex": 1,
+    "explanation": "Violet Bridgerton is his mother.",
+    "tags": ["anthony", "family"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Anthony_Bridgerton",
+    "difficulty": "medium",
+    "general": false,
+    "question": "What responsibility weighs heavily on Anthony?",
+    "options": ["Running the monarchy", "Managing the Bridgerton estate", "Serving in the army", "Writing society papers"],
+    "answerIndex": 1,
+    "explanation": "As Viscount, he manages the estate and family.",
+    "tags": ["anthony", "role"]
+  },
+
+  {
+    "category": "Bridgerton",
+    "subcategory": "Anthony_Bridgerton",
+    "difficulty": "hard",
+    "general": false,
+    "question": "How did Anthony’s father die?",
+    "options": ["Illness", "Duel", "Bee sting", "Accident"],
+    "answerIndex": 2,
+    "explanation": "His father died from an allergic reaction to a bee sting.",
+    "tags": ["anthony", "backstory"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Anthony_Bridgerton",
+    "difficulty": "hard",
+    "general": false,
+    "question": "What moment symbolizes Anthony confronting his fears with Kate?",
+    "options": ["Ballroom dance", "Horse race", "Bee sting incident", "Wedding scene"],
+    "answerIndex": 2,
+    "explanation": "The bee sting scene echoes his father’s death and deepens his bond with Kate.",
+    "tags": ["anthony", "symbolism"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Anthony_Bridgerton",
+    "difficulty": "hard",
+    "general": false,
+    "question": "Why does Anthony call off his wedding to Edwina?",
+    "options": ["Family pressure", "Financial issues", "He loves Kate", "Edwina refuses"],
+    "answerIndex": 2,
+    "explanation": "Anthony realizes he is in love with Kate.",
+    "tags": ["anthony", "plot"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Anthony_Bridgerton",
+    "difficulty": "hard",
+    "general": false,
+    "question": "What internal conflict defines Anthony’s character arc?",
+    "options": ["Duty vs love", "Wealth vs power", "Family vs society", "Tradition vs change"],
+    "answerIndex": 0,
+    "explanation": "Anthony struggles between duty and true love.",
+    "tags": ["anthony", "theme"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Anthony_Bridgerton",
+    "difficulty": "hard",
+    "general": false,
+    "question": "How does Anthony change by the end of Season Two?",
+    "options": ["Becomes more distant", "Leaves society", "Embraces love over duty", "Steps down as Viscount"],
+    "answerIndex": 2,
+    "explanation": "He finally allows himself to love and be vulnerable.",
+    "tags": ["anthony", "development"]
+  }
+]

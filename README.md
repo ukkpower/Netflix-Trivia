@@ -43,6 +43,34 @@ Create a `.env` file if you want to override the default port:
 PORT=8080
 ```
 
+For the Gemini TTS admin tester, add:
+```bash
+GEMINI_API_KEY=your_google_ai_api_key
+```
+
+Admin route:
+- Gemini TTS Admin: `http://localhost:8080/tts-admin.html`
+- Gemini TTS Bulk Admin: `http://localhost:8080/tts-bulk-admin.html`
+
+## Question Maintenance
+Stored question options can drift toward a biased `answerIndex` distribution over time. To preview a one-time reshuffle of stored option order while preserving the correct answer, run:
+
+```bash
+node scripts/randomizeStoredQuestionOptions.js --seed=12345
+```
+
+To apply the reshuffle to Convex after your updated backend functions are deployed:
+
+```bash
+node scripts/randomizeStoredQuestionOptions.js --apply --seed=12345
+```
+
+Notes:
+- The script reads from `.env.local` and uses `CONVEX_URL`.
+- `--seed` makes the preview and apply run deterministic.
+- The script prints the current and planned answer-position distribution before it writes anything.
+- New question inserts through `questions.create` and `questions.bulkCreate` now randomize stored option order automatically while preserving the correct answer.
+
 ## Game Master Internationalization
 The Game Master UI in [public/game-master.html](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/game-master.html) and the Player UI in [public/player.html](/Users/keithpower/Documents/Websites/Netflix-Trivia/public/player.html) support dependency-free translations loaded in the browser.
 
@@ -149,6 +177,9 @@ The manager exposes a `settings` object:
   Delay in milliseconds before the new track starts during a crossfade.
   Default: `0`
   With `0`, the new track starts immediately while the previous track fades out.
+- `audioManager.settings.musicDuckDuration`
+  Duration in milliseconds used when speech playback ducks and restores the music channel.
+  Default: `250`
 
 ### Music Functions
 - `await audioManager.loadMusic(name, file, volume = 100, config = {})`
@@ -185,11 +216,23 @@ The manager exposes a `settings` object:
   Sets the `soundFXVolume` property.
   Current implementation note: this value is stored, but playback volume is currently taken from the per-sound volume passed to `loadSoundFX()` plus master mute/master volume behavior.
 
+### Speech Functions
+- `await audioManager.playSpeech(src, { volume = 100, duckMusic = true, duckMultiplier = 0.5 } = {})`
+  Plays one speech clip at a time. When `duckMusic` is enabled, active music is ducked by `duckMultiplier` while speech plays and restored when speech ends or stops.
+- `audioManager.stopSpeech({ restoreMusic = true } = {})`
+  Stops active speech playback and restores music ducking by default.
+- `audioManager.muteSpeech()`
+  Mutes active and future speech playback.
+- `audioManager.unmuteSpeech()`
+  Re-enables speech playback.
+- `audioManager.setSpeechVolume(volume)`
+  Sets the speech channel volume.
+
 ### Master Controls
 - `audioManager.setMasterVolume(volume)`
-  Sets the `masterVolume` property and updates active music playback.
+  Sets the `masterVolume` property and updates active music and speech playback.
 - `audioManager.muteAll()`
-  Mutes all music playback through the master channel.
+  Mutes music and speech playback through the master channel.
 - `audioManager.unmuteAll()`
   Restores playback after `muteAll()`.
 

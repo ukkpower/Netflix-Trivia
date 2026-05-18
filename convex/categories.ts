@@ -38,8 +38,28 @@ type SeedCategory = {
  */
 const SEED: SeedCategory[] = [
   {
-    name: "Sports",
+    name: "Bridgerton",
     order: 1,
+    enabled: true,
+    image: "imgs/categories/bridgerton.png",
+    description: "Step into Regency-era London with trivia about the Bridgerton families, romances, scandals, and society.",
+    subcategories: [
+      { name: "Season One", order: 1, enabled: true },
+      { name: "Season Two", order: 2, enabled: true },
+      { name: "Season Three", order: 3, enabled: true },
+      { name: "Know Your Episodes", order: 4, enabled: true },
+      { name: "Cast Image Round", order: 5, enabled: true },
+      { name: "Locations Image Round", order: 6, enabled: true },
+      { name: "Anthony Bridgerton", order: 7, enabled: true },
+      { name: "Daphne Bridgerton", order: 8, enabled: true },
+      { name: "Eloise Bridgerton", order: 9, enabled: true },
+      { name: "Penelope Featherington", order: 10, enabled: true },
+      { name: "Simon Basset", order: 11, enabled: true }
+    ]
+  },
+  {
+    name: "Sports",
+    order: 2,
     enabled: true,
     subcategories: [
       { name: "Soccer Club", order: 1, enabled: true },
@@ -58,7 +78,7 @@ const SEED: SeedCategory[] = [
   },
   {
     name: "Entertainment",
-    order: 2,
+    order: 3,
     enabled: true,
     subcategories: [
       { name: "Movies", order: 1, enabled: true },
@@ -75,7 +95,7 @@ const SEED: SeedCategory[] = [
   },
   {
     name: "History",
-    order: 3,
+    order: 4,
     enabled: true,
     subcategories: [
       { name: "Ancient Egypt", order: 1, enabled: true },
@@ -92,7 +112,7 @@ const SEED: SeedCategory[] = [
   },
   {
     name: "Science",
-    order: 4,
+    order: 5,
     enabled: true,
     subcategories: [
       { name: "Biology", order: 1, enabled: true },
@@ -112,7 +132,7 @@ const SEED: SeedCategory[] = [
   },
   {
     name: "Decades",
-    order: 5,
+    order: 6,
     enabled: true,
     subcategories: [
       { name: "1920s", order: 1, enabled: true },
@@ -131,7 +151,7 @@ const SEED: SeedCategory[] = [
   },
   {
     name: "Mythology",
-    order: 6,
+    order: 7,
     enabled: true,
     subcategories: [
       { name: "Greek Mythology", order: 1, enabled: true },
@@ -148,7 +168,7 @@ const SEED: SeedCategory[] = [
   },
   {
     name: "Politics",
-    order: 7,
+    order: 8,
     enabled: true,
     subcategories: [
       { name: "World Leaders", order: 1, enabled: true },
@@ -165,7 +185,7 @@ const SEED: SeedCategory[] = [
   },
   {
     name: "Geography",
-    order: 8,
+    order: 9,
     enabled: true,
     subcategories: [
       { name: "Countries of the World", order: 1, enabled: true },
@@ -182,7 +202,7 @@ const SEED: SeedCategory[] = [
   },
   {
     name: "Kids",
-    order: 9,
+    order: 10,
     enabled: true,
     image: "imgs/categories/kids.png",
     description: "Family-friendly trivia featuring animated favorites, adventure stories, and playful characters.",
@@ -197,7 +217,7 @@ const SEED: SeedCategory[] = [
   },
   {
     name: "Stranger Things",
-    order: 10,
+    order: 11,
     enabled: true,
     image: "imgs/categories/stranger-things.png",
     description: "Questions from Hawkins, the Upside Down, and the characters of Stranger Things.",
@@ -207,7 +227,11 @@ const SEED: SeedCategory[] = [
       { name: "The Upside Down", order: 3, enabled: true },
       { name: "Monsters & Villains", order: 4, enabled: true },
       { name: "Episodes & Plot", order: 5, enabled: true },
-      { name: "Cast & Behind the Scenes", order: 6, enabled: true }
+      { name: "Cast & Behind the Scenes", order: 6, enabled: true },
+      { name: "Season One", order: 7, enabled: true },
+      { name: "Season Two", order: 8, enabled: true },
+      { name: "Season Three", order: 9, enabled: true },
+      { name: "Season Four", order: 10, enabled: true }
     ]
   }
 ];
@@ -245,16 +269,13 @@ async function upsertCategory(ctx: any, cat: SeedCategory) {
 async function upsertSubcategory(ctx: any, categoryId: any, sub: SeedCategory["subcategories"][0]) {
   const slug: string = slugify(sub.name);
 
-  const existing = await ctx.db
+  const existingByCategoryName = await ctx.db
     .query("subcategories")
-    .withIndex("by_slug", (q: any) => q.eq("slug", slug))
+    .withIndex("by_category_name", (q: any) => q.eq("categoryId", categoryId).eq("name", sub.name))
     .unique();
 
-  // If slug collisions ever happen across categories, switch to a composite slug
-  // like `${slugify(categoryName)}__${slugify(subName)}`. For now, names are unique.
-
-  if (existing) {
-    await ctx.db.patch(existing._id, {
+  if (existingByCategoryName) {
+    await ctx.db.patch(existingByCategoryName._id, {
       categoryId,
       name: sub.name,
       slug,
@@ -262,7 +283,7 @@ async function upsertSubcategory(ctx: any, categoryId: any, sub: SeedCategory["s
       enabled: sub.enabled,
       description: sub.description
     });
-    return existing._id;
+    return existingByCategoryName._id;
   }
 
   return await ctx.db.insert("subcategories", {
@@ -285,18 +306,37 @@ export const seed = mutation({
     const result: {
       categoriesCreatedOrUpdated: number;
       subcategoriesCreatedOrUpdated: number;
+      subcategoriesDisabled: number;
     } = {
       categoriesCreatedOrUpdated: 0,
-      subcategoriesCreatedOrUpdated: 0
+      subcategoriesCreatedOrUpdated: 0,
+      subcategoriesDisabled: 0
     };
 
     for (const cat of SEED) {
       const categoryId = await upsertCategory(ctx, cat);
       result.categoriesCreatedOrUpdated += 1;
+      const activeSubcategorySlugs = new Set<string>();
 
       for (const sub of cat.subcategories) {
         await upsertSubcategory(ctx, categoryId, sub);
+        activeSubcategorySlugs.add(slugify(sub.name));
         result.subcategoriesCreatedOrUpdated += 1;
+      }
+
+      const existingSubcategories = await ctx.db
+        .query("subcategories")
+        .withIndex("by_category", (q: any) => q.eq("categoryId", categoryId))
+        .collect();
+
+      for (const existingSubcategory of existingSubcategories) {
+        const existingSlug = existingSubcategory.slug || slugify(existingSubcategory.name);
+        if (activeSubcategorySlugs.has(existingSlug) || existingSubcategory.enabled === false) {
+          continue;
+        }
+
+        await ctx.db.patch(existingSubcategory._id, { enabled: false });
+        result.subcategoriesDisabled += 1;
       }
     }
 

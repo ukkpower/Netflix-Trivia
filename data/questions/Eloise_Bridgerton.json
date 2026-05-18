@@ -1,0 +1,169 @@
+[
+  {
+    "category": "Bridgerton",
+    "subcategory": "Eloise_Bridgerton",
+    "difficulty": "easy",
+    "general": true,
+    "question": "What is Eloise Bridgerton known for rejecting?",
+    "options": ["Friendship", "Society expectations", "Family duties", "Wealth"],
+    "answerIndex": 1,
+    "explanation": "Eloise strongly rejects traditional expectations of women in society.",
+    "tags": ["eloise", "character"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Eloise_Bridgerton",
+    "difficulty": "easy",
+    "general": true,
+    "question": "Who is Eloise’s best friend?",
+    "options": ["Daphne Bridgerton", "Penelope Featherington", "Kate Sharma", "Edwina Sharma"],
+    "answerIndex": 1,
+    "explanation": "Eloise and Penelope share a close friendship.",
+    "tags": ["eloise", "relationships"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Eloise_Bridgerton",
+    "difficulty": "easy",
+    "general": true,
+    "question": "What does Eloise dislike about debuting in society?",
+    "options": ["The dresses", "The attention and expectations of marriage", "The dancing", "The food"],
+    "answerIndex": 1,
+    "explanation": "Eloise dislikes the pressure to marry and conform.",
+    "tags": ["eloise", "society"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Eloise_Bridgerton",
+    "difficulty": "easy",
+    "general": true,
+    "question": "Which sibling is Eloise closest to?",
+    "options": ["Anthony", "Benedict", "Daphne", "Gregory"],
+    "answerIndex": 2,
+    "explanation": "Eloise shares a close bond with Daphne, especially early on.",
+    "tags": ["eloise", "family"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Eloise_Bridgerton",
+    "difficulty": "easy",
+    "general": true,
+    "question": "What mystery is Eloise obsessed with uncovering?",
+    "options": ["Royal secrets", "Lady Whistledown’s identity", "Family history", "Hidden treasure"],
+    "answerIndex": 1,
+    "explanation": "Eloise is determined to discover who Lady Whistledown is.",
+    "tags": ["eloise", "plot"]
+  },
+
+  {
+    "category": "Bridgerton",
+    "subcategory": "Eloise_Bridgerton",
+    "difficulty": "medium",
+    "general": true,
+    "question": "What intellectual interest sets Eloise apart?",
+    "options": ["Science", "Politics and women’s rights", "Art", "Music"],
+    "answerIndex": 1,
+    "explanation": "Eloise shows a strong interest in politics and women’s independence.",
+    "tags": ["eloise", "character"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Eloise_Bridgerton",
+    "difficulty": "medium",
+    "general": true,
+    "question": "Where does Eloise secretly visit in Season Two?",
+    "options": ["A university", "A political meeting in the city", "The royal palace", "A countryside estate"],
+    "answerIndex": 1,
+    "explanation": "She attends political gatherings that challenge societal norms.",
+    "tags": ["eloise", "plot"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Eloise_Bridgerton",
+    "difficulty": "medium",
+    "general": true,
+    "question": "What happens when Eloise gets too close to discovering Lady Whistledown?",
+    "options": ["She is rewarded", "She is ignored", "She becomes a target of suspicion", "She leaves society"],
+    "answerIndex": 2,
+    "explanation": "Her investigation puts her under suspicion and in danger.",
+    "tags": ["eloise", "plot"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Eloise_Bridgerton",
+    "difficulty": "medium",
+    "general": true,
+    "question": "How does Eloise react when she learns Penelope’s secret?",
+    "options": ["She is proud", "She is indifferent", "She feels betrayed", "She laughs"],
+    "answerIndex": 2,
+    "explanation": "Eloise feels deeply betrayed by Penelope.",
+    "tags": ["eloise", "conflict"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Eloise_Bridgerton",
+    "difficulty": "medium",
+    "general": false,
+    "question": "What does Eloise struggle with most internally?",
+    "options": ["Wealth", "Independence vs societal expectations", "Family loyalty", "Ambition"],
+    "answerIndex": 1,
+    "explanation": "She struggles between being independent and conforming to society.",
+    "tags": ["eloise", "theme"]
+  },
+
+  {
+    "category": "Bridgerton",
+    "subcategory": "Eloise_Bridgerton",
+    "difficulty": "hard",
+    "general": false,
+    "question": "What consequence does Eloise face due to her political interests?",
+    "options": ["She is exiled", "She is arrested and questioned", "She loses her title", "She leaves England"],
+    "answerIndex": 1,
+    "explanation": "Eloise is questioned by authorities due to her associations.",
+    "tags": ["eloise", "plot"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Eloise_Bridgerton",
+    "difficulty": "hard",
+    "general": false,
+    "question": "What theme best represents Eloise’s character arc?",
+    "options": ["Love conquers all", "Tradition vs rebellion", "Power vs wealth", "Family vs ambition"],
+    "answerIndex": 1,
+    "explanation": "Eloise represents rebellion against traditional norms.",
+    "tags": ["eloise", "theme"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Eloise_Bridgerton",
+    "difficulty": "hard",
+    "general": false,
+    "question": "Why does Eloise distance herself from Penelope?",
+    "options": ["Jealousy", "Family pressure", "Betrayal over Lady Whistledown", "Romantic rivalry"],
+    "answerIndex": 2,
+    "explanation": "Eloise feels betrayed by Penelope’s secret identity.",
+    "tags": ["eloise", "conflict"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Eloise_Bridgerton",
+    "difficulty": "hard",
+    "general": false,
+    "question": "What does Eloise ultimately seek more than anything?",
+    "options": ["Wealth", "Marriage", "Freedom and purpose", "Power"],
+    "answerIndex": 2,
+    "explanation": "Eloise desires independence and a meaningful life.",
+    "tags": ["eloise", "motivation"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Eloise_Bridgerton",
+    "difficulty": "hard",
+    "general": false,
+    "question": "How does Eloise evolve over time?",
+    "options": ["Becomes more traditional", "Becomes more withdrawn", "Gains maturity while holding her beliefs", "Leaves society completely"],
+    "answerIndex": 2,
+    "explanation": "She matures but stays true to her independent mindset.",
+    "tags": ["eloise", "development"]
+  }
+]

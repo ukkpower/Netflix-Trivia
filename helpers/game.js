@@ -376,13 +376,19 @@ export async function generateRound(currentRoundIndex, rounds, mode, questionsPe
         throw new Error(`Invalid answerIndex for question: ${questionData._id}`);
       }
 
-      shuffleArray(options);
+      const questionId = String(questionData._id);
+      const speechUrl =
+        questionData.media?.type === "audio" && typeof questionData.media.url === "string"
+          ? questionData.media.url
+          : null;
 
       formattedQuestions[index + 1] = {
+        id: questionId,
         question: questionData.question,
         correct_answer: correctAnswer,
         allAnswers: options,
-        imageName: questionData.imageName ?? null
+        imageName: questionData.imageName ?? null,
+        speechUrl
       };
     });
 

@@ -8,16 +8,27 @@ class AudioManager {
         
         // Music channel
         this.musicTracks = new Map(); // Store pre-loaded music tracks
-        this.currentMusic = null; // Currently playing Audio object
+        this.currentMusic = null; // Currently playing music handle
         this.currentMusicName = null; // Name of currently playing track
         this.musicVolume = 100; // 0-100
         this.musicMuted = false;
         this.musicLoop = true; // Default to looping
+        this.musicDuckMultiplier = 1;
+        this.audioContext = null;
+        this.webAudioSupported = typeof window !== "undefined"
+            && (typeof window.AudioContext === "function" || typeof window.webkitAudioContext === "function");
         
         // Sound effects channel
         this.soundFX = new Map(); // Store pre-loaded sound effects
         this.soundFXVolume = 100; // 0-100
         this.soundFXMuted = false;
+
+        // Speech channel
+        this.currentSpeechAudio = null;
+        this.speechVolume = 100; // 0-100
+        this.currentSpeechVolume = 100; // 0-100
+        this.speechMuted = false;
+        this.speechPlaybackToken = 0;
         
         // Master controls
         this.masterVolume = 100; // 0-100
@@ -26,11 +37,13 @@ class AudioManager {
         // Settings
         this.settings = {
             fadeOutDuration: 1000, // milliseconds
-            fadeInDelay: 0 // milliseconds before the incoming track joins the crossfade
+            fadeInDelay: 0, // milliseconds before the incoming track joins the crossfade
+            musicDuckDuration: 250 // milliseconds for speech ducking fades
         };
         
         // Music transition tracking
         this.musicFadeIntervals = new Map();
+        this.musicDuckInterval = null;
         this.musicAudioState = new Map();
         this.musicStartTimeout = null;
         this.musicTransitionToken = 0;
@@ -54,6 +67,63 @@ class AudioManager {
     }
     
     /**
+     * Get or lazily create a shared AudioContext for gapless music playback.
+     */
+    _getAudioContext() {
+        if (!this.webAudioSupported) {
+            return null;
+        }
+
+        if (!this.audioContext) {
+            const AudioContextCtor = window.AudioContext || window.webkitAudioContext;
+            this.audioContext = new AudioContextCtor();
+        }
+
+        return this.audioContext;
+    }
+
+    /**
+     * Resume the shared AudioContext before starting playback.
+     */
+    async _ensureAudioContextRunning() {
+        const audioContext = this._getAudioContext();
+        if (!audioContext) {
+            return null;
+        }
+
+        if (audioContext.state === "suspended") {
+            await audioContext.resume();
+        }
+
+        return audioContext;
+    }
+
+    /**
+     * Decode a music file for gapless playback. Falls back silently if unsupported.
+     */
+    async _decodeMusicBuffer(src) {
+        const audioContext = this._getAudioContext();
+        if (!audioContext || typeof fetch !== "function") {
+            return null;
+        }
+
+        try {
+            const response = await fetch(src);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+
+            const audioData = await response.arrayBuffer();
+            return await new Promise((resolve, reject) => {
+                audioContext.decodeAudioData(audioData.slice(0), resolve, reject);
+            });
+        } catch (error) {
+            console.warn(`Falling back to HTML audio for "${src}" because decoding failed.`, error);
+            return null;
+        }
+    }
+
+    /**
      * Pre-load a music track
      * @param {string} name - Name identifier for the music track
      * @param {string} file - Filename relative to baseSoundPath
@@ -63,28 +133,37 @@ class AudioManager {
     async loadMusic(name, file, volume = 100, config = {}) {
         const options = this._normalizeMusicConfig(config);
         const loop = options.loop ?? this.musicLoop;
+        const src = this.baseSoundPath + file;
 
-        return new Promise((resolve, reject) => {
-            const audio = new Audio(this.baseSoundPath + file);
+        const preloadAudioPromise = new Promise((resolve, reject) => {
+            const audio = new Audio(src);
             audio.loop = Boolean(loop);
-            audio.volume = 0; // Start at 0, will be set when playing
-            
-            audio.addEventListener('canplaythrough', () => {
-                this.musicTracks.set(name, {
-                    audio: audio,
-                    volume: Math.max(0, Math.min(100, volume)),
-                    file: file,
-                    loop: Boolean(loop)
-                });
-                resolve();
+            audio.volume = 0;
+            audio.preload = "auto";
+
+            audio.addEventListener("canplaythrough", () => resolve(audio), { once: true });
+            audio.addEventListener("error", () => {
+                reject(new Error(`Failed to load music "${name}" from "${file}".`));
             }, { once: true });
-            
-            audio.addEventListener('error', (e) => {
-                reject(new Error(`Failed to load music "${name}" from "${file}": ${e.message}`));
-            }, { once: true });
-            
-            // Start loading
+
             audio.load();
+        });
+
+        const [audio, buffer] = await Promise.all([
+            preloadAudioPromise,
+            this._decodeMusicBuffer(src)
+        ]);
+
+        this.musicTracks.set(name, {
+            audio,
+            buffer,
+            volume: Math.max(0, Math.min(100, volume)),
+            file,
+            loop: Boolean(loop),
+            playbackStart: this._normalizeLoopBoundary(options.playbackStart ?? options.loopStart ?? options.trimStart),
+            loopStart: this._normalizeLoopBoundary(options.loopStart ?? options.trimStart),
+            loopEnd: this._normalizeLoopBoundary(options.loopEnd),
+            trimEnd: this._normalizeLoopBoundary(options.trimEnd)
         });
     }
     
@@ -151,7 +230,205 @@ class AudioManager {
     }
 
     /**
-     * Track a music audio instance so its volume can be updated during crossfades
+     * Normalize a loop boundary in seconds.
+     */
+    _normalizeLoopBoundary(value) {
+        const normalizedValue = Number(value);
+        if (!Number.isFinite(normalizedValue) || normalizedValue < 0) {
+            return null;
+        }
+
+        return normalizedValue;
+    }
+
+    /**
+     * Resolve playback and loop points for a decoded music track.
+     */
+    _resolveMusicPlaybackWindow(track) {
+        const duration = track.buffer?.duration ?? 0;
+        const playbackStart = Math.min(
+            track.playbackStart ?? track.loopStart ?? 0,
+            duration || Number.MAX_SAFE_INTEGER
+        );
+        const loopStart = Math.min(track.loopStart ?? playbackStart, duration || Number.MAX_SAFE_INTEGER);
+
+        let loopEnd = track.loopEnd;
+        if (loopEnd == null && duration > 0 && track.trimEnd != null && track.trimEnd > 0) {
+            loopEnd = Math.max(loopStart, duration - track.trimEnd);
+        }
+
+        if (loopEnd != null && duration > 0) {
+            loopEnd = Math.min(loopEnd, duration);
+        }
+
+        if (loopEnd != null && loopEnd <= loopStart) {
+            loopEnd = null;
+        }
+
+        return {
+            playbackStart,
+            loopStart,
+            loopEnd
+        };
+    }
+
+    /**
+     * Create a music playback handle backed by an HTMLAudioElement.
+     */
+    _createHtmlMusicHandle(track, loop) {
+        const audio = new Audio(track.audio.src);
+        audio.loop = Boolean(loop);
+        audio.volume = 0;
+        audio.preload = "auto";
+
+        const handle = {
+            type: "html",
+            audio,
+            paused: true
+        };
+
+        audio.addEventListener("ended", () => {
+            handle.paused = true;
+            this._clearMusicFade(handle);
+            this.musicAudioState.delete(handle);
+
+            if (this.currentMusic === handle) {
+                this.currentMusic = null;
+                this.currentMusicName = null;
+            }
+        });
+
+        return handle;
+    }
+
+    /**
+     * Create a music playback handle backed by Web Audio for gapless looping.
+     */
+    _createBufferedMusicHandle(track, loop) {
+        const audioContext = this._getAudioContext();
+        if (!audioContext || !track.buffer) {
+            return null;
+        }
+
+        const gainNode = audioContext.createGain();
+        gainNode.gain.value = 0;
+        gainNode.connect(audioContext.destination);
+
+        const source = audioContext.createBufferSource();
+        source.buffer = track.buffer;
+        source.loop = Boolean(loop);
+
+        const playbackWindow = this._resolveMusicPlaybackWindow(track);
+        if (source.loop) {
+            source.loopStart = playbackWindow.loopStart;
+            if (playbackWindow.loopEnd != null) {
+                source.loopEnd = playbackWindow.loopEnd;
+            }
+        }
+
+        source.connect(gainNode);
+
+        const handle = {
+            type: "buffer",
+            source,
+            gainNode,
+            playbackStart: playbackWindow.playbackStart,
+            paused: true,
+            started: false,
+            stopped: false
+        };
+
+        source.onended = () => {
+            handle.paused = true;
+            handle.stopped = true;
+            this._clearMusicFade(handle);
+            this.musicAudioState.delete(handle);
+
+            try {
+                source.disconnect();
+            } catch (error) {
+                // Ignore disconnect races during stop/cleanup.
+            }
+
+            try {
+                gainNode.disconnect();
+            } catch (error) {
+                // Ignore disconnect races during stop/cleanup.
+            }
+
+            if (this.currentMusic === handle) {
+                this.currentMusic = null;
+                this.currentMusicName = null;
+            }
+        };
+
+        return handle;
+    }
+
+    /**
+     * Create the best music playback handle available for this track.
+     */
+    _createMusicHandle(track, loop) {
+        return this._createBufferedMusicHandle(track, loop) ?? this._createHtmlMusicHandle(track, loop);
+    }
+
+    /**
+     * Check whether a music handle is currently playing.
+     */
+    _isMusicHandlePlaying(handle) {
+        if (!handle) {
+            return false;
+        }
+
+        if (handle.type === "buffer") {
+            return handle.started && !handle.stopped && !handle.paused;
+        }
+
+        return !handle.audio.paused;
+    }
+
+    /**
+     * Update loop state for an active music handle.
+     */
+    _setMusicHandleLoop(handle, loop) {
+        if (!handle) {
+            return;
+        }
+
+        if (handle.type === "buffer") {
+            handle.source.loop = Boolean(loop);
+            return;
+        }
+
+        handle.audio.loop = Boolean(loop);
+    }
+
+    /**
+     * Start an inactive music handle.
+     */
+    async _playMusicHandle(handle) {
+        if (!handle) {
+            return;
+        }
+
+        if (handle.type === "buffer") {
+            await this._ensureAudioContextRunning();
+            if (handle.started) {
+                return;
+            }
+
+            handle.source.start(0, handle.playbackStart ?? 0);
+            handle.started = true;
+            handle.paused = false;
+            return;
+        }
+
+        await handle.audio.play();
+        handle.paused = false;
+    }
+
+    /**
+     * Track a music playback handle so its volume can be updated during crossfades.
      */
     _registerMusicAudio(audio, trackVolume, fadeMultiplier = 1) {
         this.musicAudioState.set(audio, {
@@ -170,7 +447,13 @@ class AudioManager {
 
         const effectiveVolume = this._getEffectiveVolume(state.trackVolume);
         const targetVolume = this.musicMuted ? 0 : effectiveVolume;
-        audio.volume = targetVolume * state.fadeMultiplier;
+
+        if (audio.type === "buffer") {
+            audio.gainNode.gain.value = targetVolume * state.fadeMultiplier * this.musicDuckMultiplier;
+            return;
+        }
+
+        audio.audio.volume = targetVolume * state.fadeMultiplier * this.musicDuckMultiplier;
     }
 
     /**
@@ -201,15 +484,106 @@ class AudioManager {
     }
 
     /**
+     * Resolve an audio source. Absolute URLs and site-root paths are used as-is.
+     */
+    _resolveAudioSource(src) {
+        if (typeof src !== "string") {
+            return "";
+        }
+
+        const trimmedSrc = src.trim();
+        if (/^(?:[a-z]+:)?\/\//i.test(trimmedSrc) || trimmedSrc.startsWith("/") || trimmedSrc.startsWith("data:") || trimmedSrc.startsWith("blob:")) {
+            return trimmedSrc;
+        }
+
+        return this.baseSoundPath + trimmedSrc;
+    }
+
+    /**
+     * Fade the music duck multiplier independently from music crossfades.
+     */
+    _fadeMusicDuckMultiplier(targetMultiplier = 1, duration = this.settings.musicDuckDuration) {
+        if (this.musicDuckInterval) {
+            clearInterval(this.musicDuckInterval);
+            this.musicDuckInterval = null;
+        }
+
+        const clampedTarget = Math.max(0, Math.min(1, Number(targetMultiplier)));
+        const fadeDuration = Math.max(0, Number(duration) || 0);
+        const startMultiplier = this.musicDuckMultiplier;
+
+        if (fadeDuration === 0 || startMultiplier === clampedTarget) {
+            this.musicDuckMultiplier = clampedTarget;
+            this._updateAllMusicVolumes();
+            return Promise.resolve();
+        }
+
+        return new Promise((resolve) => {
+            const startTime = Date.now();
+
+            this.musicDuckInterval = setInterval(() => {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / fadeDuration, 1);
+
+                this.musicDuckMultiplier = startMultiplier + ((clampedTarget - startMultiplier) * progress);
+                this._updateAllMusicVolumes();
+
+                if (progress >= 1) {
+                    clearInterval(this.musicDuckInterval);
+                    this.musicDuckInterval = null;
+                    resolve();
+                }
+            }, 16);
+        });
+    }
+
+    /**
+     * Apply the effective volume to the active speech audio.
+     */
+    _applySpeechVolume(audio = this.currentSpeechAudio) {
+        if (!audio) return;
+
+        const channelVolume = (this.speechVolume * this.currentSpeechVolume) / 100;
+        const effectiveVolume = this._getEffectiveVolume(channelVolume);
+        audio.volume = this.speechMuted ? 0 : effectiveVolume;
+    }
+
+    /**
      * Stop a music audio instance and remove all tracking for it
      */
     _stopAndCleanupMusicAudio(audio) {
         if (!audio) return;
 
         this._clearMusicFade(audio);
-        audio.pause();
-        audio.currentTime = 0;
         this.musicAudioState.delete(audio);
+
+        if (audio.type === "buffer") {
+            audio.paused = true;
+            if (audio.started && !audio.stopped) {
+                audio.stopped = true;
+                try {
+                    audio.source.stop();
+                } catch (error) {
+                    // Ignore repeated stop attempts.
+                }
+            }
+
+            try {
+                audio.source.disconnect();
+            } catch (error) {
+                // Ignore disconnect races during stop/cleanup.
+            }
+
+            try {
+                audio.gainNode.disconnect();
+            } catch (error) {
+                // Ignore disconnect races during stop/cleanup.
+            }
+        } else {
+            audio.audio.pause();
+            audio.audio.currentTime = 0;
+            audio.paused = true;
+        }
 
         if (this.currentMusic === audio) {
             this.currentMusic = null;
@@ -312,7 +686,7 @@ class AudioManager {
         const targetMultiplier = effectiveVolume === 0 ? 0 : Math.min(effectiveTargetVolume / effectiveVolume, 1);
 
         return new Promise((resolve) => {
-            audio.play().then(() => {
+            this._playMusicHandle(audio).then(() => {
                 this._fadeMusicAudio(
                     audio,
                     this._getMusicFadeMultiplier(audio),
@@ -321,6 +695,7 @@ class AudioManager {
                 ).then(resolve);
             }).catch(err => {
                 console.error("Error playing music:", err);
+                this._stopAndCleanupMusicAudio(audio);
                 resolve();
             });
         });
@@ -341,8 +716,8 @@ class AudioManager {
         const loop = options.loop ?? track.loop ?? this.musicLoop;
         
         // If same track is already playing, do nothing
-        if (this.currentMusicName === name && this.currentMusic && !this.currentMusic.paused) {
-            this.currentMusic.loop = Boolean(loop);
+        if (this.currentMusicName === name && this._isMusicHandlePlaying(this.currentMusic)) {
+            this._setMusicHandleLoop(this.currentMusic, loop);
             return;
         }
 
@@ -360,9 +735,8 @@ class AudioManager {
             this._clearMusicFade(outgoingMusic);
         }
 
-        // Create new Audio instance from the pre-loaded track
-        const newAudio = new Audio(track.audio.src);
-        newAudio.loop = Boolean(loop);
+        // Create a new playback handle from the pre-loaded track
+        const newAudio = this._createMusicHandle(track, loop);
         this._registerMusicAudio(newAudio, track.volume, 0);
 
         // Calculate target volume
@@ -455,8 +829,100 @@ class AudioManager {
     setMusicLoop(loop) {
         this.musicLoop = loop;
         for (const audio of this.musicAudioState.keys()) {
-            audio.loop = loop;
+            this._setMusicHandleLoop(audio, loop);
         }
+    }
+
+    /**
+     * Play speech audio. Only one speech clip can be active at a time.
+     * @param {string} src - Audio URL or path
+     * @param {object} options - Speech playback and ducking options
+     */
+    async playSpeech(src, { volume = 100, duckMusic = true, duckMultiplier = 0.5 } = {}) {
+        const resolvedSrc = this._resolveAudioSource(src);
+        if (!resolvedSrc) {
+            return false;
+        }
+
+        this.stopSpeech({ restoreMusic: !duckMusic });
+
+        const playbackToken = ++this.speechPlaybackToken;
+        const audio = new Audio(resolvedSrc);
+        audio.preload = "auto";
+        this.currentSpeechAudio = audio;
+        this.currentSpeechVolume = Math.max(0, Math.min(100, volume));
+        this._applySpeechVolume(audio);
+
+        const cleanupSpeech = ({ restoreMusic = true } = {}) => {
+            if (playbackToken !== this.speechPlaybackToken) {
+                return;
+            }
+
+            this.currentSpeechAudio = null;
+
+            if (restoreMusic && duckMusic) {
+                this._fadeMusicDuckMultiplier(1);
+            }
+        };
+
+        audio.addEventListener("ended", () => cleanupSpeech(), { once: true });
+        audio.addEventListener("error", () => cleanupSpeech(), { once: true });
+
+        try {
+            await audio.play();
+            if (playbackToken !== this.speechPlaybackToken || this.currentSpeechAudio !== audio) {
+                audio.pause();
+                return false;
+            }
+
+            if (duckMusic) {
+                this._fadeMusicDuckMultiplier(duckMultiplier);
+            }
+            return true;
+        } catch (error) {
+            cleanupSpeech();
+            throw error;
+        }
+    }
+
+    /**
+     * Stop active speech playback.
+     */
+    stopSpeech({ restoreMusic = true } = {}) {
+        const audio = this.currentSpeechAudio;
+        this.speechPlaybackToken += 1;
+        this.currentSpeechAudio = null;
+
+        if (audio) {
+            audio.pause();
+            audio.currentTime = 0;
+        }
+
+        if (restoreMusic) {
+            this._fadeMusicDuckMultiplier(1);
+        }
+    }
+
+    /**
+     * Mute/unmute speech channel
+     */
+    muteSpeech() {
+        this.speechMuted = true;
+        this._applySpeechVolume();
+    }
+
+    unmuteSpeech() {
+        this.speechMuted = false;
+        this._applySpeechVolume();
+    }
+
+    /**
+     * Set speech channel volume (0-100)
+     * @param {number} volume - Volume level 0-100
+     */
+    setSpeechVolume(volume) {
+        this.speechVolume = Math.max(0, Math.min(100, volume));
+        this._applySpeechVolume();
     }
     
     /**
@@ -510,6 +976,7 @@ class AudioManager {
     setMasterVolume(volume) {
         this.masterVolume = Math.max(0, Math.min(100, volume));
         this._updateAllMusicVolumes();
+        this._applySpeechVolume();
     }
     
     /**
@@ -518,6 +985,7 @@ class AudioManager {
     muteAll() {
         this.masterMuted = true;
         this._updateAllMusicVolumes();
+        this._applySpeechVolume();
     }
     
     /**
@@ -526,5 +994,6 @@ class AudioManager {
     unmuteAll() {
         this.masterMuted = false;
         this._updateAllMusicVolumes();
+        this._applySpeechVolume();
     }
 }

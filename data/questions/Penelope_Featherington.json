@@ -1,0 +1,169 @@
+[
+  {
+    "category": "Bridgerton",
+    "subcategory": "Penelope_Featherington",
+    "difficulty": "easy",
+    "general": true,
+    "question": "What secret identity does Penelope Featherington have?",
+    "options": ["The Queen’s spy", "Lady Whistledown", "A novelist", "A royal advisor"],
+    "answerIndex": 1,
+    "explanation": "Penelope is secretly Lady Whistledown, the gossip writer.",
+    "tags": ["penelope", "identity"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Penelope_Featherington",
+    "difficulty": "easy",
+    "general": true,
+    "question": "Who is Penelope secretly in love with?",
+    "options": ["Anthony Bridgerton", "Colin Bridgerton", "Benedict Bridgerton", "Simon Basset"],
+    "answerIndex": 1,
+    "explanation": "Penelope has long been in love with Colin Bridgerton.",
+    "tags": ["penelope", "romance"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Penelope_Featherington",
+    "difficulty": "easy",
+    "general": true,
+    "question": "Which family does Penelope belong to?",
+    "options": ["Bridgerton", "Sharma", "Featherington", "Danbury"],
+    "answerIndex": 2,
+    "explanation": "Penelope is part of the Featherington family.",
+    "tags": ["penelope", "family"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Penelope_Featherington",
+    "difficulty": "easy",
+    "general": true,
+    "question": "Who is Penelope’s best friend?",
+    "options": ["Daphne Bridgerton", "Eloise Bridgerton", "Kate Sharma", "Edwina Sharma"],
+    "answerIndex": 1,
+    "explanation": "Penelope and Eloise are very close friends.",
+    "tags": ["penelope", "relationships"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Penelope_Featherington",
+    "difficulty": "easy",
+    "general": true,
+    "question": "How is Penelope usually perceived in society early on?",
+    "options": ["Confident", "Popular", "Overlooked", "Powerful"],
+    "answerIndex": 2,
+    "explanation": "Penelope is often overlooked and underestimated.",
+    "tags": ["penelope", "character"]
+  },
+
+  {
+    "category": "Bridgerton",
+    "subcategory": "Penelope_Featherington",
+    "difficulty": "medium",
+    "general": true,
+    "question": "What does Lady Whistledown write about?",
+    "options": ["Politics", "Fashion", "Society gossip", "History"],
+    "answerIndex": 2,
+    "explanation": "She publishes scandalous gossip about society.",
+    "tags": ["penelope", "identity"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Penelope_Featherington",
+    "difficulty": "medium",
+    "general": true,
+    "question": "How does Penelope fund her secret identity?",
+    "options": ["Family money", "Inheritance", "Profits from her publications", "Royal support"],
+    "answerIndex": 2,
+    "explanation": "She earns money through Lady Whistledown’s papers.",
+    "tags": ["penelope", "plot"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Penelope_Featherington",
+    "difficulty": "medium",
+    "general": true,
+    "question": "What causes tension between Penelope and Eloise?",
+    "options": ["A suitor rivalry", "Lady Whistledown’s identity", "Family conflict", "Money issues"],
+    "answerIndex": 1,
+    "explanation": "Eloise discovers Penelope is Lady Whistledown.",
+    "tags": ["penelope", "conflict"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Penelope_Featherington",
+    "difficulty": "medium",
+    "general": true,
+    "question": "What is Penelope’s relationship with her mother like?",
+    "options": ["Supportive", "Distant and critical", "Nonexistent", "Friendly"],
+    "answerIndex": 1,
+    "explanation": "Her mother is often critical and dismissive.",
+    "tags": ["penelope", "family"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Penelope_Featherington",
+    "difficulty": "medium",
+    "general": false,
+    "question": "What major secret does Penelope reveal about Marina Thompson?",
+    "options": ["She is wealthy", "She is leaving town", "She is pregnant", "She is engaged secretly"],
+    "answerIndex": 2,
+    "explanation": "Penelope exposes Marina’s pregnancy through Lady Whistledown.",
+    "tags": ["penelope", "plot"]
+  },
+
+  {
+    "category": "Bridgerton",
+    "subcategory": "Penelope_Featherington",
+    "difficulty": "hard",
+    "general": false,
+    "question": "Why does Penelope reveal Marina’s secret?",
+    "options": ["Jealousy", "To protect Colin", "For money", "For revenge"],
+    "answerIndex": 1,
+    "explanation": "She does it to protect Colin from a deceptive marriage.",
+    "tags": ["penelope", "motivation"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Penelope_Featherington",
+    "difficulty": "hard",
+    "general": false,
+    "question": "What internal conflict defines Penelope’s character?",
+    "options": ["Power vs duty", "Love vs secrecy", "Wealth vs status", "Family vs society"],
+    "answerIndex": 1,
+    "explanation": "She struggles between her secret identity and her relationships.",
+    "tags": ["penelope", "theme"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Penelope_Featherington",
+    "difficulty": "hard",
+    "general": false,
+    "question": "How does Penelope evolve over the series?",
+    "options": ["Becomes more withdrawn", "Gains confidence and independence", "Leaves society", "Loses her identity"],
+    "answerIndex": 1,
+    "explanation": "Penelope grows into a more confident and independent woman.",
+    "tags": ["penelope", "development"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Penelope_Featherington",
+    "difficulty": "hard",
+    "general": false,
+    "question": "What role does writing play in Penelope’s life?",
+    "options": ["A hobby", "A secret power and voice", "A job forced on her", "A family duty"],
+    "answerIndex": 1,
+    "explanation": "Writing as Lady Whistledown gives her influence and control.",
+    "tags": ["penelope", "theme"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Penelope_Featherington",
+    "difficulty": "hard",
+    "general": false,
+    "question": "What major challenge does Penelope face by later seasons?",
+    "options": ["Losing her fortune", "Keeping her identity hidden", "Leaving England", "Becoming a noble"],
+    "answerIndex": 1,
+    "explanation": "Her biggest challenge is maintaining her secret identity.",
+    "tags": ["penelope", "conflict"]
+  }
+]

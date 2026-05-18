@@ -4,6 +4,8 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import path from "path";
 import { fileURLToPath } from "url";
+import { registerGeminiTtsAdminRoutes } from "./helpers/geminiTtsAdmin.js";
+import { registerGeminiTtsBulkAdminRoutes } from "./helpers/geminiTtsBulkAdmin.js";
 import roomHandler from "./roomHandler.js";
 
 // Load .env first, then .env.local (if present) to allow local overrides.
@@ -13,8 +15,13 @@ const app = express();
  
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const publicDir = path.join(__dirname, "public");
+const dataDir = path.join(__dirname, "data");
 
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.json({ limit: "1mb" }));
+registerGeminiTtsAdminRoutes(app, { publicDir });
+await registerGeminiTtsBulkAdminRoutes(app, { publicDir, dataDir });
+app.use(express.static(publicDir));
 
 const httpServer = createServer(app);
 

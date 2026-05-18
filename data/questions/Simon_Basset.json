@@ -1,0 +1,169 @@
+[
+  {
+    "category": "Bridgerton",
+    "subcategory": "Simon_Basset",
+    "difficulty": "easy",
+    "general": true,
+    "question": "What title does Simon Basset hold?",
+    "options": ["Viscount", "Duke", "Earl", "Baron"],
+    "answerIndex": 1,
+    "explanation": "Simon is the Duke of Hastings.",
+    "tags": ["simon", "titles"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Simon_Basset",
+    "difficulty": "easy",
+    "general": true,
+    "question": "Who is Simon’s main love interest?",
+    "options": ["Kate Sharma", "Daphne Bridgerton", "Penelope Featherington", "Edwina Sharma"],
+    "answerIndex": 1,
+    "explanation": "Simon’s central romance is with Daphne Bridgerton.",
+    "tags": ["simon", "romance"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Simon_Basset",
+    "difficulty": "easy",
+    "general": true,
+    "question": "What is Simon’s relationship with Anthony Bridgerton?",
+    "options": ["Enemies", "Brothers", "Friends", "Cousins"],
+    "answerIndex": 2,
+    "explanation": "Simon and Anthony are close friends.",
+    "tags": ["simon", "relationships"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Simon_Basset",
+    "difficulty": "easy",
+    "general": true,
+    "question": "Why does Simon initially avoid marriage?",
+    "options": ["He dislikes society", "He has a secret family", "He vowed not to marry or have children", "He is engaged already"],
+    "answerIndex": 2,
+    "explanation": "Simon vows not to marry or have children to spite his father.",
+    "tags": ["simon", "plot"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Simon_Basset",
+    "difficulty": "easy",
+    "general": true,
+    "question": "Who raises Simon after his father neglects him?",
+    "options": ["Lady Danbury", "Queen Charlotte", "Violet Bridgerton", "Lady Featherington"],
+    "answerIndex": 0,
+    "explanation": "Lady Danbury becomes a mentor and guardian figure to Simon.",
+    "tags": ["simon", "backstory"]
+  },
+
+  {
+    "category": "Bridgerton",
+    "subcategory": "Simon_Basset",
+    "difficulty": "medium",
+    "general": true,
+    "question": "What speech difficulty does Simon struggle with as a child?",
+    "options": ["Lisp", "Stutter", "Mute", "Accent"],
+    "answerIndex": 1,
+    "explanation": "Simon has a stutter, which his father harshly criticizes.",
+    "tags": ["simon", "backstory"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Simon_Basset",
+    "difficulty": "medium",
+    "general": true,
+    "question": "What arrangement does Simon make with Daphne?",
+    "options": ["Secret marriage", "Fake courtship", "Business partnership", "Elopement"],
+    "answerIndex": 1,
+    "explanation": "They pretend to court each other to avoid unwanted attention.",
+    "tags": ["simon", "plot"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Simon_Basset",
+    "difficulty": "medium",
+    "general": true,
+    "question": "Where is Simon’s estate located?",
+    "options": ["Bridgerton House", "Clyvedon", "Danbury House", "Featherington House"],
+    "answerIndex": 1,
+    "explanation": "Clyvedon is Simon’s country estate.",
+    "tags": ["simon", "locations"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Simon_Basset",
+    "difficulty": "medium",
+    "general": true,
+    "question": "What motivates Simon’s vow against having children?",
+    "options": ["Fear of poverty", "Hatred of his father", "Medical condition", "Social expectations"],
+    "answerIndex": 1,
+    "explanation": "He wants to end his family line to spite his father.",
+    "tags": ["simon", "motivation"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Simon_Basset",
+    "difficulty": "medium",
+    "general": false,
+    "question": "What event forces Simon and Daphne to marry?",
+    "options": ["Family agreement", "Financial deal", "Being caught compromising", "Royal order"],
+    "answerIndex": 2,
+    "explanation": "They are caught in a compromising situation, forcing marriage.",
+    "tags": ["simon", "plot"]
+  },
+
+  {
+    "category": "Bridgerton",
+    "subcategory": "Simon_Basset",
+    "difficulty": "hard",
+    "general": false,
+    "question": "What was Simon’s father’s attitude toward him?",
+    "options": ["Loving", "Indifferent", "Proud", "Cruel and rejecting"],
+    "answerIndex": 3,
+    "explanation": "His father was cruel due to Simon’s speech impediment.",
+    "tags": ["simon", "backstory"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Simon_Basset",
+    "difficulty": "hard",
+    "general": false,
+    "question": "What internal conflict defines Simon’s character?",
+    "options": ["Wealth vs duty", "Love vs revenge", "Family vs society", "Power vs fear"],
+    "answerIndex": 1,
+    "explanation": "Simon struggles between loving Daphne and honoring his vow of revenge.",
+    "tags": ["simon", "theme"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Simon_Basset",
+    "difficulty": "hard",
+    "general": false,
+    "question": "How does Simon ultimately resolve his vow?",
+    "options": ["He keeps it", "He abandons it for love", "He leaves society", "He passes it to someone else"],
+    "answerIndex": 1,
+    "explanation": "Simon chooses love and a future family with Daphne.",
+    "tags": ["simon", "ending"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Simon_Basset",
+    "difficulty": "hard",
+    "general": false,
+    "question": "What symbolic theme is central to Simon’s story?",
+    "options": ["Ambition", "Forgiveness", "Revenge", "Tradition"],
+    "answerIndex": 2,
+    "explanation": "His story revolves around revenge against his father and overcoming it.",
+    "tags": ["simon", "theme"]
+  },
+  {
+    "category": "Bridgerton",
+    "subcategory": "Simon_Basset",
+    "difficulty": "hard",
+    "general": false,
+    "question": "What change does Simon undergo by the end of Season One?",
+    "options": ["Becomes isolated", "Rejects love", "Accepts love and family", "Leaves England"],
+    "answerIndex": 2,
+    "explanation": "Simon embraces love and starts a family with Daphne.",
+    "tags": ["simon", "development"]
+  }
+]
